@@ -1,13 +1,13 @@
 import SwiftUI
 
 public struct NeoBrutalistWindowGroup<Content: View>: Scene {
-    public init(id: String, title: String, subTitle: String = "", content: @escaping () -> Content) {
+    public init(id: String, title: String, subTitle: String = "", content: @escaping () -> Content)
+    {
         self.id = id
         self.title = title
         self.subTitle = subTitle
         self.content = content
     }
-
 
     var id: String
     var title: String
@@ -30,16 +30,13 @@ public struct NeoBrutalistWindowGroup<Content: View>: Scene {
                         offset: theme.shadowOffset,
                         clip: .horizontal
                     )
+                    .ignoresSafeArea()
                 }
-                .neoBrutalistShadow(
-                    color: Color.black.opacity(theme.shadowRadius == 0 ? 0.2 : 0.28),
-                    radius: theme.shadowRadius,
-                    offset: theme.shadowOffset
-                )
-                .safeAreaPadding(.bottom)
         }
-            .windowLevel(.floating)
-            .windowStyle(.plain)
+        .windowLevel(.floating)
+        .windowStyle(.hiddenTitleBar)
+        .windowResizability(.contentSize)
+
     }
 
 }
