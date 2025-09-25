@@ -4,7 +4,7 @@ NeoBrutalistUI is a Swift Package that delivers a cross-platform (iOS + macOS) S
 
 ## Highlights
 - 🎨 Simplified themes with easy environment injection.
-- 🧱 Opinionated components: buttons, cards, toggles, badges, and background surfaces with brutalist texture.
+- 🧱 Opinionated components: buttons, cards, toggles, disclosure groups, badges, and background surfaces with brutalist texture.
 - 🖥️ Single Swift package with library + demo executable target so the same code runs on iOS and macOS.
 - ✅ Lightweight test coverage that validates palette math and theming helpers.
 

@@ -1,5 +1,5 @@
-import SwiftUI
 import NeoBrutalistUI
+import SwiftUI
 
 struct DemoRootView: View {
     @Binding var selectedTheme: NeoBrutalistTheme
@@ -19,6 +19,7 @@ struct DemoRootView: View {
                     LazyVStack(alignment: .leading, spacing: NeoBrutalist.Spacing.large.rawValue) {
                         themeGallery
                         introCard
+                        group
                         controlPanel
                         activityFeed
                     }
@@ -38,7 +39,9 @@ struct DemoRootView: View {
             accentEdge: .top
         ) {
             LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 220), spacing: NeoBrutalist.Spacing.medium.rawValue)],
+                columns: [
+                    GridItem(.adaptive(minimum: 220), spacing: NeoBrutalist.Spacing.medium.rawValue)
+                ],
                 spacing: NeoBrutalist.Spacing.medium.rawValue
             ) {
                 ForEach(themeOptions) { option in
@@ -61,17 +64,34 @@ struct DemoRootView: View {
             subtitle: "Component Library",
             icon: Image(systemName: "sparkles")
         ) {
-            Text("A SwiftUI showcase for iOS and macOS that embraces bold geometry, unapologetic color, and tactile depth.")
-            Text("Toggle between curated themes, mix components, and view the library in action inside a single Swift Package.")
+            Text(
+                "A SwiftUI showcase for iOS and macOS that embraces bold geometry, unapologetic color, and tactile depth."
+            )
+            Text(
+                "Toggle between curated themes, mix components, and view the library in action inside a single Swift Package."
+            )
+        }
+    }
+
+    private var group: some View {
+        NeoBrutalistDisclosureGroup {
+            Text("Group")
+        } content: {
+            Text("Content")
         }
     }
 
     private var controlPanel: some View {
         VStack(alignment: .leading, spacing: NeoBrutalist.Spacing.large.rawValue) {
-            NeoBrutalistCard(title: "Controls", subtitle: "Interactive Elements", icon: Image(systemName: "slider.horizontal.3")) {
+            NeoBrutalistCard(
+                title: "Controls", subtitle: "Interactive Elements",
+                icon: Image(systemName: "slider.horizontal.3")
+            ) {
                 VStack(alignment: .leading, spacing: NeoBrutalist.Spacing.medium.rawValue) {
                     NeoBrutalistButton(size: .prominent) {
-                        log("Primary action fired at intensity \(String(format: "%.2f", intensity))")
+                        log(
+                            "Primary action fired at intensity \(String(format: "%.2f", intensity))"
+                        )
                     } label: {
                         Label("Deploy Sequence", systemImage: "bolt.fill")
                             .labelStyle(.titleAndIcon)
@@ -92,14 +112,25 @@ struct DemoRootView: View {
                 }
             }
 
-            NeoBrutalistCard(title: "Badges", subtitle: "Status Chips", icon: Image(systemName: "tag.fill"), accentEdge: .trailing) {
+            NeoBrutalistCard(
+                title: "Badges", subtitle: "Status Chips", icon: Image(systemName: "tag.fill"),
+                accentEdge: .trailing
+            ) {
                 VStack(alignment: .leading, spacing: NeoBrutalist.Spacing.small.rawValue) {
                     Text("Use badges to build status dashboards or highlight filters.")
                         .foregroundColor(selectedTheme.textMuted.color)
 
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: NeoBrutalist.Spacing.small.rawValue)], spacing: NeoBrutalist.Spacing.small.rawValue) {
+                    LazyVGrid(
+                        columns: [
+                            GridItem(
+                                .adaptive(minimum: 140),
+                                spacing: NeoBrutalist.Spacing.small.rawValue)
+                        ], spacing: NeoBrutalist.Spacing.small.rawValue
+                    ) {
                         ForEach(DemoLogItem.Status.allCases, id: \.self) { status in
-                            NeoBrutalistBadge(status.label, icon: Image(systemName: status.iconName), placement: .leading, isActive: status == .live)
+                            NeoBrutalistBadge(
+                                status.label, icon: Image(systemName: status.iconName),
+                                placement: .leading, isActive: status == .live)
                         }
                     }
                 }
@@ -108,7 +139,11 @@ struct DemoRootView: View {
     }
 
     private var activityFeed: some View {
-        NeoBrutalistCard(title: "Mission Log", subtitle: "Live Events", icon: Image(systemName: "antenna.radiowaves.left.and.right"), accentEdge: .trailing, highlighted: true) {
+        NeoBrutalistCard(
+            title: "Mission Log", subtitle: "Live Events",
+            icon: Image(systemName: "antenna.radiowaves.left.and.right"), accentEdge: .trailing,
+            highlighted: true
+        ) {
             VStack(alignment: .leading, spacing: NeoBrutalist.Spacing.medium.rawValue) {
                 ForEach(logItems.prefix(5)) { log in
                     VStack(alignment: .leading, spacing: 6) {
@@ -137,11 +172,11 @@ struct DemoRootView: View {
         }
     }
 
-#if os(macOS)
-    private var activeThemeOption: DemoThemeOption? {
-        themeOptions.first { $0.theme == selectedTheme }
-    }
-#endif
+    #if os(macOS)
+        private var activeThemeOption: DemoThemeOption? {
+            themeOptions.first { $0.theme == selectedTheme }
+        }
+    #endif
 }
 
 // MARK: - Supporting Models
@@ -192,7 +227,9 @@ private struct ThemeSwatch: View {
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(option.theme.surface.secondary.color.opacity(0.55))
-                .shadow(color: Color.black.opacity(0.1), radius: isSelected ? 10 : 4, x: option.theme.shadowOffset.width, y: option.theme.shadowOffset.height)
+                .shadow(
+                    color: Color.black.opacity(0.1), radius: isSelected ? 10 : 4,
+                    x: option.theme.shadowOffset.width, y: option.theme.shadowOffset.height)
         )
         .overlay(alignment: .topLeading) {
             if isSelected {
@@ -214,7 +251,9 @@ private struct ThemeSwatch: View {
     }
 
     private var styleBorderColor: Color {
-        isSelected ? option.theme.accent.highlight.color : option.theme.surface.highlight.color.opacity(0.5)
+        isSelected
+            ? option.theme.accent.highlight.color
+            : option.theme.surface.highlight.color.opacity(0.5)
     }
 }
 
@@ -231,8 +270,8 @@ private struct DemoLogItem: Identifiable {
     }
 }
 
-private extension DemoLogItem {
-    enum Status: CaseIterable, Hashable {
+extension DemoLogItem {
+    fileprivate enum Status: CaseIterable, Hashable {
         case live
         case pending
         case offline
@@ -254,12 +293,19 @@ private extension DemoLogItem {
         }
     }
 
-    static let seed: [DemoLogItem] = [
-        DemoLogItem(title: "Launch Sequence", message: "Stage separation confirmed. Vector locked.", status: .live),
-        DemoLogItem(title: "Diagnostics", message: "Thermal envelope stable at 81%", status: .pending),
-        DemoLogItem(title: "Payload", message: "Neo Brutalist components compiled for all platforms.", status: .live),
-        DemoLogItem(title: "Telemetry", message: "Signal drop detected in sector 7.", status: .offline),
-        DemoLogItem(title: "Crew", message: "All operators synced to midnight mode.", status: .live)
+    fileprivate static let seed: [DemoLogItem] = [
+        DemoLogItem(
+            title: "Launch Sequence", message: "Stage separation confirmed. Vector locked.",
+            status: .live),
+        DemoLogItem(
+            title: "Diagnostics", message: "Thermal envelope stable at 81%", status: .pending),
+        DemoLogItem(
+            title: "Payload", message: "Neo Brutalist components compiled for all platforms.",
+            status: .live),
+        DemoLogItem(
+            title: "Telemetry", message: "Signal drop detected in sector 7.", status: .offline),
+        DemoLogItem(
+            title: "Crew", message: "All operators synced to midnight mode.", status: .live),
     ]
 }
 
@@ -278,10 +324,13 @@ private struct DemoThemeOption: Identifiable {
 
     static var all: [DemoThemeOption] {
         [
-            DemoThemeOption(name: "Bubblegum Pop", tagline: "Playful with punch", theme: .bubblegum),
-            DemoThemeOption(name: "Midnight Transit", tagline: "Blueprint and neon", theme: .midnightTransit),
-            DemoThemeOption(name: "Citrus Circuit", tagline: "Warm and energetic", theme: .citrusCircuit),
-            DemoThemeOption(name: "Terminal Mint", tagline: "Dark room glow", theme: .terminalMint)
+            DemoThemeOption(
+                name: "Bubblegum Pop", tagline: "Playful with punch", theme: .bubblegum),
+            DemoThemeOption(
+                name: "Midnight Transit", tagline: "Blueprint and neon", theme: .midnightTransit),
+            DemoThemeOption(
+                name: "Citrus Circuit", tagline: "Warm and energetic", theme: .citrusCircuit),
+            DemoThemeOption(name: "Terminal Mint", tagline: "Dark room glow", theme: .terminalMint),
         ]
     }
 }
