@@ -14,9 +14,10 @@ public struct NeoBrutalistTheme: Equatable {
     public var shadowOffset: CGSize
     public var shadowRadius: CGFloat
     public var noiseOpacity: Double
+    public var windowButtonSize: CGSize
 
     public init(
-        name: String =  "",
+        name: String = "",
         background: ColorPalette = .paper,
         surface: ColorPalette = .paper,
         accent: ColorPalette = .bubbleAccent,
@@ -27,7 +28,8 @@ public struct NeoBrutalistTheme: Equatable {
         cornerRadius: CGFloat = 0,
         shadowOffset: CGSize = CGSize(width: 6, height: 6),
         shadowRadius: CGFloat = 0,
-        noiseOpacity: Double = 0
+        noiseOpacity: Double = 0,
+        windowButtonSize: CGSize = CGSize(width: 16, height: 16)
     ) {
         self.name = name
         self.background = background
@@ -41,6 +43,7 @@ public struct NeoBrutalistTheme: Equatable {
         self.shadowOffset = shadowOffset
         self.shadowRadius = shadowRadius
         self.noiseOpacity = noiseOpacity
+        self.windowButtonSize = windowButtonSize
     }
 
     public static var bubblegum: NeoBrutalistTheme {
@@ -234,8 +237,8 @@ public struct ColorDescriptor: Equatable, Codable {
     }
 }
 
-public extension ColorPalette {
-    var gradient: LinearGradient {
+extension ColorPalette {
+    public var gradient: LinearGradient {
         LinearGradient(
             colors: [primary.color, secondary.color, highlight.color.opacity(0.65)],
             startPoint: .topLeading,
@@ -283,7 +286,7 @@ public struct Typography: Equatable {
         Typography(
             titleFont: .neoBrutalistCustom("CabinetGrotesk-Bold", size: 34),
             bodyFont: .neoBrutalistCustom("CabinetGrotesk-Medium", size: 19),
-            monoFont: .neoBrutalistCustom("IBMPlexMono-Think                    ", size: 16)
+            monoFont: .neoBrutalistCustom("IBMPlexMono-Think", size: 16)
         )
     }
 }
@@ -291,15 +294,15 @@ private struct NeoBrutalistThemeKey: EnvironmentKey {
     static var defaultValue: NeoBrutalistTheme { .bubblegum }
 }
 
-public extension EnvironmentValues {
-    var neoBrutalistTheme: NeoBrutalistTheme {
+extension EnvironmentValues {
+    public var neoBrutalistTheme: NeoBrutalistTheme {
         get { self[NeoBrutalistThemeKey.self] }
         set { self[NeoBrutalistThemeKey.self] = newValue }
     }
 }
 
-public extension View {
-    func neoBrutalistTheme(_ theme: NeoBrutalistTheme) -> some View {
+extension View {
+    public func neoBrutalistTheme(_ theme: NeoBrutalistTheme) -> some View {
         environment(\.neoBrutalistTheme, theme)
     }
 }

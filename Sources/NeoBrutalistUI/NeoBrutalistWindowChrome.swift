@@ -1,28 +1,145 @@
+import SwiftUI
+
 #if os(macOS)
     import SwiftUI
     import AppKit
 
-    public struct NeoBrutalistWindowChrome: View {
+    public struct WindowGestureConfiguration: Identifiable {
+        public let id: UUID = UUID()
+        public enum GestureType {
+            case doubleTap
+        }
+        public let gestureType: GestureType
+        public let action: (_ window: NSWindow) -> Void
+
+        public static func doubleTap(action: @escaping (_ window: NSWindow) -> Void)
+            -> WindowGestureConfiguration
+        {
+            WindowGestureConfiguration(
+                gestureType: .doubleTap,
+                action: action
+            )
+        }
+    }
+
+    public struct WindowChromeButtonConfiguration: Identifiable {
+        public let id: UUID = UUID()
+        public let icon: Image
+        public let color: Color
+        public let accessibilityLabel: String
+        public let action: (_ window: NSWindow) -> Void
+
+        public static func close(action: @escaping (_ window: NSWindow) -> Void)
+            -> WindowChromeButtonConfiguration
+        {
+            WindowChromeButtonConfiguration(
+                icon: Image(systemName: "xmark"),
+                color: Color.red,
+                accessibilityLabel: "Close Window",
+                action: action
+            )
+        }
+
+        public static func minimize(action: @escaping (_ window: NSWindow) -> Void)
+            -> WindowChromeButtonConfiguration
+        {
+            WindowChromeButtonConfiguration(
+                icon: Image(systemName: "minus"),
+                color: Color.yellow,
+                accessibilityLabel: "Minimize Window",
+                action: action
+            )
+        }
+        public static func zoom(action: @escaping (_ window: NSWindow) -> Void)
+            -> WindowChromeButtonConfiguration
+        {
+            WindowChromeButtonConfiguration(
+                icon: Image(systemName: "arrow.up.left.and.arrow.down.right"),
+                color: Color.green,
+                accessibilityLabel: "Zoom Window",
+                action: action
+            )
+        }
+        public static func pin(action: @escaping (_ window: NSWindow) -> Void)
+            -> WindowChromeButtonConfiguration
+        {
+            WindowChromeButtonConfiguration(
+                icon: Image(systemName: "square.on.square"),
+                color: Color.cyan,
+                accessibilityLabel: "Pin Window",
+                action: action
+            )
+        }
+
+        public init(
+            icon: Image,
+            color: Color,
+            accessibilityLabel: String,
+            action: @escaping (_ window: NSWindow) -> Void
+        ) {
+            self.icon = icon
+            self.color = color
+            self.accessibilityLabel = accessibilityLabel
+            self.action = action
+        }
+    }
+
+    extension [WindowChromeButtonConfiguration] {
+        @MainActor
+        public static var defaultButtons: [WindowChromeButtonConfiguration] {
+
+            [
+                WindowChromeButtonConfiguration.close(action: { $0.performClose(nil) }),
+                WindowChromeButtonConfiguration.minimize { $0.miniaturize(nil) },
+                WindowChromeButtonConfiguration.zoom { $0.performZoom(nil) },
+            ]
+        }
+    }
+    extension [WindowGestureConfiguration] {
+        @MainActor
+        public static var defaultGestures: [WindowGestureConfiguration] {
+
+            [
+                WindowGestureConfiguration.doubleTap { $0.toggleFullScreen(nil) }
+            ]
+        }
+    }
+
+    public struct NeoBrutalistWindowChrome<Accessory: View>: View {
         @Environment(\.neoBrutalistTheme) private var theme
 
         private let title: String
         private let subtitle: String?
-        private let accessory: AnyView?
+        private let accessory: Accessory
+        private let windowButtons: [WindowChromeButtonConfiguration]
+        private let windowGestures: [WindowGestureConfiguration]
 
         @State private var window: NSWindow?
 
-        public init(title: String, subtitle: String? = nil) {
-            self.title = title
-            self.subtitle = subtitle
-            self.accessory = nil
-        }
-
-        public init<Accessory: View>(
-            title: String, subtitle: String? = nil, @ViewBuilder accessory: () -> Accessory
+        public init(
+            buttons: [WindowChromeButtonConfiguration] = .defaultButtons,
+            gestures: [WindowGestureConfiguration] = .defaultGestures,
+            title: String,
+            subtitle: String? = nil,
+            @ViewBuilder accessory: () -> Accessory
         ) {
             self.title = title
             self.subtitle = subtitle
-            self.accessory = AnyView(accessory())
+            self.accessory = accessory()
+            self.windowButtons = buttons
+            self.windowGestures = gestures
+        }
+        public init(
+            buttons: [WindowChromeButtonConfiguration],
+            gestures: [WindowGestureConfiguration],
+            title: String,
+            subtitle: String? = nil
+        ) where Accessory == EmptyView {
+            self.title = title
+            self.subtitle = subtitle
+            self.accessory = EmptyView()
+            self.windowButtons = buttons
+            self.windowGestures = gestures
         }
 
         public var body: some View {
@@ -31,7 +148,14 @@
                 .frame(maxWidth: .infinity)
                 .contentShape(Rectangle())
                 .onTapGesture(count: 2) {
-                    window?.performZoom(nil)
+                    if let window {
+                        for gesture in windowGestures {
+                            switch gesture.gestureType {
+                            case .doubleTap:
+                                gesture.action(window)
+                            }
+                        }
+                    }
                 }
                 .background(
                     WindowReader { newWindow in
@@ -66,7 +190,7 @@
 
         private var chromeContent: some View {
             HStack(spacing: 16) {
-                controls
+                WindowControls(theme: theme, window: window, windowButtons: windowButtons)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(theme.typography.titleFont)
@@ -92,69 +216,15 @@
                     }
                 }
                 Spacer()
-                if let accessory {
-                    accessory
-                }
+                accessory
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 18)
-            .padding(.bottom, 14)
+            .padding(.horizontal, 10)
+            .padding(.top, 8)
+            .padding(.bottom, 10)
         }
 
         private var accentHeight: CGFloat {
             max(theme.borderWidth * 3, 8)
-        }
-
-        private var controls: some View {
-            WithState(initialState: false) { $hover in
-                HStack(spacing: 12) {
-                    controlButton(.close, hover: hover)
-                    controlButton(.miniaturize, hover: hover)
-                    controlButton(.zoom, hover: hover)
-                }
-                .onContinuousHover { phase in
-                    switch phase {
-                    case .active:
-                        hover = true
-                    case .ended:
-                        hover = false
-                    }
-                }
-            }
-        }
-
-        private func controlButton(_ control: WindowControl, hover: Bool) -> some View {
-
-            Button {
-                run(control)
-            } label: {
-                Circle()
-                    .fill(control.fill(for: theme))
-                    .frame(width: 18, height: 18)
-                    .overlay(
-                        Circle()
-                            .stroke(
-                                theme.surface.secondary.color.opacity(0.85),
-                                lineWidth: max(theme.borderWidth * 0.6, 1))
-                    )
-                    .overlay(control.icon(for: theme).opacity(hover ? 1 : 0))
-                    .shadow(color: Color.black.opacity(0.08), radius: 1.5, x: 0, y: 1)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(control.accessibilityLabel)
-            .disabled(window == nil)
-        }
-
-        private func run(_ control: WindowControl) {
-            guard let window else { return }
-            switch control {
-            case .close:
-                window.performClose(nil)
-            case .miniaturize:
-                window.miniaturize(nil)
-            case .zoom:
-                window.performZoom(nil)
-            }
         }
 
         private func configureWindow(_ window: NSWindow) {
@@ -177,6 +247,94 @@
 
             if !window.isKeyWindow, window.canBecomeKey {
                 window.makeKey()
+            }
+        }
+    }
+
+    struct WindowControls: View {
+        var theme: NeoBrutalistTheme
+        let window: NSWindow?
+        let windowButtons: [WindowChromeButtonConfiguration]
+        @State private var hover: Bool = false
+        var body: some View {
+            HStack(spacing: 8) {
+                ForEach(windowButtons) { button in
+                    controlButton(button, hover: hover)
+                }
+            }
+            .onContinuousHover { phase in
+                switch phase {
+                case .active:
+                    hover = true
+                case .ended:
+                    hover = false
+                }
+            }
+        }
+        private func controlButton(
+            _ control: WindowChromeButtonConfiguration, hover: Bool
+        )
+            -> some View
+        {
+
+            WithState(initialState: false) { $down in
+                Button {
+                    if let window {
+                        control.action(window)
+                    }
+                } label: {
+                    Circle()
+                        .fill(control.color)
+                        .stroke(
+                            control.color.mix(with: .black, by: 0.7).opacity(0.5),
+                            lineWidth: max(theme.borderWidth * 0.6, 1)
+                        )
+                        .frame(
+                            width: theme.windowButtonSize.width,
+                            height: theme.windowButtonSize.height
+                        )
+                        .overlay {
+                            Circle()
+                                .inset(
+                                    by: max(
+                                        1,
+                                        min(
+                                            theme.windowButtonSize.width,
+                                            theme.windowButtonSize.height)
+                                            * 0.1)
+                                )
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            down ? .black.opacity(0.3) : .white.opacity(0.3),
+                                            .clear,
+                                        ], startPoint: .top,
+                                        endPoint: .bottom)
+                                )
+                                .blendMode(.softLight)
+                        }
+                        .overlay(
+                            control.icon.resizable(resizingMode: .tile).aspectRatio(
+                                contentMode: .fit
+                            )
+                            .opacity(
+                                hover ? 0.7 : 0
+                            ).padding(
+                                max(
+                                    2,
+                                    min(theme.windowButtonSize.width, theme.windowButtonSize.height)
+                                        * 0.22)
+                            )
+                        )
+                        .bold()
+                        .contentShape(Circle())
+                        .shadow(color: Color.black.opacity(0.08), radius: 1.5, x: 0, y: 1)
+                        .compositingGroup()
+                }
+                .buttonStyle(NoStyle())
+                .accessibilityLabel(control.accessibilityLabel)
+                .onTouchUpInside(downInside: $down)
+                .disabled(window == nil)
             }
         }
     }
@@ -376,51 +534,6 @@
         }
     }
 
-    private enum WindowControl {
-        case close
-        case miniaturize
-        case zoom
-
-        func fill(for theme: NeoBrutalistTheme) -> Color {
-            switch self {
-            case .close:
-                return .red
-            case .miniaturize:
-                return .yellow
-            case .zoom:
-                return .green
-            }
-        }
-
-        func icon(for theme: NeoBrutalistTheme) -> some View {
-            Image(systemName: symbolName)
-                .font(.system(size: 8, weight: .heavy, design: .rounded))
-                .foregroundColor(Color.black.opacity(0.9))
-        }
-
-        private var symbolName: String {
-            switch self {
-            case .close:
-                return "xmark"
-            case .miniaturize:
-                return "minus"
-            case .zoom:
-                return "arrow.up.left.and.arrow.down.right"
-            }
-        }
-
-        var accessibilityLabel: String {
-            switch self {
-            case .close:
-                return "Close Window"
-            case .miniaturize:
-                return "Minimize Window"
-            case .zoom:
-                return "Zoom Window"
-            }
-        }
-    }
-
     private struct WindowReader: NSViewRepresentable {
         let handler: (NSWindow?) -> Void
 
@@ -437,12 +550,6 @@
             DispatchQueue.main.async {
                 handler(nsView.window)
             }
-        }
-    }
-
-    extension ColorDescriptor {
-        fileprivate var nsColor: NSColor {
-            NSColor(calibratedRed: red, green: green, blue: blue, alpha: alpha)
         }
     }
 #endif
@@ -466,5 +573,75 @@ struct WithState<V: View, S>: View {
     @ViewBuilder var viewBuilder: (Binding<S>) -> V
     var body: some View {
         viewBuilder($state)
+    }
+}
+
+extension View {
+    public func onTouchUpInside(
+        downInside: Binding<Bool> = .constant(false),
+        action: @escaping (_ time: TimeInterval) -> Void = { _ in }
+    ) -> some View {
+        self.modifier(TouchUpInsideModifier(touchingDownInside: downInside, action: action))
+    }
+}
+
+struct TouchUpInsideModifier: ViewModifier {
+    init(
+        touchingDownInside: Binding<Bool>,
+        action: @escaping (_ len: TimeInterval) -> Void
+    ) {
+        self.action = action
+        _isTouchingDown = touchingDownInside
+    }
+
+    let action: (TimeInterval) -> Void
+    @Binding var isTouchingDown: Bool
+    @State var size: CGSize = .zero
+    @State var isInside: Bool = false
+    @State var start: Date?
+
+    func body(content: Content) -> some View {
+        content
+            .readingSize(into: $size)
+            .simultaneousGesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { touch in
+                        isInside =
+                            touch.translation.width >= 0 && touch.translation.height >= 0
+                            && touch.translation.width < size.width
+                            && touch.translation.height < size.height
+                        if isInside {
+                            start = start ?? Date.now
+                        }
+                    }
+                    .onEnded { touch in
+                        if isInside {
+                            action(Date.now.timeIntervalSince(start ?? Date.now))
+                        }
+                        start = nil
+                        isInside = false
+                    }
+            )
+            .onChange(of: isInside) { _, new in
+                isTouchingDown = new
+            }
+    }
+}
+extension View {
+    public func readingSize(into binding: Binding<CGSize>) -> some View {
+        self
+            .overlay {
+                GeometryReader { geo in
+                    Color.clear
+                        .task(id: geo.size) {
+                            binding.wrappedValue = geo.size
+                        }
+                }
+            }
+    }
+}
+struct NoStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
     }
 }

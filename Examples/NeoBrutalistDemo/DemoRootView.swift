@@ -102,13 +102,12 @@ struct DemoRootView: View {
                     }
                     .toggleStyle(.neoBrutalist(size: .regular))
 
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Noise Intensity")
-                            .font(selectedTheme.typography.bodyFont)
-                            .foregroundColor(selectedTheme.textMuted.color)
-                        Slider(value: $intensity, in: 0...1)
-                            .tint(selectedTheme.accent.highlight.color)
-                    }
+                    NeoBrutalistSlider(
+                        "Noise Intensity",
+                        value: $intensity,
+                        in: 0...1,
+                        accessibilityLabel: "Noise intensity"
+                    )
                 }
             }
 
