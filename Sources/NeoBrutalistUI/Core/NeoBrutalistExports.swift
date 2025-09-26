@@ -17,7 +17,9 @@ public enum NeoBrutalist {
             .bubblegum,
             .daybreakPlaza,
             .nocturneVolt,
-            .ultravioletCargo
+            .ultravioletCargo,
+            .desert,
+            .jungle
         ]
     }
 }

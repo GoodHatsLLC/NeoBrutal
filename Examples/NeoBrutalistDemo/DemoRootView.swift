@@ -8,6 +8,10 @@ struct DemoRootView: View {
     @State private var intensity: Double = 0.65
     @State private var logItems: [DemoLogItem] = DemoLogItem.seed
 
+    @State private var textFieldValue = "Hello, world!"
+
+    @State private var stepperValue = 0
+
     private let themeOptions = DemoThemeOption.all
 
     var body: some View {
@@ -108,6 +112,10 @@ struct DemoRootView: View {
                         in: 0...1,
                         accessibilityLabel: "Noise intensity"
                     )
+
+                    NeoBrutalistTextField("Text Field", text: $textFieldValue)
+
+                    NeoBrutalistStepper(value: $stepperValue, in: 0...10)
                 }
             }
 
@@ -331,6 +339,10 @@ private struct DemoThemeOption: Identifiable {
                 name: "Nocturne Volt", tagline: "Moody neon grids", theme: .nocturneVolt),
             DemoThemeOption(
                 name: "Ultraviolet Cargo", tagline: "Cosmic freight vibes", theme: .ultravioletCargo),
+            DemoThemeOption(
+                name: "Desert", tagline: "Warm desert tones", theme: .desert),
+            DemoThemeOption(
+                name: "Jungle", tagline: "Lush jungle vibes", theme: .jungle)
         ]
     }
 }
