@@ -178,6 +178,30 @@ public struct ColorPalette: Equatable {
             highlight: ColorDescriptor(red: 128, green: 255, blue: 192)
         )
     }
+
+    public static var breakIdeasBackground: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 253, green: 252, blue: 251),
+            secondary: ColorDescriptor(red: 253, green: 252, blue: 251),
+            highlight: ColorDescriptor(red: 253, green: 252, blue: 251)
+        )
+    }
+
+    public static var breakIdeasPrimary: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 229, green: 136, blue: 163),
+            secondary: ColorDescriptor(red: 229, green: 136, blue: 163),
+            highlight: ColorDescriptor(red: 229, green: 136, blue: 163)
+        )
+    }
+
+    public static var breakIdeasAccent: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 253, green: 238, blue: 147),
+            secondary: ColorDescriptor(red: 253, green: 238, blue: 147),
+            highlight: ColorDescriptor(red: 253, green: 238, blue: 147)
+        )
+    }
 }
 
 public struct ColorDescriptor: Equatable, Codable {

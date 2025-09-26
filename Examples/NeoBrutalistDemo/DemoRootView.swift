@@ -342,7 +342,9 @@ private struct DemoThemeOption: Identifiable {
             DemoThemeOption(
                 name: "Desert", tagline: "Warm desert tones", theme: .desert),
             DemoThemeOption(
-                name: "Jungle", tagline: "Lush jungle vibes", theme: .jungle)
+                name: "Jungle", tagline: "Lush jungle vibes", theme: .jungle),
+            DemoThemeOption(
+                name: "Break Ideas", tagline: "Fresh and bold", theme: .breakIdeas)
         ]
     }
 }
