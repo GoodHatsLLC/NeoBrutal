@@ -102,6 +102,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
             let fillWidth = min(max(knobCenter, knobSize * 0.4), trackWidth)
 
             ZStack(alignment: .leading) {
+
                 baseTrack(height: trackHeight)
                 progressTrack(width: fillWidth, height: trackHeight)
                 knob(size: knobSize)
@@ -109,7 +110,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
             }
             .frame(height: max(knobSize, 48))
             .contentShape(Rectangle())
-            .gesture(
+            .highPriorityGesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { drag in
                         let clampedX = min(max(drag.location.x, 0), trackWidth)
@@ -153,11 +154,11 @@ public struct NeoBrutalistSlider<Label: View>: View {
     }
 
     private func knob(size: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: 6, style: .continuous)
+        RoundedRectangle(cornerRadius: theme.shadowRadius, style: .continuous)
             .fill(isDragging ? theme.accent.highlight.color : theme.accent.primary.color)
             .frame(width: size, height: size)
             .overlay(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                RoundedRectangle(cornerRadius: theme.shadowRadius, style: .continuous)
                     .stroke(Color.black.opacity(0.12), lineWidth: 1)
             )
             .neoBrutalistShadow(

@@ -47,11 +47,12 @@ public struct NeoBrutalistWindowGroup<Content: View, Accessory: View>: Scene {
                         offset: theme.shadowOffset,
                         clip: .horizontal
                     )
-                    .ignoresSafeArea()
                 }
+                .ignoresSafeArea()
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
+        .windowBackgroundDragBehavior(.disabled)
 
     }
 

@@ -326,10 +326,11 @@ private struct DemoThemeOption: Identifiable {
             DemoThemeOption(
                 name: "Bubblegum Pop", tagline: "Playful with punch", theme: .bubblegum),
             DemoThemeOption(
-                name: "Midnight Transit", tagline: "Blueprint and neon", theme: .midnightTransit),
+                name: "Daybreak Plaza", tagline: "Sunlit plaza energy", theme: .daybreakPlaza),
             DemoThemeOption(
-                name: "Citrus Circuit", tagline: "Warm and energetic", theme: .citrusCircuit),
-            DemoThemeOption(name: "Terminal Mint", tagline: "Dark room glow", theme: .terminalMint),
+                name: "Nocturne Volt", tagline: "Moody neon grids", theme: .nocturneVolt),
+            DemoThemeOption(
+                name: "Ultraviolet Cargo", tagline: "Cosmic freight vibes", theme: .ultravioletCargo),
         ]
     }
 }

@@ -62,51 +62,51 @@ public struct NeoBrutalistTheme: Equatable {
         )
     }
 
-    public static var midnightTransit: NeoBrutalistTheme {
+    public static var daybreakPlaza: NeoBrutalistTheme {
         NeoBrutalistTheme(
-            background: .midnight,
-            surface: .graphite,
-            accent: .electricBlue,
-            typography: .highContrast,
-            textPrimary: ColorDescriptor(red: 230, green: 238, blue: 255),
-            textMuted: ColorDescriptor(red: 132, green: 153, blue: 197),
-            borderWidth: 3,
-            cornerRadius: 0,
-            shadowOffset: CGSize(width: 6, height: 6),
-            shadowRadius: 0,
-            noiseOpacity: 0.12
-        )
-    }
-
-    public static var citrusCircuit: NeoBrutalistTheme {
-        NeoBrutalistTheme(
-            background: .bone,
+            background: .morningMist,
             surface: .paper,
-            accent: .magenta,
-            typography: .playful,
-            textPrimary: ColorDescriptor(red: 38, green: 34, blue: 31),
-            textMuted: ColorDescriptor(red: 120, green: 98, blue: 83),
+            accent: .sunburst,
+            typography: .blocky,
+            textPrimary: ColorDescriptor(red: 42, green: 37, blue: 32),
+            textMuted: ColorDescriptor(red: 144, green: 125, blue: 112),
             borderWidth: 2,
             cornerRadius: 0,
             shadowOffset: CGSize(width: 6, height: 6),
             shadowRadius: 0,
-            noiseOpacity: 0.04
+            noiseOpacity: 0.05
         )
     }
 
-    public static var terminalMint: NeoBrutalistTheme {
+    public static var nocturneVolt: NeoBrutalistTheme {
         NeoBrutalistTheme(
-            background: .charcoal,
-            surface: .midnight,
-            accent: .emeraldPulse,
-            typography: .default,
-            textPrimary: ColorDescriptor(red: 218, green: 255, blue: 229),
-            textMuted: ColorDescriptor(red: 132, green: 191, blue: 166),
+            background: .abyss,
+            surface: .graphite,
+            accent: .plasmaBlue,
+            typography: .highContrast,
+            textPrimary: ColorDescriptor(red: 225, green: 235, blue: 255),
+            textMuted: ColorDescriptor(red: 129, green: 147, blue: 197),
             borderWidth: 3,
             cornerRadius: 0,
             shadowOffset: CGSize(width: 6, height: 6),
             shadowRadius: 0,
-            noiseOpacity: 0.16
+            noiseOpacity: 0.14
+        )
+    }
+
+    public static var ultravioletCargo: NeoBrutalistTheme {
+        NeoBrutalistTheme(
+            background: .violetNight,
+            surface: .midnight,
+            accent: .infraSignal,
+            typography: .default,
+            textPrimary: ColorDescriptor(red: 240, green: 228, blue: 255),
+            textMuted: ColorDescriptor(red: 165, green: 150, blue: 191),
+            borderWidth: 3,
+            cornerRadius: 0,
+            shadowOffset: CGSize(width: 6, height: 6),
+            shadowRadius: 0,
+            noiseOpacity: 0.18
         )
     }
 }
@@ -207,6 +207,70 @@ public struct ColorPalette: Equatable {
             primary: ColorDescriptor(red: 78, green: 236, blue: 189),
             secondary: ColorDescriptor(red: 48, green: 204, blue: 156),
             highlight: ColorDescriptor(red: 180, green: 255, blue: 228)
+        )
+    }
+
+    public static var morningMist: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 252, green: 247, blue: 237),
+            secondary: ColorDescriptor(red: 242, green: 234, blue: 219),
+            highlight: ColorDescriptor(red: 255, green: 212, blue: 144)
+        )
+    }
+
+    public static var pastelSky: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 243, green: 247, blue: 255),
+            secondary: ColorDescriptor(red: 226, green: 234, blue: 252),
+            highlight: ColorDescriptor(red: 184, green: 209, blue: 255)
+        )
+    }
+
+    public static var citrusSpark: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 255, green: 207, blue: 96),
+            secondary: ColorDescriptor(red: 255, green: 173, blue: 68),
+            highlight: ColorDescriptor(red: 255, green: 102, blue: 146)
+        )
+    }
+
+    public static var sunburst: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 255, green: 157, blue: 45),
+            secondary: ColorDescriptor(red: 255, green: 102, blue: 128),
+            highlight: ColorDescriptor(red: 0, green: 200, blue: 96)
+        )
+    }
+
+    public static var abyss: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 10, green: 15, blue: 32),
+            secondary: ColorDescriptor(red: 22, green: 30, blue: 55),
+            highlight: ColorDescriptor(red: 108, green: 236, blue: 255)
+        )
+    }
+
+    public static var plasmaBlue: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 64, green: 194, blue: 235),
+            secondary: ColorDescriptor(red: 42, green: 115, blue: 245),
+            highlight: ColorDescriptor(red: 95, green: 255, blue: 234)
+        )
+    }
+
+    public static var violetNight: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 33, green: 18, blue: 48),
+            secondary: ColorDescriptor(red: 54, green: 32, blue: 76),
+            highlight: ColorDescriptor(red: 136, green: 78, blue: 255)
+        )
+    }
+
+    public static var infraSignal: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 255, green: 64, blue: 119),
+            secondary: ColorDescriptor(red: 214, green: 45, blue: 174),
+            highlight: ColorDescriptor(red: 255, green: 209, blue: 104)
         )
     }
 }

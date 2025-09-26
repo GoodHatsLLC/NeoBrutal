@@ -164,6 +164,7 @@ import SwiftUI
                         configureWindow(newWindow)
                     }
                 )
+                .gesture(WindowDragGesture())
                 .task(id: theme) {
                     if let window {
                         configureWindow(window)
@@ -174,6 +175,14 @@ import SwiftUI
         private var background: some View {
             Rectangle()
                 .fill(theme.surface.primary.color)
+                .overlay {
+                    if theme.noiseOpacity > 0 {
+                        Rectangle()
+                            .fill(NeoBrutalistNoise.paint())
+                            .opacity(theme.noiseOpacity)
+                            .blendMode(.overlay)
+                    }
+                }
                 .overlay(
                     Rectangle()
                         .stroke(
@@ -191,6 +200,8 @@ import SwiftUI
         private var chromeContent: some View {
             HStack(spacing: 16) {
                 WindowControls(theme: theme, window: window, windowButtons: windowButtons)
+                    .padding(.horizontal, theme.borderWidth)
+                    .padding(.leading, 4)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(theme.typography.titleFont)
@@ -238,7 +249,7 @@ import SwiftUI
 
             window.titleVisibility = .hidden
             window.titlebarAppearsTransparent = true
-            window.isMovableByWindowBackground = true
+            window.isMovableByWindowBackground = false
             window.backgroundColor = .clear
 
             window.standardWindowButton(.closeButton)?.isHidden = true
@@ -246,7 +257,7 @@ import SwiftUI
             window.standardWindowButton(.zoomButton)?.isHidden = true
 
             if !window.isKeyWindow, window.canBecomeKey {
-                window.makeKey()
+                window.makeKeyAndOrderFront(nil)
             }
         }
     }
@@ -335,201 +346,6 @@ import SwiftUI
                 .accessibilityLabel(control.accessibilityLabel)
                 .onTouchUpInside(downInside: $down)
                 .disabled(window == nil)
-            }
-        }
-    }
-
-    struct NeoBrutalistWindowResizeHandle: View {
-        @Environment(\.neoBrutalistTheme) private var theme
-
-        @State private var window: NSWindow?
-        @State private var initialFrame: NSRect?
-        @State private var isDragging = false
-        @State private var isHovering = false
-        @State private var cursorPushed = false
-
-        private let handleDimension: CGFloat = 28
-
-        var body: some View {
-            ZStack(alignment: .bottomTrailing) {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(backgroundColor)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .stroke(borderColor, lineWidth: borderWidth)
-                    )
-                    .shadow(
-                        color: Color.black.opacity(0.12), radius: isHovering || isDragging ? 4 : 2,
-                        x: 0, y: 2)
-
-                ResizeGlyph()
-                    .stroke(indicatorColor, lineWidth: 1.6)
-                    .frame(width: handleDimension * 0.42, height: handleDimension * 0.42)
-                    .padding(.bottom, 5)
-                    .padding(.trailing, 5)
-            }
-            .frame(width: handleDimension, height: handleDimension)
-            .padding(4)
-            .contentShape(Rectangle())
-            .opacity(isHandleAvailable ? 1 : 0)
-            .allowsHitTesting(isHandleAvailable)
-            .animation(.easeOut(duration: 0.16), value: isHovering)
-            .animation(.easeOut(duration: 0.16), value: isDragging)
-            .onHover { hovering in
-                isHovering = hovering
-                updateCursor(hovering: hovering)
-            }
-            .gesture(dragGesture)
-            .background(
-                WindowReader { newWindow in
-                    window = newWindow
-                }
-            )
-            .onDisappear {
-                if cursorPushed {
-                    NSCursor.pop()
-                    cursorPushed = false
-                }
-            }
-            .accessibilityLabel("Resize Window")
-        }
-
-        private var dragGesture: some Gesture {
-            DragGesture(minimumDistance: 0)
-                .onChanged { value in
-                    guard isHandleAvailable else { return }
-                    if initialFrame == nil {
-                        initialFrame = window?.frame
-                    }
-                    isDragging = true
-                    updateWindowFrame(with: value)
-                }
-                .onEnded { _ in
-                    isDragging = false
-                    initialFrame = nil
-                }
-        }
-
-        private var isHandleAvailable: Bool {
-            guard let window, window.styleMask.contains(.resizable) else { return false }
-            return true
-        }
-
-        private var backgroundColor: Color {
-            if isDragging {
-                return theme.surface.secondary.color.opacity(0.85)
-            }
-            if isHovering {
-                return theme.surface.secondary.color.opacity(0.75)
-            }
-            return theme.surface.secondary.color.opacity(0.55)
-        }
-
-        private var borderColor: Color {
-            theme.surface.highlight.color.opacity(0.9)
-        }
-
-        private var borderWidth: CGFloat {
-            max(theme.borderWidth * 0.9, 1.2)
-        }
-
-        private var indicatorColor: Color {
-            if isDragging {
-                return theme.textPrimary.color.opacity(0.95)
-            }
-            if isHovering {
-                return theme.textPrimary.color.opacity(0.75)
-            }
-            return theme.textMuted.color.opacity(0.8)
-        }
-
-        private func updateWindowFrame(with value: DragGesture.Value) {
-            guard let window, let startFrame = initialFrame else { return }
-
-            var newFrame = startFrame
-
-            let minWidth = resolvedMinimumWidth(for: window)
-            let maxWidth = resolvedMaximumWidth(for: window)
-
-            var proposedWidth = startFrame.size.width + value.translation.width
-            proposedWidth = clamp(proposedWidth, minWidth, maxWidth)
-            newFrame.size.width = proposedWidth
-
-            let minHeight = resolvedMinimumHeight(for: window)
-            let maxHeight = resolvedMaximumHeight(for: window)
-
-            let proposedHeight = startFrame.size.height + value.translation.height
-            let clampedHeight = clamp(proposedHeight, minHeight, maxHeight)
-            let top = startFrame.maxY
-            newFrame.size.height = clampedHeight
-            newFrame.origin.y = top - clampedHeight
-
-            if newFrame != window.frame {
-                window.setFrame(newFrame, display: true, animate: false)
-            }
-        }
-
-        private func updateCursor(hovering: Bool) {
-            #if os(macOS)
-                if hovering && !cursorPushed {
-                    NSCursor.closedHand.push()
-                    cursorPushed = true
-                } else if !hovering && cursorPushed {
-                    NSCursor.pop()
-                    cursorPushed = false
-                }
-            #endif
-        }
-
-        private func clamp(_ value: CGFloat, _ minValue: CGFloat, _ maxValue: CGFloat) -> CGFloat {
-            min(max(value, minValue), maxValue)
-        }
-
-        private func resolvedMinimumWidth(for window: NSWindow) -> CGFloat {
-            let fallback: CGFloat = 80
-            let candidates = [window.contentMinSize.width, window.minSize.width, fallback].filter {
-                $0 > 0
-            }
-            return candidates.max() ?? fallback
-        }
-
-        private func resolvedMinimumHeight(for window: NSWindow) -> CGFloat {
-            let fallback: CGFloat = 80
-            let candidates = [window.contentMinSize.height, window.minSize.height, fallback].filter
-            { $0 > 0 }
-            return candidates.max() ?? fallback
-        }
-
-        private func resolvedMaximumWidth(for window: NSWindow) -> CGFloat {
-            let candidates = [window.contentMaxSize.width, window.maxSize.width].filter {
-                $0 > 0 && $0 < .greatestFiniteMagnitude
-            }
-            return candidates.min() ?? .greatestFiniteMagnitude
-        }
-
-        private func resolvedMaximumHeight(for window: NSWindow) -> CGFloat {
-            let candidates = [window.contentMaxSize.height, window.maxSize.height].filter {
-                $0 > 0 && $0 < .greatestFiniteMagnitude
-            }
-            return candidates.min() ?? .greatestFiniteMagnitude
-        }
-
-        private struct ResizeGlyph: Shape {
-            func path(in rect: CGRect) -> Path {
-                var path = Path()
-
-                let spacing = rect.width / 3
-
-                path.move(to: CGPoint(x: rect.maxX, y: rect.minY + spacing))
-                path.addLine(to: CGPoint(x: rect.minX + spacing, y: rect.maxY))
-
-                path.move(to: CGPoint(x: rect.maxX, y: rect.minY + spacing * 2))
-                path.addLine(to: CGPoint(x: rect.minX + spacing * 2, y: rect.maxY))
-
-                path.move(to: CGPoint(x: rect.maxX - spacing, y: rect.minY))
-                path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY - spacing))
-
-                return path
             }
         }
     }

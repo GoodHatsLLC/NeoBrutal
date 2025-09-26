@@ -44,6 +44,14 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
     private var surface: some View {
         baseShape
             .fill(theme.surface.primary.color)
+            .overlay {
+                if theme.noiseOpacity > 0 {
+                    baseShape
+                        .fill(NeoBrutalistNoise.paint())
+                        .opacity(theme.noiseOpacity)
+                        .blendMode(.overlay)
+                }
+            }
             .overlay(baseShape.stroke(theme.surface.secondary.color.opacity(0.7), lineWidth: theme.borderWidth))
             .overlay(highlightBorder)
             .overlay(accentBar)

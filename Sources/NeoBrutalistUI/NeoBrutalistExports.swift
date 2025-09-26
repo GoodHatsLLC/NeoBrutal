@@ -15,36 +15,9 @@ public enum NeoBrutalist {
     public static var curatedThemes: [NeoBrutalistTheme] {
         [
             .bubblegum,
-            .midnightTransit,
-            .citrusCircuit,
-            .terminalMint
+            .daybreakPlaza,
+            .nocturneVolt,
+            .ultravioletCargo
         ]
-    }
-
-    /// Returns a theme pairing suited for the current color scheme.
-    public static func theme(for colorScheme: ColorScheme) -> NeoBrutalistTheme {
-        switch colorScheme {
-        case .light:
-            return .citrusCircuit
-        case .dark:
-            return .midnightTransit
-        @unknown default:
-            return .bubblegum
-        }
-    }
-}
-
-public extension View {
-    /// Applies a Neo Brutalist theme that adapts to the current color scheme.
-    func neoBrutalistAutoThemed() -> some View {
-        modifier(AutoThemedModifier())
-    }
-}
-
-private struct AutoThemedModifier: ViewModifier {
-    @Environment(\.colorScheme) private var colorScheme
-
-    func body(content: Content) -> some View {
-        content.neoBrutalistTheme(NeoBrutalist.theme(for: colorScheme))
     }
 }

@@ -1,4 +1,6 @@
 import SwiftUI
+import CoreGraphics
+import Foundation
 
 extension View {
     @ViewBuilder
@@ -65,5 +67,45 @@ private struct NeoBrutalistShadowModifier: ViewModifier {
         } else {
             content
         }
+    }
+}
+
+enum NeoBrutalistNoise {
+    static let image: Image = {
+        let dimension = 128
+        let pixelCount = dimension * dimension
+        var pixels = [UInt8](repeating: 0, count: pixelCount)
+
+        for index in 0..<pixelCount {
+            pixels[index] = UInt8.random(in: 0...255)
+        }
+
+        let data = Data(pixels)
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        let bytesPerRow = dimension
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.none.rawValue)
+
+        guard let provider = CGDataProvider(data: data as CFData),
+              let cgImage = CGImage(
+                  width: dimension,
+                  height: dimension,
+                  bitsPerComponent: 8,
+                  bitsPerPixel: 8,
+                  bytesPerRow: bytesPerRow,
+                  space: colorSpace,
+                  bitmapInfo: bitmapInfo,
+                  provider: provider,
+                  decode: nil,
+                  shouldInterpolate: false,
+                  intent: .defaultIntent
+              ) else {
+            return Image(systemName: "square.fill")
+        }
+
+        return Image(decorative: cgImage, scale: 1, orientation: .up)
+    }()
+
+    static func paint(scale: CGFloat = 1) -> ImagePaint {
+        ImagePaint(image: image, scale: scale)
     }
 }

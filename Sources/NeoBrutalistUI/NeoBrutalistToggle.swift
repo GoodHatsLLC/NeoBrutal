@@ -32,7 +32,6 @@ public struct NeoBrutalistToggleStyle: ToggleStyle {
             Spacer(minLength: 0)
             toggle(configuration: configuration)
         }
-        .neoBrutalistSurface(accentEdge: configuration.isOn ? .trailing : .leading, highlighted: configuration.isOn, padding: 18)
     }
 
     private func toggle(configuration: Configuration) -> some View {

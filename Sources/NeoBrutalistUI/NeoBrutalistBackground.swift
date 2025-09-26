@@ -18,6 +18,14 @@ public struct NeoBrutalistBackground: View {
                 theme.background.primary.color
                     .ignoresSafeArea()
 
+                if theme.noiseOpacity > 0 {
+                    Rectangle()
+                        .fill(NeoBrutalistNoise.paint())
+                        .opacity(theme.noiseOpacity)
+                        .blendMode(.overlay)
+                        .ignoresSafeArea()
+                }
+
                 if showsGrid {
                     grid
                         .ignoresSafeArea()
