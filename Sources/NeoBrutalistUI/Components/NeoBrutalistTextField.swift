@@ -16,6 +16,7 @@ public struct NeoBrutalistTextField: View {
             .padding()
             .background(theme.surface.primary.color)
             .border(Color.black, width: theme.borderWidth)
+            .compositingGroup()
             .shadow(color: .black, radius: 0, x: theme.shadowOffset.width, y: theme.shadowOffset.height)
     }
 }

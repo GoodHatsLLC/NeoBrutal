@@ -10,30 +10,45 @@ public struct NeoBrutalistStepper: View {
         self._value = value
         self.range = range
     }
-    
+
+    @ScaledMetric(relativeTo: .title2) var h2  = 20
+
     public var body: some View {
         HStack {
-            Button(action: { 
-                if value > range.lowerBound {
-                    value -= 1
+                Button(action: {
+                    if value > range.lowerBound {
+                        withAnimation {
+                            value -= 1
+                        }
+                    }
+                }) {
+                    Image(systemName: "minus")
+                        .frame(width: h2, height: h2)
                 }
-            }) {
-                Image(systemName: "minus")
+                .buttonStyle(NeoBrutalistStepperButtonStyle(theme: theme))
+
+            if #available(macOS 26.0, *) {
+                Text("\(value)")
+                    .font(theme.typography.monoFont.pointSize(h2))
+                    .contentTransition(.numericText(value: Double(value)))
+                    .padding()
+            } else {
+                Text("\(value)")
+                    .font(theme.typography.monoFont)
+                    .contentTransition(.numericText(value: Double(value)))
+                    .padding()
             }
-            .buttonStyle(NeoBrutalistStepperButtonStyle(theme: theme))
-            
-            Text("\(value)")
-                .font(theme.typography.bodyFont)
-                .padding(.horizontal)
-            
-            Button(action: { 
-                if value < range.upperBound {
-                    value += 1
+                Button(action: {
+                    if value < range.upperBound {
+                        withAnimation {
+                            value += 1
+                        }
+                    }
+                }) {
+                    Image(systemName: "plus")
+                        .frame(width: h2, height: h2)
                 }
-            }) {
-                Image(systemName: "plus")
-            }
-            .buttonStyle(NeoBrutalistStepperButtonStyle(theme: theme))
+                .buttonStyle(NeoBrutalistStepperButtonStyle(theme: theme))
         }
     }
 }
@@ -45,10 +60,14 @@ struct NeoBrutalistStepperButtonStyle: ButtonStyle {
         configuration.label
             .font(theme.typography.bodyFont)
             .padding()
-            .background(theme.surface.primary.color)
+            .background {
+                Rectangle()
+                    .fill(theme.surface.primary.color)
+                .border(Color.black, width: theme.borderWidth)
+                .compositingGroup()
+                .shadow(color: .black, radius: 0, x: theme.shadowOffset.width, y: theme.shadowOffset.height)
+            }
             .foregroundColor(theme.textPrimary.color)
-            .border(Color.black, width: theme.borderWidth)
-            .shadow(color: .black, radius: 0, x: theme.shadowOffset.width, y: theme.shadowOffset.height)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0, anchor: .bottomTrailing)
     }
 }
