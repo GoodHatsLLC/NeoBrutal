@@ -9,8 +9,8 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
 
         var padding: EdgeInsets {
             switch self {
-            case .compact: return EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
-            case .regular: return EdgeInsets(top: 14, leading: 22, bottom: 14, trailing: 22)
+            case .compact: return EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+            case .regular: return EdgeInsets(top: 22, leading: 22, bottom: 22, trailing: 22)
             case .prominent: return EdgeInsets(top: 18, leading: 28, bottom: 18, trailing: 28)
             }
         }
@@ -35,26 +35,24 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
             .padding(size.padding)
             .background(background(isPressed: configuration.isPressed))
             .offset(x: pressOffset.width, y: pressOffset.height)
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+//            .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.spring(response: 0.28, dampingFraction: 0.7), value: configuration.isPressed)
     }
 
     private func background(isPressed: Bool) -> some View {
         let fill = isPressed ? theme.accent.primary.color: theme.surface.primary.color
         let border = isPressed ? theme.accent.highlight.color : theme.accent.primary.color
-        let shadowColor = Color.primary.opacity(0.2)
-        let shadowOffset = isPressed ? .zero : theme.shadowOffset
+        let shadowColor = Color.primary.opacity(theme.shadowOpacity)
 
         return baseShape
             .fill(fill)
             .overlay(baseShape.stroke(border, lineWidth: theme.borderWidth))
-            .overlay(baseShape.stroke(theme.surface.highlight.color.opacity(0.6), lineWidth: theme.borderWidth * 0.6))
-            .compositingGroup()
+            .overlay(baseShape.stroke(theme.surface.highlight.color.opacity(0.6), lineWidth: theme.borderWidth))
             .neoBrutalistShadow(
                 color: shadowColor,
                 radius: theme.shadowRadius,
-                offset: shadowOffset,
-                isEnabled: displayShadow
+                offset: theme.shadowOffset,
+                isEnabled: !isPressed && displayShadow
             )
     }
 

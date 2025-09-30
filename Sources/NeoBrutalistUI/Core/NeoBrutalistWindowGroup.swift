@@ -42,7 +42,7 @@ public struct NeoBrutalistWindowGroup<Content: View, Accessory: View>: Scene {
                     )
                     .fixedSize(horizontal: false, vertical: true)
                     .neoBrutalistShadow(
-                        color: Color.black.opacity(theme.shadowRadius == 0 ? 0.2 : 0.28),
+                        color: Color.primary.opacity(theme.shadowOpacity),
                         radius: theme.shadowRadius,
                         offset: theme.shadowOffset,
                         clip: .horizontal

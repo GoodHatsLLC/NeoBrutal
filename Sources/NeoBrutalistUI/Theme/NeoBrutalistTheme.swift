@@ -15,6 +15,7 @@ public struct NeoBrutalistTheme: Equatable {
     public var cornerRadius: CGFloat
     public var shadowOffset: CGSize
     public var shadowRadius: CGFloat
+    public var shadowOpacity: CGFloat
     public var noiseOpacity: Double
     public var windowButtonSize: CGSize
 
@@ -30,7 +31,8 @@ public struct NeoBrutalistTheme: Equatable {
         cornerRadius: CGFloat = 0,
         shadowOffset: CGSize = CGSize(width: 6, height: 6),
         shadowRadius: CGFloat = 0,
-        noiseOpacity: Double = 0,
+        shadowOpacity: CGFloat = 0.4,
+        noiseOpacity: Double = 0.2,
         windowButtonSize: CGSize = CGSize(width: 16, height: 16)
     ) {
         self.name = name
@@ -44,6 +46,7 @@ public struct NeoBrutalistTheme: Equatable {
         self.cornerRadius = cornerRadius
         self.shadowOffset = shadowOffset
         self.shadowRadius = shadowRadius
+        self.shadowOpacity = shadowOpacity
         self.noiseOpacity = noiseOpacity
         self.windowButtonSize = windowButtonSize
     }

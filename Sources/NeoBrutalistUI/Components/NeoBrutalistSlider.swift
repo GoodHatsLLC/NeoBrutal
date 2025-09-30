@@ -162,7 +162,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
                     .stroke(Color.black.opacity(0.12), lineWidth: 1)
             )
             .neoBrutalistShadow(
-                color: Color.black.opacity(isDragging ? 0.18 : 0.28),
+                color: Color.black.opacity(isDragging ? min(1, theme.shadowOpacity + 0.2) : theme.shadowOpacity),
                 radius: theme.shadowRadius,
                 offset: theme.shadowOffset,
                 isEnabled: true

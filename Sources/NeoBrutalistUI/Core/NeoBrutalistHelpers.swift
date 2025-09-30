@@ -36,37 +36,34 @@ private struct NeoBrutalistShadowModifier: ViewModifier {
     let offset: CGSize
     let clip: Axis?
     let isEnabled: Bool
+    var modOffset: CGSize { isEnabled ? offset : .zero }
 
     @ViewBuilder
     func body(content: Content) -> some View {
-        if isEnabled {
             if radius <= 0 {
                 content
                     .background {
                         color
-                            .offset(x: offset.width, y: offset.height)
+                            .offset(x: modOffset.width, y: modOffset.height)
                     }
                     .padding(.bottom, max(clip == .vertical ? 0 :  offset.height, 0))
-                    .padding(.top, max(clip == .vertical ? 0 : -offset.height, 0))
+                    .padding(.top, max(clip == .vertical ? 0 : offset.height, 0))
                     .padding(.trailing, max(clip == .horizontal ? 0 : offset.width, 0))
-                    .padding(.leading, max(clip == .horizontal ? 0 : -offset.width, 0))
+                    .padding(.leading, max(clip == .horizontal ? 0 : offset.width, 0))
                     .clipped()
             } else {
                 content.shadow(
                     color: color,
                     radius: radius,
-                    x: offset.width,
-                    y: offset.height
+                    x: modOffset.width,
+                    y: modOffset.height
                 )
                 .padding(.bottom, max(clip == .vertical ? 0 :  offset.height, 0))
-                .padding(.top, max(clip == .vertical ? 0 : -offset.height, 0))
+                .padding(.top, max(clip == .vertical ? 0 : offset.height, 0))
                 .padding(.trailing, max(clip == .horizontal ? 0 : offset.width, 0))
-                .padding(.leading, max(clip == .horizontal ? 0 : -offset.width, 0))
+                .padding(.leading, max(clip == .horizontal ? 0 : offset.width, 0))
 
             }
-        } else {
-            content
-        }
     }
 }
 

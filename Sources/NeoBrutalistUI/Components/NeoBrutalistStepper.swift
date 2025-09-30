@@ -25,7 +25,7 @@ public struct NeoBrutalistStepper: View {
                     Image(systemName: "minus")
                         .frame(width: h2, height: h2)
                 }
-                .buttonStyle(NeoBrutalistStepperButtonStyle(theme: theme))
+                .buttonStyle(NeoBrutalistButtonStyle())
 
             if #available(macOS 26.0, *) {
                 Text("\(value)")
@@ -48,26 +48,7 @@ public struct NeoBrutalistStepper: View {
                     Image(systemName: "plus")
                         .frame(width: h2, height: h2)
                 }
-                .buttonStyle(NeoBrutalistStepperButtonStyle(theme: theme))
+                .buttonStyle(NeoBrutalistButtonStyle())
         }
-    }
-}
-
-struct NeoBrutalistStepperButtonStyle: ButtonStyle {
-    let theme: NeoBrutalistTheme
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(theme.typography.bodyFont)
-            .padding()
-            .background {
-                Rectangle()
-                    .fill(theme.surface.primary.color)
-                .border(Color.black, width: theme.borderWidth)
-                .compositingGroup()
-                .shadow(color: .black, radius: 0, x: theme.shadowOffset.width, y: theme.shadowOffset.height)
-            }
-            .foregroundColor(theme.textPrimary.color)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0, anchor: .bottomTrailing)
     }
 }

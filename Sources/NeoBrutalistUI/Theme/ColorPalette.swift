@@ -197,9 +197,9 @@ public struct ColorPalette: Equatable {
 
     public static var breakIdeasAccent: ColorPalette {
         ColorPalette(
-            primary: ColorDescriptor(red: 253, green: 238, blue: 147),
-            secondary: ColorDescriptor(red: 253, green: 238, blue: 147),
-            highlight: ColorDescriptor(red: 253, green: 238, blue: 147)
+            primary: ColorDescriptor(red: 243, green: 211, blue:0),
+            secondary: ColorDescriptor(red: 243, green: 211, blue:0),
+            highlight: ColorDescriptor(red: 243, green: 211, blue:0)
         )
     }
 }

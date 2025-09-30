@@ -57,7 +57,7 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
             .overlay(accentBar)
             .compositingGroup()
             .neoBrutalistShadow(
-                color: Color.primary.opacity(isHighlighted ? 0.2 : 0.1),
+                color: Color.primary.opacity(isHighlighted ? min(1, theme.shadowOpacity + 0.2) : theme.shadowOpacity),
                 radius: theme.shadowRadius,
                 offset: theme.shadowOffset
             )

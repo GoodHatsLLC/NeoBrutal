@@ -13,10 +13,15 @@ public struct NeoBrutalistTextField: View {
     
     public var body: some View {
         TextField(title, text: $text)
+            .textFieldStyle(.plain)
             .padding()
             .background(theme.surface.primary.color)
-            .border(Color.black, width: theme.borderWidth)
+            .border(Color.primary.opacity(theme.shadowOpacity), width: theme.borderWidth)
             .compositingGroup()
-            .shadow(color: .black, radius: 0, x: theme.shadowOffset.width, y: theme.shadowOffset.height)
+            .neoBrutalistShadow(
+                color: Color.primary.opacity(theme.shadowOpacity),
+                radius: theme.shadowRadius,
+                offset: theme.shadowOffset
+            )
     }
 }
