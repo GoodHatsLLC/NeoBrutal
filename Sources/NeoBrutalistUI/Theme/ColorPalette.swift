@@ -179,6 +179,14 @@ public struct ColorPalette: Equatable {
         )
     }
 
+    public static var crimsonFury: ColorPalette {
+        ColorPalette(
+            primary: ColorDescriptor(red: 220, green: 38, blue: 38),
+            secondary: ColorDescriptor(red: 185, green: 28, blue: 28),
+            highlight: ColorDescriptor(red: 255, green: 82, blue: 82)
+        )
+    }
+
     public static var breakIdeasBackground: ColorPalette {
         ColorPalette(
             primary: ColorDescriptor(red: 253, green: 252, blue: 251),

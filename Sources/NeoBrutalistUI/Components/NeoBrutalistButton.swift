@@ -35,7 +35,7 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
             .padding(size.padding)
             .background(background(isPressed: configuration.isPressed))
             .offset(x: pressOffset.width, y: pressOffset.height)
-//            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.spring(response: 0.28, dampingFraction: 0.7), value: configuration.isPressed)
     }
 
@@ -48,6 +48,7 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
             .fill(fill)
             .overlay(baseShape.stroke(border, lineWidth: theme.borderWidth))
             .overlay(baseShape.stroke(theme.surface.highlight.color.opacity(0.6), lineWidth: theme.borderWidth))
+            .compositingGroup()
             .neoBrutalistShadow(
                 color: shadowColor,
                 radius: theme.shadowRadius,

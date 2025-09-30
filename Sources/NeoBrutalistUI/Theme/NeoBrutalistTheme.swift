@@ -146,6 +146,22 @@ public struct NeoBrutalistTheme: Equatable {
             noiseOpacity: 0.14
         )
     }
+
+    public static var crimsonFury: NeoBrutalistTheme {
+        NeoBrutalistTheme(
+            background: .paper,
+            surface: .paper,
+            accent: .crimsonFury,
+            typography: .blocky,
+            textPrimary: ColorDescriptor(red: 20, green: 20, blue: 20),
+            textMuted: ColorDescriptor(red: 120, green: 120, blue: 120),
+            borderWidth: 3,
+            cornerRadius: 0,
+            shadowOffset: CGSize(width: 8, height: 8),
+            shadowRadius: 0,
+            noiseOpacity: 0.25
+        )
+    }
 }
 
 private struct NeoBrutalistThemeKey: EnvironmentKey {

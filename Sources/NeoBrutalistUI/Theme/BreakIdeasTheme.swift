@@ -13,7 +13,7 @@ public extension NeoBrutalistTheme {
             borderWidth: 2,
             cornerRadius: 10,
             shadowOffset: CGSize(width: 4, height: 4),
-            shadowRadius: 0,
+            shadowRadius: 5,
             noiseOpacity: 0.05,
             windowButtonSize: CGSize(width: 16, height: 16)
         )

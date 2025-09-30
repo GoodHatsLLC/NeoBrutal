@@ -167,6 +167,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
                 offset: theme.shadowOffset,
                 isEnabled: true
             )
+            .offset(x: -theme.borderWidth, y: -theme.borderWidth/2)
             .scaleEffect(isDragging ? 1.05 : 1)
             .animation(.easeOut(duration: 0.15), value: isDragging)
     }
