@@ -469,7 +469,7 @@ struct TouchUpInsideModifier: ViewModifier {
     }
 }
 extension View {
-    public func readingSize(into binding: Binding<CGSize>) -> some View {
+    func readingSize(into binding: Binding<CGSize>) -> some View {
         self
             .overlay {
                 GeometryReader { geo in
