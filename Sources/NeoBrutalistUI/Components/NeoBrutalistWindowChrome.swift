@@ -12,12 +12,16 @@ import SwiftUI
         public let gestureType: GestureType
         public let action: (_ window: NSWindow) -> Void
 
-        public static func doubleTap(action: @escaping (_ window: NSWindow) -> Void)
+        public static func doubleTap(
+            action: @MainActor @escaping (_ window: NSWindow) -> Void = {
+                w in w.zoom(nil)
+            }
+        )
             -> WindowGestureConfiguration
         {
             WindowGestureConfiguration(
                 gestureType: .doubleTap,
-                action: action
+                action: { w in Task { @MainActor in action(w) } }
             )
         }
     }
@@ -29,45 +33,61 @@ import SwiftUI
         public let accessibilityLabel: String
         public let action: (_ window: NSWindow) -> Void
 
-        public static func close(action: @escaping (_ window: NSWindow) -> Void)
+        public static func close(
+            action: @MainActor @escaping (_ window: NSWindow) -> Void = {
+                w in w.performClose(nil)
+            }
+        )
             -> WindowChromeButtonConfiguration
         {
             WindowChromeButtonConfiguration(
                 icon: Image(systemName: "xmark"),
                 color: Color.red,
                 accessibilityLabel: "Close Window",
-                action: action
+                action: { w in Task { @MainActor in action(w) } }
             )
         }
 
-        public static func minimize(action: @escaping (_ window: NSWindow) -> Void)
+        public static func minimize(
+            action: @MainActor @escaping (_ window: NSWindow) -> Void = {
+                w in w.miniaturize(nil)
+            }
+        )
             -> WindowChromeButtonConfiguration
         {
             WindowChromeButtonConfiguration(
                 icon: Image(systemName: "minus"),
                 color: Color.yellow,
                 accessibilityLabel: "Minimize Window",
-                action: action
+                action:  { w in Task { @MainActor in action(w) } }
             )
         }
-        public static func zoom(action: @escaping (_ window: NSWindow) -> Void)
+        public static func zoom(
+            action: @MainActor @escaping (_ window: NSWindow) -> Void = {
+                w in w.performZoom(nil)
+            }
+        )
             -> WindowChromeButtonConfiguration
         {
             WindowChromeButtonConfiguration(
-                icon: Image(systemName: "arrow.up.left.and.arrow.down.right"),
+                icon: Image(systemName: "chevron.up.chevron.down"),
                 color: Color.green,
                 accessibilityLabel: "Zoom Window",
-                action: action
+                action:  { w in Task { @MainActor in action(w) } }
             )
         }
-        public static func pin(action: @escaping (_ window: NSWindow) -> Void)
+        public static func pin(
+            action: @MainActor @escaping (_ window: NSWindow) -> Void = { w in
+                w.level = w.level == .normal ? .floating : .normal
+            }
+        )
             -> WindowChromeButtonConfiguration
         {
             WindowChromeButtonConfiguration(
                 icon: Image(systemName: "square.on.square"),
-                color: Color.cyan,
+                color: Color.blue,
                 accessibilityLabel: "Pin Window",
-                action: action
+                action:  { w in Task { @MainActor in action(w) } }
             )
         }
 
@@ -89,9 +109,10 @@ import SwiftUI
         public static var defaultButtons: [WindowChromeButtonConfiguration] {
 
             [
-                WindowChromeButtonConfiguration.close(action: { $0.performClose(nil) }),
-                WindowChromeButtonConfiguration.minimize { $0.miniaturize(nil) },
-                WindowChromeButtonConfiguration.zoom { $0.performZoom(nil) },
+                WindowChromeButtonConfiguration.close(),
+                WindowChromeButtonConfiguration.minimize(),
+                WindowChromeButtonConfiguration.zoom(),
+                WindowChromeButtonConfiguration.pin()
             ]
         }
     }
@@ -100,7 +121,7 @@ import SwiftUI
         public static var defaultGestures: [WindowGestureConfiguration] {
 
             [
-                WindowGestureConfiguration.doubleTap { $0.toggleFullScreen(nil) }
+                WindowGestureConfiguration.doubleTap()
             ]
         }
     }
@@ -240,7 +261,11 @@ import SwiftUI
 
         private func configureWindow(_ window: NSWindow) {
             let requiredMask: NSWindow.StyleMask = [
-                .titled, .closable, .miniaturizable, .resizable, .fullSizeContentView,
+                .titled,
+                .closable,
+                .miniaturizable,
+                .resizable,
+                .fullSizeContentView,
             ]
 
             if !window.styleMask.contains(requiredMask) {
@@ -283,19 +308,20 @@ import SwiftUI
             }
         }
         private func controlButton(
-            _ control: WindowChromeButtonConfiguration, hover: Bool
+            _ control: WindowChromeButtonConfiguration,
+            hover: Bool
         )
             -> some View
         {
 
-            WithState(initialState: false) { $down in
+            WithState(initialState: (down: false, active: false)) { $s in
                 Button {
                     if let window {
                         control.action(window)
                     }
                 } label: {
                     Circle()
-                        .fill(control.color)
+                        .fill(control.color.exposure(adjustment: s.active ? 5 : 0))
                         .stroke(
                             control.color.mix(with: .black, by: 0.7).opacity(0.5),
                             lineWidth: max(theme.borderWidth * 0.6, 1)
@@ -317,7 +343,7 @@ import SwiftUI
                                 .fill(
                                     LinearGradient(
                                         colors: [
-                                            down ? .black.opacity(0.3) : .white.opacity(0.3),
+                                            s.down ? .black: .white.opacity(0.3),
                                             .clear,
                                         ], startPoint: .top,
                                         endPoint: .bottom)
@@ -328,6 +354,7 @@ import SwiftUI
                             control.icon.resizable(resizingMode: .tile).aspectRatio(
                                 contentMode: .fit
                             )
+                            .fontWeight(.black)
                             .opacity(
                                 hover ? 0.7 : 0
                             ).padding(
@@ -337,14 +364,12 @@ import SwiftUI
                                         * 0.22)
                             )
                         )
-                        .bold()
                         .contentShape(Circle())
-                        .shadow(color: Color.black.opacity(0.08), radius: 1.5, x: 0, y: 1)
                         .compositingGroup()
                 }
                 .buttonStyle(NoStyle())
                 .accessibilityLabel(control.accessibilityLabel)
-                .onTouchUpInside(downInside: $down)
+                .onTouchUpInside(downInside: $s.active)
                 .disabled(window == nil)
             }
         }
