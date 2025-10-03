@@ -48,6 +48,7 @@ public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: V
                     .readingSize(into: $size, safeArea: $safeArea)
                 content()
             }
+            .background(.ultraThinMaterial)
             .ignoresSafeArea()
             .overlay {
                 overlay()

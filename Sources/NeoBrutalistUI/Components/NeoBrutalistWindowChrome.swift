@@ -1,4 +1,3 @@
-import SwiftUI
 
 #if os(macOS)
     import SwiftUI
@@ -35,7 +34,7 @@ import SwiftUI
 
         public static func close(
             action: @MainActor @escaping (_ window: NSWindow) -> Void = {
-                w in w.performClose(nil)
+                w in w.windowController?.close()
             }
         )
             -> WindowChromeButtonConfiguration
@@ -254,7 +253,6 @@ import SwiftUI
 
         private func configureWindow(_ window: NSWindow) {
             let requiredMask: NSWindow.StyleMask = [
-//                .titled,
                 .closable,
                 .miniaturizable,
                 .resizable,
