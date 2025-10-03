@@ -165,9 +165,6 @@ import SwiftUI
 
         public var body: some View {
             chromeContent
-                .background(background)
-                .frame(maxWidth: .infinity)
-                .contentShape(Rectangle())
                 .onTapGesture(count: 2) {
                     if let window {
                         for gesture in windowGestures {
@@ -192,67 +189,63 @@ import SwiftUI
                     }
                 }
         }
-
-        private var background: some View {
-            Rectangle()
-                .fill(theme.surface.primary.color)
-                .overlay {
-                    if theme.noiseOpacity > 0 {
-                        Rectangle()
-                            .fill(NeoBrutalistNoise.paint())
-                            .opacity(theme.noiseOpacity)
-                            .blendMode(.overlay)
-                    }
-                }
-                .overlay(
-                    Rectangle()
-                        .stroke(
-                            theme.surface.secondary.color.opacity(0.75),
-                            lineWidth: theme.borderWidth)
-                )
-                .overlay(alignment: .bottom) {
-                    Rectangle()
-                        .fill(theme.accent.primary.color)
-                        .frame(height: accentHeight)
-                }
-                .ignoresSafeArea(edges: [.top, .horizontal])
-        }
-
         private var chromeContent: some View {
-            HStack(spacing: 16) {
-                WindowControls(theme: theme, window: window, windowButtons: windowButtons)
-                    .padding(.horizontal, theme.borderWidth)
-                    .padding(.leading, 4)
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(theme.typography.titleFont)
-                        .foregroundColor(theme.textPrimary.color)
-                        .lineLimit(1)
+                    VStack(spacing: 0) {
+                        HStack(spacing: 0) {
+                            Color.clear.frame(width: 16)
+                            WindowControls(theme: theme, window: window, windowButtons: windowButtons)
+                                .padding(.horizontal, theme.borderWidth)
+                            Color.clear.frame(width: 16)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(title)
+                                    .font(theme.typography.titleFont)
+                                    .foregroundColor(theme.textPrimary.color)
+                                    .lineLimit(1)
 
-                    if let subtitle, !subtitle.isEmpty {
-                        Text(subtitle.uppercased())
-                            .font(theme.typography.monoFont)
-                            .foregroundColor(theme.textMuted.color)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(
-                                Capsule(style: .continuous)
-                                    .fill(theme.surface.secondary.color.opacity(0.7))
-                                    .overlay(
-                                        Capsule(style: .continuous)
-                                            .stroke(
-                                                theme.surface.highlight.color.opacity(0.65),
-                                                lineWidth: max(theme.borderWidth * 0.8, 1))
-                                    )
-                            )
+                                if let subtitle, !subtitle.isEmpty {
+                                    Text(subtitle.uppercased())
+                                        .font(theme.typography.monoFont)
+                                        .foregroundColor(theme.textMuted.color)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 4)
+                                        .background(
+                                            Capsule(style: .continuous)
+                                                .fill(theme.surface.secondary.color.opacity(0.7))
+                                                .overlay(
+                                                    Capsule(style: .continuous)
+                                                        .stroke(
+                                                            theme.surface.highlight.color.opacity(0.65),
+                                                            lineWidth: max(theme.borderWidth * 0.8, 1))
+                                                )
+                                        )
+                                }
+                            }
+                            .fixedSize()
+                            Spacer(minLength: 0)
+                            Color.clear.frame(width: 16)
+                            accessory
+                            Color.clear.frame(width: 16)
+                        }
+                        .background {
+                            if theme.noiseOpacity > 0 {
+                                Rectangle()
+                                    .fill(NeoBrutalistNoise.paint())
+                                    .opacity(theme.noiseOpacity)
+                                    .blendMode(.overlay)
+                            }
+                        }
+                        Rectangle()
+                            .fill(theme.accent.primary.color)
+                            .frame(height: accentHeight)
+                        Rectangle()
+                            .fill(.primary.opacity(theme.shadowOpacity))
+                            .frame(height: accentHeight)
                     }
-                }
-                Spacer()
-                accessory
-            }
-            .padding(.horizontal, 10)
-            .padding(.top, 8)
-            .padding(.bottom, 10)
+                    .background {
+                        Rectangle()
+                            .fill(theme.surface.primary.color)
+                    }
+                .ignoresSafeArea()
         }
 
         private var accentHeight: CGFloat {
@@ -261,7 +254,7 @@ import SwiftUI
 
         private func configureWindow(_ window: NSWindow) {
             let requiredMask: NSWindow.StyleMask = [
-                .titled,
+//                .titled,
                 .closable,
                 .miniaturizable,
                 .resizable,
