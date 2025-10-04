@@ -11,9 +11,13 @@
         public let gestureType: GestureType
         public let action: (_ window: NSWindow) -> Void
 
-        public static func doubleTap(
-            action: @MainActor @escaping (_ window: NSWindow) -> Void = {
-                w in w.zoom(nil)
+        public static func doubleTapZoom(
+            action: @MainActor @escaping (_ window: NSWindow) -> Void = { w in
+                if w.isZoomed {
+                    w.setIsZoomed(false)
+                } else {
+                    w.setIsZoomed(true)
+                }
             }
         )
             -> WindowGestureConfiguration
@@ -62,8 +66,12 @@
             )
         }
         public static func zoom(
-            action: @MainActor @escaping (_ window: NSWindow) -> Void = {
-                w in w.performZoom(nil)
+            action: @MainActor @escaping (_ window: NSWindow) -> Void = { w in
+                if w.isZoomed {
+                    w.setIsZoomed(false)
+                } else {
+                    w.setIsZoomed(true)
+                }
             }
         )
             -> WindowChromeButtonConfiguration
@@ -120,7 +128,7 @@
         public static var defaultGestures: [WindowGestureConfiguration] {
 
             [
-                WindowGestureConfiguration.doubleTap()
+                WindowGestureConfiguration.doubleTapZoom()
             ]
         }
     }
@@ -164,16 +172,6 @@
 
         public var body: some View {
             chromeContent
-                .onTapGesture(count: 2) {
-                    if let window {
-                        for gesture in windowGestures {
-                            switch gesture.gestureType {
-                            case .doubleTap:
-                                gesture.action(window)
-                            }
-                        }
-                    }
-                }
                 .background(
                     WindowReader { newWindow in
                         guard let newWindow, window !== newWindow else { return }
@@ -181,7 +179,6 @@
                         configureWindow(newWindow)
                     }
                 )
-                .gesture(WindowDragGesture())
                 .task(id: theme) {
                     if let window {
                         configureWindow(window)
@@ -192,14 +189,23 @@
                     VStack(spacing: 0) {
                         HStack(spacing: 0) {
                             Color.clear.frame(width: 16)
-                            WindowControls(theme: theme, window: window, windowButtons: windowButtons)
+                            WindowControls(
+                                theme: theme,
+                                window: window,
+                                windowButtons: windowButtons
+                            )
                                 .padding(.horizontal, theme.borderWidth)
-                            Color.clear.frame(width: 16)
-                            VStack(alignment: .leading, spacing: 4) {
+                            Color.clear
+                                .frame(width: 16)
+                            VStack(
+                                alignment: .leading,
+                                spacing: 4
+                            ) {
                                 Text(title)
                                     .font(theme.typography.titleFont)
                                     .foregroundColor(theme.textPrimary.color)
                                     .lineLimit(1)
+                                    .padding()
 
                                 if let subtitle, !subtitle.isEmpty {
                                     Text(subtitle.uppercased())
@@ -211,10 +217,18 @@
                                             Capsule(style: .continuous)
                                                 .fill(theme.surface.secondary.color.opacity(0.7))
                                                 .overlay(
-                                                    Capsule(style: .continuous)
+                                                    Capsule(
+                                                        style: .continuous
+                                                    )
                                                         .stroke(
-                                                            theme.surface.highlight.color.opacity(0.65),
-                                                            lineWidth: max(theme.borderWidth * 0.8, 1))
+                                                            theme.surface.highlight.color.opacity(
+                                                                0.65
+                                                            ),
+                                                            lineWidth: max(
+                                                                theme.borderWidth * 0.8,
+                                                                1
+                                                            )
+                                                        )
                                                 )
                                         )
                                 }
@@ -222,7 +236,7 @@
                             .fixedSize()
                             Spacer(minLength: 0)
                             Color.clear.frame(width: 16)
-                            accessory
+                            accessory.lineLimit(1)
                             Color.clear.frame(width: 16)
                         }
                         .background {
@@ -243,6 +257,17 @@
                     .background {
                         Rectangle()
                             .fill(theme.surface.primary.color)
+                            .onTapGesture(count: 2) {
+                                if let window {
+                                    for gesture in windowGestures {
+                                        switch gesture.gestureType {
+                                        case .doubleTap:
+                                            gesture.action(window)
+                                        }
+                                    }
+                                }
+                            }
+                            .simultaneousGesture(WindowDragGesture())
                     }
                 .ignoresSafeArea()
         }
@@ -284,7 +309,7 @@
         let windowButtons: [WindowChromeButtonConfiguration]
         @State private var hover: Bool = false
         var body: some View {
-            HStack(spacing: 8) {
+            HStack {
                 ForEach(windowButtons) { button in
                     controlButton(button, hover: hover)
                 }

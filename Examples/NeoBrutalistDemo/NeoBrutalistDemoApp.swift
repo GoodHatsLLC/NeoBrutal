@@ -12,6 +12,15 @@ struct NeoBrutalistDemoApp: App {
             title: "NeoBrutalist"
         ) {
             DemoRootView(selectedTheme: $selectedTheme)
+        } overlay: {
+
+        } accessory: {
+            NeoBrutalistButton(size: .prominent) {
+          
+            } label: {
+                Label("Deploy Sequence", systemImage: "bolt.fill")
+                    .labelStyle(.titleAndIcon)
+            }
         }
         .environment(\.neoBrutalistTheme, selectedTheme)
     }
