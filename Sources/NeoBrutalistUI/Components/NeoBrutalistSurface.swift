@@ -27,18 +27,23 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
 
     private let accentEdge: AccentEdge?
     private let isHighlighted: Bool
-    private let padding: CGFloat
 
-    public init(accentEdge: AccentEdge?, isHighlighted: Bool, padding: CGFloat) {
+    public init(accentEdge: AccentEdge?, isHighlighted: Bool) {
         self.accentEdge = accentEdge
         self.isHighlighted = isHighlighted
-        self.padding = padding
     }
 
     public func body(content: Content) -> some View {
-        content
-            .padding(padding)
-            .background(surface)
+            content
+                .background(surface)
+                .padding(accentEdge.padding(size: accentThickness))
+                .background(isHighlighted ? theme.accent.highlight.color : theme.accent.primary.color)
+                .compositingGroup()
+                .neoBrutalistShadow(
+                    color: Color.primary.opacity(isHighlighted ? min(1, theme.shadowOpacity + 0.2) : theme.shadowOpacity),
+                    radius: theme.shadowRadius,
+                    offset: theme.shadowOffset
+                )
     }
 
     private var surface: some View {
@@ -54,13 +59,6 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
             }
             .overlay(baseShape.stroke(theme.surface.secondary.color.opacity(0.7), lineWidth: theme.borderWidth))
             .overlay(highlightBorder)
-            .overlay(accentBar)
-            .compositingGroup()
-            .neoBrutalistShadow(
-                color: Color.primary.opacity(isHighlighted ? min(1, theme.shadowOpacity + 0.2) : theme.shadowOpacity),
-                radius: theme.shadowRadius,
-                offset: theme.shadowOffset
-            )
     }
 
     private var highlightBorder: some View {
@@ -70,20 +68,6 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
                 lineWidth: isHighlighted ? theme.borderWidth * 1.4 : theme.borderWidth * 0.6
             )
             .opacity(isHighlighted ? 1 : 0.7)
-    }
-
-    private var accentBar: some View {
-        Group {
-            if let edge = accentEdge {
-                Rectangle()
-                    .fill(isHighlighted ? theme.accent.highlight.color : theme.accent.primary.color)
-                    .frame(
-                        width: edge.isVertical ? accentThickness : nil,
-                        height: edge.isHorizontal ? accentThickness : nil
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: edge.alignment)
-            }
-        }
     }
 
     private var accentThickness: CGFloat {
@@ -103,9 +87,20 @@ public extension View {
     ///   - padding: Automatic padding inside the surface.
     func neoBrutalistSurface(
         accentEdge: NeoBrutalistSurfaceModifier.AccentEdge? = .trailing,
-        highlighted: Bool = false,
-        padding: CGFloat = 20
+        highlighted: Bool = false
     ) -> some View {
-        modifier(NeoBrutalistSurfaceModifier(accentEdge: accentEdge, isHighlighted: highlighted, padding: padding))
+        modifier(NeoBrutalistSurfaceModifier(accentEdge: accentEdge, isHighlighted: highlighted))
+    }
+}
+
+extension NeoBrutalistSurfaceModifier.AccentEdge? {
+    func padding(size: CGFloat) -> EdgeInsets {
+        switch self {
+        case .none: return .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        case .some(.top): return .init(top: size, leading: 0, bottom: 0, trailing: 0)
+        case .some(.leading): return .init(top: 0, leading: size, bottom: 0, trailing: 0)
+        case .some(.trailing): return .init(top: 0, leading: 0, bottom: 0, trailing: size)
+        case .some(.bottom): return .init(top: 0, leading: 0, bottom: size, trailing: 0)
+        }
     }
 }

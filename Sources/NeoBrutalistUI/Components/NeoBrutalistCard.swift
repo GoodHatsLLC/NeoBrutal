@@ -28,10 +28,9 @@ public struct NeoBrutalistCard<Content: View>: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
+        VStack(alignment: .leading) {
             if hasHeader {
                 header
-
                 Divider()
                     .overlay(theme.surface.highlight.color.opacity(0.4))
             }
@@ -40,7 +39,8 @@ public struct NeoBrutalistCard<Content: View>: View {
                 .font(theme.typography.bodyFont)
                 .foregroundColor(theme.textPrimary.color)
         }
-        .neoBrutalistSurface(accentEdge: accentEdge, highlighted: highlighted, padding: 24)
+        .padding()
+        .neoBrutalistSurface(accentEdge: accentEdge, highlighted: highlighted)
     }
 
     @ViewBuilder

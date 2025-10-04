@@ -98,7 +98,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
             let trackHeight: CGFloat = 12
             let progress = progressValue()
             let knobCenter = CGFloat(progress) * trackWidth
-            let knobOffset = max(0, min(knobCenter - knobSize / 2, trackWidth - knobSize))
+            let knobOffset = max(0, min(knobCenter - knobSize / 2, trackWidth - knobSize - theme.shadowOffset.width))
             let fillWidth = min(max(knobCenter, knobSize * 0.4), trackWidth)
 
             ZStack(alignment: .leading) {
@@ -131,6 +131,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
             )
         }
         .frame(height: 56)
+        .padding(.horizontal, theme.borderWidth)
     }
 
     private func baseTrack(height: CGFloat) -> some View {
@@ -141,6 +142,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
                     .stroke(theme.surface.highlight.color.opacity(0.8), lineWidth: max(theme.borderWidth * 0.8, 1))
             )
             .frame(height: height)
+            .padding(.horizontal, theme.shadowOffset.width)
     }
 
     private func progressTrack(width: CGFloat, height: CGFloat) -> some View {
@@ -150,7 +152,8 @@ public struct NeoBrutalistSlider<Label: View>: View {
                 RoundedRectangle(cornerRadius: theme.cornerRadius == 0 ? 6 : theme.cornerRadius, style: .continuous)
                     .stroke(theme.accent.highlight.color.opacity(0.9), lineWidth: max(theme.borderWidth * 0.6, 1))
             )
-            .frame(width: width, height: height)
+            .frame(width: width-theme.shadowOffset.width*2, height: height)
+            .padding(.horizontal, theme.shadowOffset.width)
     }
 
     private func knob(size: CGFloat) -> some View {
@@ -167,7 +170,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
                 offset: theme.shadowOffset,
                 isEnabled: true
             )
-            .offset(x: -theme.borderWidth, y: -theme.borderWidth/2)
+            .offset(x: -theme.borderWidth-theme.shadowOffset.width, y: -theme.borderWidth/2)
             .scaleEffect(isDragging ? 1.05 : 1)
             .animation(.easeOut(duration: 0.15), value: isDragging)
     }

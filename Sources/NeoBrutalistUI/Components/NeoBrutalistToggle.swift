@@ -71,6 +71,7 @@ public struct NeoBrutalistToggleStyle: ToggleStyle {
                 configuration.isOn.toggle()
             }
         }
+        .padding(.horizontal, theme.borderWidth)
     }
 }
 
