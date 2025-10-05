@@ -46,11 +46,11 @@ private struct NeoBrutalistShadowModifier: ViewModifier {
                         color
                             .offset(x: modOffset.width, y: modOffset.height)
                     }
-                    .padding(.bottom, max(clip == .vertical ? 0 :  offset.height, 0))
-                    .padding(.top, max(clip == .vertical ? 0 : offset.height, 0))
-                    .padding(.trailing, max(clip == .horizontal ? 0 : offset.width, 0))
-                    .padding(.leading, max(clip == .horizontal ? 0 : offset.width, 0))
-                    .clipped()
+//                    .padding(.bottom, max(clip == .vertical ? 0 :  offset.height, 0))
+//                    .padding(.top, max(clip == .vertical ? 0 : offset.height, 0))
+//                    .padding(.trailing, max(clip == .horizontal ? 0 : offset.width, 0))
+//                    .padding(.leading, max(clip == .horizontal ? 0 : offset.width, 0))
+//                    .clipped()
             } else {
                 content.shadow(
                     color: color,
