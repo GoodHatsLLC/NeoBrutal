@@ -116,6 +116,26 @@ struct DemoRootView: View {
                     NeoBrutalistTextField("Text Field", text: $textFieldValue)
 
                     NeoBrutalistStepper(value: $stepperValue, in: 0...10)
+
+                    NeoBrutalistMenu("Actions", systemImage: "ellipsis.circle") {
+                        NeoBrutalistMenuItem("Export Data", systemImage: "square.and.arrow.up") {
+                            log("Export data action triggered")
+                        }
+
+                        NeoBrutalistMenuItem("Refresh", systemImage: "arrow.clockwise") {
+                            log("Refresh action triggered")
+                        }
+
+                        Divider()
+
+                        NeoBrutalistMenuItem("Settings", systemImage: "gear") {
+                            log("Settings opened")
+                        }
+
+                        NeoBrutalistMenuItem("Delete", systemImage: "trash", destructive: true) {
+                            log("Delete action triggered")
+                        }
+                    }
                 }
             }
 
