@@ -55,10 +55,10 @@ public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: V
                     .safeAreaPadding(.top, size.height)
                     .ignoresSafeArea()
             }
+            .clipShape(RoundedRectangle(cornerRadius: theme.windowRadius, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: theme.windowRadius).strokeBorder(.primary, lineWidth: theme.windowBorder)
+                RoundedRectangle(cornerRadius: theme.windowRadius, style: .continuous).strokeBorder(.primary, lineWidth: theme.windowBorder)
             }
-            .clipShape(RoundedRectangle(cornerRadius: theme.windowRadius))
             .offset(-theme.windowShadowOffset/2.0)
             .background {
                 RoundedRectangle(cornerRadius: theme.windowRadius)

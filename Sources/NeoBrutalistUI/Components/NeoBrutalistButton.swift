@@ -20,6 +20,7 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
 
     private let size: Size
     private let displayShadow: Bool
+    @Environment(\.isEnabled) var isEnabled
 
     public init(size: Size = .regular, displayShadow: Bool = true) {
         self.size = size
@@ -40,8 +41,8 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
     }
 
     private func background(isPressed: Bool) -> some View {
-        let fill = isPressed ? theme.accent.primary.color: theme.surface.primary.color
-        let border = isPressed ? theme.accent.highlight.color : theme.accent.primary.color
+        let fill = isEnabled ? isPressed ? theme.accent.primary.color: theme.surface.primary.color : theme.surface.secondary.color.mix(with: .gray, by: 0.1)
+        let border = isEnabled ? isPressed ? theme.accent.highlight.color : theme.accent.primary.color : .primary
         let shadowColor = Color.primary.opacity(theme.shadowOpacity)
 
         return baseShape

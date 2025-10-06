@@ -297,7 +297,7 @@
             window.standardWindowButton(.miniaturizeButton)?.isHidden = true
             window.standardWindowButton(.zoomButton)?.isHidden = true
 
-            if !window.isKeyWindow, window.canBecomeKey {
+            if window.canBecomeKey {
                 window.makeKeyAndOrderFront(nil)
             }
         }
