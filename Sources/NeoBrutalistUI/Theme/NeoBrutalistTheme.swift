@@ -41,7 +41,7 @@ public struct NeoBrutalistTheme: Equatable {
         windowShadowOffset: CGSize = CGSize(width: 8, height: 8),
         windowShadowOpacity: CGFloat = 0.5,
         windowRadius: CGFloat = 16,
-        windowBorder: CGFloat = 3
+        windowBorder: CGFloat = 2
     ) {
         self.name = name
         self.background = background

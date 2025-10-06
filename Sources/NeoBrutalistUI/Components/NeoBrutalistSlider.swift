@@ -173,6 +173,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
             .offset(x: -theme.borderWidth-theme.shadowOffset.width, y: -theme.borderWidth/2)
             .scaleEffect(isDragging ? 1.05 : 1)
             .animation(.easeOut(duration: 0.15), value: isDragging)
+            .padding(.horizontal, theme.shadowOffset.width)
     }
 
     private func progressValue() -> Double {
