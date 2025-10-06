@@ -67,6 +67,7 @@ public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: V
             }
             .padding(.horizontal, theme.windowShadowOffset.width/2.0)
             .padding(.vertical, theme.windowShadowOffset.height/2.0)
+            .preferredColorScheme(.light) // FIXME: hack
         }
         .windowStyle(.plain)
         .windowResizability(.contentSize)
