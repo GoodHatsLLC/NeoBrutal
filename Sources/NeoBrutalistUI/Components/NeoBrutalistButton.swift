@@ -9,7 +9,7 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
 
         var padding: EdgeInsets {
             switch self {
-            case .compact: return EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+            case .compact: return EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
             case .regular: return EdgeInsets(top: 22, leading: 22, bottom: 22, trailing: 22)
             case .prominent: return EdgeInsets(top: 18, leading: 28, bottom: 18, trailing: 28)
             }

@@ -55,8 +55,18 @@ public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: V
                     .safeAreaPadding(.top, size.height)
                     .ignoresSafeArea()
             }
-            .border(.primary.opacity(0.8))
-            .neoBrutalistShadow(color: .primary.opacity(theme.shadowOpacity), radius: theme.shadowRadius, offset: theme.shadowOffset)
+            .overlay {
+                RoundedRectangle(cornerRadius: theme.windowRadius).strokeBorder(.primary, lineWidth: theme.windowBorder)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: theme.windowRadius))
+            .offset(-theme.windowShadowOffset/2.0)
+            .background {
+                RoundedRectangle(cornerRadius: theme.windowRadius)
+                    .fill(.primary.opacity(theme.shadowOpacity))
+                    .offset(theme.windowShadowOffset/2.0)
+            }
+            .padding(.horizontal, theme.windowShadowOffset.width/2.0)
+            .padding(.vertical, theme.windowShadowOffset.height/2.0)
         }
         .windowStyle(.plain)
         .windowResizability(.contentSize)
@@ -103,4 +113,11 @@ extension AnyHashable {
     }
     self = .init(group)
   }
+}
+
+prefix func -(_ size: CGSize) -> CGSize {
+    .init(width: -size.width, height: -size.height)
+}
+func /(_ size: CGSize, _ div: CGFloat) -> CGSize {
+    .init(width: size.width/div, height: size.height/div)
 }

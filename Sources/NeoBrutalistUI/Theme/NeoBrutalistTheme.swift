@@ -18,6 +18,10 @@ public struct NeoBrutalistTheme: Equatable {
     public var shadowOpacity: CGFloat
     public var noiseOpacity: Double
     public var windowButtonSize: CGSize
+    public var windowShadowOffset: CGSize
+    public var windowShadowOpacity: CGFloat
+    public var windowRadius: CGFloat
+    public var windowBorder: CGFloat
 
     public init(
         name: String = "",
@@ -33,7 +37,11 @@ public struct NeoBrutalistTheme: Equatable {
         shadowRadius: CGFloat = 0,
         shadowOpacity: CGFloat = 0.4,
         noiseOpacity: Double = 0.2,
-        windowButtonSize: CGSize = CGSize(width: 16, height: 16)
+        windowButtonSize: CGSize = CGSize(width: 16, height: 16),
+        windowShadowOffset: CGSize = CGSize(width: 8, height: 8),
+        windowShadowOpacity: CGFloat = 0.5,
+        windowRadius: CGFloat = 16,
+        windowBorder: CGFloat = 3
     ) {
         self.name = name
         self.background = background
@@ -49,6 +57,10 @@ public struct NeoBrutalistTheme: Equatable {
         self.shadowOpacity = shadowOpacity
         self.noiseOpacity = noiseOpacity
         self.windowButtonSize = windowButtonSize
+        self.windowShadowOffset = windowShadowOffset
+        self.windowShadowOpacity = windowShadowOpacity
+        self.windowRadius = windowRadius
+        self.windowBorder = windowBorder
     }
 
     public static var bubblegum: NeoBrutalistTheme {
