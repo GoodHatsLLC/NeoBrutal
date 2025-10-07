@@ -6,7 +6,16 @@
       "Bash(swift run:*)",
       "Bash(swift build:*)",
       "Bash(SNAPSHOT_THEMES=bubblegum swift run NeoBrutalistSnapshots)",
-      "Bash(env SNAPSHOT_THEMES=bubblegum,crimsonFury swift run NeoBrutalistSnapshots)"
+      "Bash(env SNAPSHOT_THEMES=bubblegum,crimsonFury swift run NeoBrutalistSnapshots)",
+      "WebFetch(domain:github.com)",
+      "Bash(SNAPSHOT_THEMES=bubblegum swift run NeoBrutalistWindowSnapshots)",
+      "Bash(screencapture:*)",
+      "Bash(SNAPSHOT_THEMES=bubblegum ./Examples/NeoBrutalistWindowSnapshots/capture.sh)",
+      "mcp__peekaboo__analyze",
+      "mcp__peekaboo__list",
+      "Bash(pgrep:*)",
+      "Bash(mktemp:*)",
+      "mcp__peekaboo__image"
     ],
     "deny": [],
     "ask": []

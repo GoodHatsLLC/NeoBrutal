@@ -22,6 +22,10 @@ let package = Package(
         .executable(
             name: "NeoBrutalistSnapshots",
             targets: ["NeoBrutalistSnapshots"]
+        ),
+        .executable(
+            name: "NeoBrutalistWindowSnapshots",
+            targets: ["NeoBrutalistWindowSnapshots"]
         )
     ],
     targets: [
@@ -41,6 +45,11 @@ let package = Package(
             dependencies: ["NeoBrutalistUI"],
             path: "Examples/NeoBrutalistSnapshots",
             exclude: ["README.md"]
+        ),
+        .executableTarget(
+            name: "NeoBrutalistWindowSnapshots",
+            dependencies: ["NeoBrutalistUI"],
+            path: "Examples/NeoBrutalistWindowSnapshots"
         ),
         .testTarget(
             name: "NeoBrutalistUITests",
