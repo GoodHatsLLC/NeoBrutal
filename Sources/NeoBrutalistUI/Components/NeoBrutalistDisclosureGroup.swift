@@ -50,6 +50,7 @@ public struct NeoBrutalistDisclosureGroup<Label: View, Content: View>: View {
                 expandedContent
             }
         }
+        .padding()
         .neoBrutalistSurface(accentEdge: accentEdge, highlighted: highlighted)
         .animation(animation, value: isExpanded)
     }
