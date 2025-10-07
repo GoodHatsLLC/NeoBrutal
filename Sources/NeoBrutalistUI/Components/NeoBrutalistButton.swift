@@ -17,6 +17,11 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
     }
 
     @Environment(\.neoBrutalistTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var themeVariant: NeoBrutalistTheme.Variant {
+        theme.variant(for: colorScheme)
+    }
 
     private let size: Size
     private let displayShadow: Bool
@@ -28,10 +33,10 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
     }
 
     public func makeBody(configuration: Configuration) -> some View {
-        let pressOffset = configuration.isPressed ? theme.shadowOffset : .zero
+        let pressOffset = configuration.isPressed ? themeVariant.shadowOffset : .zero
 
         configuration.label
-            .font(theme.typography.bodyFont)
+            .font(themeVariant.typography.bodyFont)
             .foregroundStyle(.nb.textPrimary)
             .padding(size.padding)
             .background(background(isPressed: configuration.isPressed))
@@ -42,53 +47,53 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
 
     @ViewBuilder
     private func background(isPressed: Bool) -> some View {
-        let shadowColor = Color.primary.opacity(theme.shadowOpacity)
+        let shadowColor = Color.primary.opacity(themeVariant.shadowOpacity)
 
         if isEnabled {
             if isPressed {
                 baseShape
                     .fill(.nb.accent.primary)
-                    .overlay(baseShape.stroke(.nb.accent.highlight, lineWidth: theme.borderWidth))
-                    .overlay(baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: theme.borderWidth))
+                    .overlay(baseShape.stroke(.nb.accent.highlight, lineWidth: themeVariant.borderWidth))
+                    .overlay(baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: themeVariant.borderWidth))
                     .compositingGroup()
                     .neoBrutalistShadow(
                         color: shadowColor,
-                        radius: theme.shadowRadius,
-                        offset: theme.shadowOffset,
+                        radius: themeVariant.shadowRadius,
+                        offset: themeVariant.shadowOffset,
                         isEnabled: !isPressed && displayShadow
                     )
             } else {
                 baseShape
                     .fill(.nb.surface.primary)
-                    .overlay(baseShape.stroke(.nb.accent.primary, lineWidth: theme.borderWidth))
-                    .overlay(baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: theme.borderWidth))
+                    .overlay(baseShape.stroke(.nb.accent.primary, lineWidth: themeVariant.borderWidth))
+                    .overlay(baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: themeVariant.borderWidth))
                     .compositingGroup()
                     .neoBrutalistShadow(
                         color: shadowColor,
-                        radius: theme.shadowRadius,
-                        offset: theme.shadowOffset,
+                        radius: themeVariant.shadowRadius,
+                        offset: themeVariant.shadowOffset,
                         isEnabled: !isPressed && displayShadow
                     )
             }
         } else {
             // For disabled state, we need to compute a mixed color
-            let disabledFill = theme.surface.secondary.color.mix(with: .gray, by: 0.1)
+            let disabledFill = themeVariant.surface.secondary.color.mix(with: .gray, by: 0.1)
             baseShape
                 .fill(disabledFill)
-                .overlay(baseShape.stroke(.primary, lineWidth: theme.borderWidth))
-                .overlay(baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: theme.borderWidth))
+                .overlay(baseShape.stroke(.primary, lineWidth: themeVariant.borderWidth))
+                .overlay(baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: themeVariant.borderWidth))
                 .compositingGroup()
                 .neoBrutalistShadow(
                     color: shadowColor,
-                    radius: theme.shadowRadius,
-                    offset: theme.shadowOffset,
+                    radius: themeVariant.shadowRadius,
+                    offset: themeVariant.shadowOffset,
                     isEnabled: !isPressed && displayShadow
                 )
         }
     }
 
     private var baseShape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: theme.cornerRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: themeVariant.cornerRadius, style: .continuous)
     }
 }
 

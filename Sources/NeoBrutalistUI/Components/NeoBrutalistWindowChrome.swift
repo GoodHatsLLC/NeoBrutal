@@ -135,6 +135,11 @@
 
     public struct NeoBrutalistWindowChrome<Accessory: View>: View {
         @Environment(\.neoBrutalistTheme) private var theme
+        @Environment(\.colorScheme) private var colorScheme
+
+        private var themeVariant: NeoBrutalistTheme.Variant {
+            theme.variant(for: colorScheme)
+        }
 
         private let title: String
         private let subtitle: String?
@@ -194,7 +199,7 @@
                                 window: window,
                                 windowButtons: windowButtons
                             )
-                                .padding(.horizontal, theme.borderWidth)
+                                .padding(.horizontal, themeVariant.borderWidth)
                             Color.clear
                                 .frame(width: 16)
                             VStack(
@@ -202,30 +207,30 @@
                                 spacing: 4
                             ) {
                                 Text(title)
-                                    .font(theme.typography.titleFont)
-                                    .foregroundColor(theme.textPrimary.color)
+                                    .font(themeVariant.typography.titleFont)
+                                    .foregroundColor(themeVariant.textPrimary.color)
                                     .lineLimit(1)
                                     .padding()
 
                                 if let subtitle, !subtitle.isEmpty {
                                     Text(subtitle.uppercased())
-                                        .font(theme.typography.monoFont)
-                                        .foregroundColor(theme.textMuted.color)
+                                        .font(themeVariant.typography.monoFont)
+                                        .foregroundColor(themeVariant.textMuted.color)
                                         .padding(.horizontal, 10)
                                         .padding(.vertical, 4)
                                         .background(
                                             Capsule(style: .continuous)
-                                                .fill(theme.surface.secondary.color.opacity(0.7))
+                                                .fill(themeVariant.surface.secondary.color.opacity(0.7))
                                                 .overlay(
                                                     Capsule(
                                                         style: .continuous
                                                     )
                                                         .stroke(
-                                                            theme.surface.highlight.color.opacity(
+                                                            themeVariant.surface.highlight.color.opacity(
                                                                 0.65
                                                             ),
                                                             lineWidth: max(
-                                                                theme.borderWidth * 0.8,
+                                                                themeVariant.borderWidth * 0.8,
                                                                 1
                                                             )
                                                         )
@@ -240,23 +245,23 @@
                             Color.clear.frame(width: 16)
                         }
                         .background {
-                            if theme.noiseOpacity > 0 {
+                            if themeVariant.noiseOpacity > 0 {
                                 Rectangle()
                                     .fill(NeoBrutalistNoise.paint())
-                                    .opacity(theme.noiseOpacity)
+                                    .opacity(themeVariant.noiseOpacity)
                                     .blendMode(.overlay)
                             }
                         }
                         Rectangle()
-                            .fill(theme.accent.primary.color)
+                            .fill(themeVariant.accent.primary.color)
                             .frame(height: accentHeight)
                         Rectangle()
-                            .fill(.primary.opacity(theme.shadowOpacity))
+                            .fill(.primary.opacity(themeVariant.shadowOpacity))
                             .frame(height: accentHeight)
                     }
                     .background {
                         Rectangle()
-                            .fill(theme.surface.primary.color)
+                            .fill(themeVariant.surface.primary.color)
                             .onTapGesture(count: 2) {
                                 if let window {
                                     for gesture in windowGestures {
@@ -273,7 +278,7 @@
         }
 
         private var accentHeight: CGFloat {
-            max(theme.borderWidth * 3, 8)
+            max(themeVariant.borderWidth * 3, 8)
         }
 
         private func configureWindow(_ window: NSWindow) {
@@ -340,11 +345,11 @@
                         .fill(control.color.exposure(adjustment: s.active ? 5 : 0))
                         .stroke(
                             control.color.mix(with: .black, by: 0.7).opacity(0.5),
-                            lineWidth: max(theme.borderWidth * 0.6, 1)
+                            lineWidth: max(themeVariant.borderWidth * 0.6, 1)
                         )
                         .frame(
-                            width: theme.windowButtonSize.width,
-                            height: theme.windowButtonSize.height
+                            width: themeVariant.windowButtonSize.width,
+                            height: themeVariant.windowButtonSize.height
                         )
                         .overlay {
                             Circle()
@@ -352,8 +357,8 @@
                                     by: max(
                                         1,
                                         min(
-                                            theme.windowButtonSize.width,
-                                            theme.windowButtonSize.height)
+                                            themeVariant.windowButtonSize.width,
+                                            themeVariant.windowButtonSize.height)
                                             * 0.1)
                                 )
                                 .fill(
@@ -376,7 +381,7 @@
                             ).padding(
                                 max(
                                     2,
-                                    min(theme.windowButtonSize.width, theme.windowButtonSize.height)
+                                    min(themeVariant.windowButtonSize.width, themeVariant.windowButtonSize.height)
                                         * 0.22)
                             )
                         )

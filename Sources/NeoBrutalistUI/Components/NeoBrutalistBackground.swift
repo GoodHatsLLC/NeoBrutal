@@ -6,6 +6,11 @@ public struct NeoBrutalistBackground: View {
     private let showsGrid: Bool
 
     @Environment(\.neoBrutalistTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var themeVariant: NeoBrutalistTheme.Variant {
+        theme.variant(for: colorScheme)
+    }
 
     public init(gridSpacing: CGFloat = 32, showsGrid: Bool = true) {
         self.gridSpacing = gridSpacing
@@ -19,10 +24,10 @@ public struct NeoBrutalistBackground: View {
                     .fill(.nb.background.primary)
                     .ignoresSafeArea()
 
-                if theme.noiseOpacity > 0 {
+                if themeVariant.noiseOpacity > 0 {
                     Rectangle()
                         .fill(NeoBrutalistNoise.paint())
-                        .opacity(theme.noiseOpacity)
+                        .opacity(themeVariant.noiseOpacity)
                         .blendMode(.overlay)
                         .ignoresSafeArea()
                 }
@@ -54,7 +59,7 @@ public struct NeoBrutalistBackground: View {
                 }
             }
 
-            context.stroke(path, with: .color(theme.background.highlight.color.opacity(0.15)), lineWidth: 1)
+            context.stroke(path, with: .color(themeVariant.background.highlight.color.opacity(0.15)), lineWidth: 1)
         }
     }
 }

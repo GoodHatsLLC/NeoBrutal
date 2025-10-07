@@ -138,6 +138,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         theme: NeoBrutalistTheme,
         content: Content
     ) -> NSWindow {
+        let variant = theme.variant(for: .light)
+
         let contentView = VStack(spacing: 0) {
             NeoBrutalistWindowChrome(
                 buttons: .defaultButtons,
@@ -148,19 +150,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             content
         }
         .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: theme.windowRadius, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: variant.windowRadius, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: theme.windowRadius, style: .continuous)
-                .strokeBorder(.primary, lineWidth: theme.windowBorder)
+            RoundedRectangle(cornerRadius: variant.windowRadius, style: .continuous)
+                .strokeBorder(.primary, lineWidth: variant.windowBorder)
         }
-        .offset(x: -theme.windowShadowOffset.width/2.0, y: -theme.windowShadowOffset.height/2.0)
+        .offset(x: -variant.windowShadowOffset.width/2.0, y: -variant.windowShadowOffset.height/2.0)
         .background {
-            RoundedRectangle(cornerRadius: theme.windowRadius)
-                .fill(.primary.opacity(theme.shadowOpacity))
-                .offset(x: theme.windowShadowOffset.width/2.0, y: theme.windowShadowOffset.height/2.0)
+            RoundedRectangle(cornerRadius: variant.windowRadius)
+                .fill(.primary.opacity(variant.shadowOpacity))
+                .offset(x: variant.windowShadowOffset.width/2.0, y: variant.windowShadowOffset.height/2.0)
         }
-        .padding(.horizontal, theme.windowShadowOffset.width/2.0)
-        .padding(.vertical, theme.windowShadowOffset.height/2.0)
+        .padding(.horizontal, variant.windowShadowOffset.width/2.0)
+        .padding(.vertical, variant.windowShadowOffset.height/2.0)
         .neoBrutalistTheme(theme)
         .preferredColorScheme(.light)
 

@@ -3,6 +3,7 @@ import SwiftUI
 
 struct DemoRootView: View {
     @Binding var selectedTheme: NeoBrutalistTheme
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var notificationsEnabled = true
     @State private var intensity: Double = 0.65
@@ -13,6 +14,10 @@ struct DemoRootView: View {
     @State private var stepperValue = 0
 
     private let themeOptions = DemoThemeOption.all
+
+    private var selectedVariant: NeoBrutalistTheme.Variant {
+        selectedTheme.variant(for: colorScheme)
+    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -145,7 +150,7 @@ struct DemoRootView: View {
             ) {
                 VStack(alignment: .leading, spacing: NeoBrutalist.Spacing.small.rawValue) {
                     Text("Use badges to build status dashboards or highlight filters.")
-                        .foregroundColor(selectedTheme.textMuted.color)
+                        .foregroundColor(selectedVariant.textMuted.color)
 
                     LazyVGrid(
                         columns: [
@@ -175,17 +180,17 @@ struct DemoRootView: View {
                 ForEach(logItems.prefix(5)) { log in
                     VStack(alignment: .leading, spacing: 6) {
                         Text(log.title)
-                            .font(selectedTheme.typography.bodyFont)
-                            .foregroundColor(selectedTheme.accent.highlight.color)
+                            .font(selectedVariant.typography.bodyFont)
+                            .foregroundColor(selectedVariant.accent.highlight.color)
                         Text(log.message)
-                            .font(selectedTheme.typography.monoFont)
-                            .foregroundColor(selectedTheme.textMuted.color)
+                            .font(selectedVariant.typography.monoFont)
+                            .foregroundColor(selectedVariant.textMuted.color)
                     }
                     .padding(.vertical, 6)
                     .overlay(alignment: .bottom) {
                         Rectangle()
                             .frame(height: 1)
-                            .foregroundColor(selectedTheme.surface.secondary.color.opacity(0.35))
+                            .foregroundColor(selectedVariant.surface.secondary.color.opacity(0.35))
                     }
                 }
             }
@@ -211,12 +216,17 @@ struct DemoRootView: View {
 private struct ThemeSwatch: View {
     let option: DemoThemeOption
     let isSelected: Bool
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var themeVariant: NeoBrutalistTheme.Variant {
+        option.theme.variant(for: colorScheme)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: NeoBrutalist.Spacing.small.rawValue) {
             ZStack(alignment: .topTrailing) {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(option.theme.background.gradient)
+                    .fill(themeVariant.background.gradient)
                     .overlay(
                         RoundedRectangle(cornerRadius: 14, style: .continuous)
                             .stroke(styleBorderColor, lineWidth: isSelected ? 4 : 2)
@@ -224,7 +234,7 @@ private struct ThemeSwatch: View {
                     .frame(height: 96)
 
                 Circle()
-                    .fill(option.theme.accent.highlight.color)
+                    .fill(themeVariant.accent.highlight.color)
                     .frame(width: 24, height: 24)
                     .overlay(
                         Circle()
@@ -235,28 +245,28 @@ private struct ThemeSwatch: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(option.name)
-                    .font(option.theme.typography.bodyFont)
-                    .foregroundColor(option.theme.textPrimary.color)
+                    .font(themeVariant.typography.bodyFont)
+                    .foregroundColor(themeVariant.textPrimary.color)
 
                 Text(option.tagline)
-                    .font(option.theme.typography.monoFont)
-                    .foregroundColor(option.theme.textMuted.color)
+                    .font(themeVariant.typography.monoFont)
+                    .foregroundColor(themeVariant.textMuted.color)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, NeoBrutalist.Spacing.small.rawValue)
             .padding(.bottom, NeoBrutalist.Spacing.small.rawValue)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(option.theme.surface.primary.color.opacity(0.85))
+                    .fill(themeVariant.surface.primary.color.opacity(0.85))
             )
         }
         .padding(NeoBrutalist.Spacing.small.rawValue)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(option.theme.surface.secondary.color.opacity(0.55))
+                .fill(themeVariant.surface.secondary.color.opacity(0.55))
                 .shadow(
                     color: Color.black.opacity(0.1), radius: isSelected ? 10 : 4,
-                    x: option.theme.shadowOffset.width, y: option.theme.shadowOffset.height)
+                    x: themeVariant.shadowOffset.width, y: themeVariant.shadowOffset.height)
         )
         .overlay(alignment: .topLeading) {
             if isSelected {
@@ -264,10 +274,10 @@ private struct ThemeSwatch: View {
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
-                    .foregroundColor(option.theme.surface.primary.color)
+                    .foregroundColor(themeVariant.surface.primary.color)
                     .background(
                         Capsule(style: .continuous)
-                            .fill(option.theme.accent.primary.color)
+                            .fill(themeVariant.accent.primary.color)
                     )
                     .offset(x: 12, y: -10)
             }
@@ -279,8 +289,8 @@ private struct ThemeSwatch: View {
 
     private var styleBorderColor: Color {
         isSelected
-            ? option.theme.accent.highlight.color
-            : option.theme.surface.highlight.color.opacity(0.5)
+            ? themeVariant.accent.highlight.color
+            : themeVariant.surface.highlight.color.opacity(0.5)
     }
 }
 

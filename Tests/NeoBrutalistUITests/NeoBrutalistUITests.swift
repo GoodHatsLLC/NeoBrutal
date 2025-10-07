@@ -6,10 +6,10 @@ final class NeoBrutalistUITests: XCTestCase {
     func testThemeCopiesPreserveEquality() {
         let bubblegum = NeoBrutalistTheme.bubblegum
         var adjusted = bubblegum
-        adjusted.cornerRadius = 24
+        adjusted.light.cornerRadius = 24
 
-        XCTAssertNotEqual(bubblegum.cornerRadius, adjusted.cornerRadius)
-        XCTAssertEqual(bubblegum.accent, adjusted.accent)
+        XCTAssertNotEqual(bubblegum.light.cornerRadius, adjusted.light.cornerRadius)
+        XCTAssertEqual(bubblegum.light.accent, adjusted.light.accent)
     }
 
     func testColorDescriptorNormalization() {

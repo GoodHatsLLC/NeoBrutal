@@ -2,8 +2,6 @@ import SwiftUI
 
 /// A menu component with Neo Brutalist styling.
 public struct NeoBrutalistMenu<Label: View, Content: View>: View {
-    @Environment(\.neoBrutalistTheme) private var theme
-    @State private var isExpanded: Bool = false
 
     private let label: Label
     private let content: Content
@@ -31,8 +29,6 @@ public struct NeoBrutalistMenu<Label: View, Content: View>: View {
 
 /// Custom menu style for Neo Brutalist aesthetics.
 public struct NeoBrutalistMenuStyle: MenuStyle {
-    @Environment(\.neoBrutalistTheme) private var theme
-
     private let size: NeoBrutalistButtonStyle.Size
 
     public init(size: NeoBrutalistButtonStyle.Size = .regular) {
@@ -48,6 +44,11 @@ public struct NeoBrutalistMenuStyle: MenuStyle {
 /// A menu item with Neo Brutalist styling for use inside menus.
 public struct NeoBrutalistMenuItem<Label: View>: View {
     @Environment(\.neoBrutalistTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var themeVariant: NeoBrutalistTheme.Variant {
+        theme.variant(for: colorScheme)
+    }
 
     private let action: () -> Void
     private let label: Label
@@ -66,7 +67,7 @@ public struct NeoBrutalistMenuItem<Label: View>: View {
     public var body: some View {
         Button(action: action) {
             label
-                .font(theme.typography.bodyFont)
+                .font(themeVariant.typography.bodyFont)
                 .foregroundStyle(destructive ? AnyShapeStyle(.red) : AnyShapeStyle(.nb.textPrimary))
         }
     }

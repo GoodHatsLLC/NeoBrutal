@@ -2,6 +2,11 @@ import SwiftUI
 
 public struct NeoBrutalistTextField: View {
     @Environment(\.neoBrutalistTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var themeVariant: NeoBrutalistTheme.Variant {
+        theme.variant(for: colorScheme)
+    }
     
     let title: String
     @Binding var text: String
@@ -16,12 +21,12 @@ public struct NeoBrutalistTextField: View {
             .textFieldStyle(.plain)
             .padding()
             .background(Color.nb.surface.primary)
-            .border(Color.primary.opacity(theme.shadowOpacity), width: theme.borderWidth)
+            .border(Color.primary.opacity(themeVariant.shadowOpacity), width: themeVariant.borderWidth)
             .compositingGroup()
             .neoBrutalistShadow(
-                color: Color.primary.opacity(theme.shadowOpacity),
-                radius: theme.shadowRadius,
-                offset: theme.shadowOffset
+                color: Color.primary.opacity(themeVariant.shadowOpacity),
+                radius: themeVariant.shadowRadius,
+                offset: themeVariant.shadowOffset
             )
     }
 }

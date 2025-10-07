@@ -30,6 +30,11 @@ public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: V
     @ViewBuilder var overlay: () -> Overlay
     @ViewBuilder var accessory: () -> Accessory
     @Environment(\.neoBrutalistTheme) var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var themeVariant: NeoBrutalistTheme.Variant {
+        theme.variant(for: colorScheme)
+    }
     @State var safeArea: EdgeInsets = .init()
     @State var size: CGSize = .zero
 
@@ -55,18 +60,18 @@ public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: V
                     .safeAreaPadding(.top, size.height)
                     .ignoresSafeArea()
             }
-            .clipShape(RoundedRectangle(cornerRadius: theme.windowRadius, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: themeVariant.windowRadius, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: theme.windowRadius, style: .continuous).strokeBorder(.primary, lineWidth: theme.windowBorder)
+                RoundedRectangle(cornerRadius: themeVariant.windowRadius, style: .continuous).strokeBorder(.primary, lineWidth: themeVariant.windowBorder)
             }
-            .offset(-theme.windowShadowOffset/2.0)
+            .offset(-themeVariant.windowShadowOffset / 2.0)
             .background {
-                RoundedRectangle(cornerRadius: theme.windowRadius)
-                    .fill(.primary.opacity(theme.shadowOpacity))
-                    .offset(theme.windowShadowOffset/2.0)
+                RoundedRectangle(cornerRadius: themeVariant.windowRadius)
+                    .fill(.primary.opacity(themeVariant.shadowOpacity))
+                    .offset(themeVariant.windowShadowOffset / 2.0)
             }
-            .padding(.horizontal, theme.windowShadowOffset.width/2.0)
-            .padding(.vertical, theme.windowShadowOffset.height/2.0)
+            .padding(.horizontal, themeVariant.windowShadowOffset.width / 2.0)
+            .padding(.vertical, themeVariant.windowShadowOffset.height / 2.0)
             .preferredColorScheme(.light) // FIXME: hack
         }
         .windowStyle(.plain)
