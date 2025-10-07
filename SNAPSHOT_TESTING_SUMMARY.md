@@ -11,6 +11,7 @@ A complete automated visual regression testing system for the NeoBrutalistUI lib
 ✅ **High Resolution**: 2x scale PNG images suitable for detailed comparison
 ✅ **Organized Output**: Theme-based directory structure for easy navigation
 ✅ **Configurable**: Environment variables for custom output paths and theme selection
+✅ **Light & Dark**: Captures snapshots in both color schemes for each theme
 ✅ **Production Ready**: Proper error handling, logging, and exit codes for CI/CD
 
 ## Quick Usage
@@ -21,6 +22,9 @@ swift run NeoBrutalistSnapshots
 
 # Specific themes only
 SNAPSHOT_THEMES=bubblegum,nocturneVolt swift run NeoBrutalistSnapshots
+
+# Only light mode
+SNAPSHOT_COLOR_SCHEMES=light swift run NeoBrutalistSnapshots
 
 # Custom output directory
 SNAPSHOT_OUTPUT=/path/to/output swift run NeoBrutalistSnapshots
@@ -52,7 +56,7 @@ Examples/NeoBrutalistSnapshots/
 
 ### Key Components
 
-1. **SnapshotConfig**: Defines size, scale, and theme for rendering
+1. **SnapshotConfig**: Defines size, scale, theme, and color scheme for rendering
    - `standard`: 400x300 @ 2x
    - `compact`: 300x200 @ 2x
    - `wide`: 600x300 @ 2x
@@ -70,16 +74,11 @@ Snapshots are saved to `./Snapshots/` (gitignored) in this structure:
 ```
 Snapshots/
 ├── bubblegum/
-│   ├── buttons@2x.png
-│   ├── cards@2x.png
-│   ├── toggles@2x.png
-│   ├── badges@2x.png
-│   ├── surfaces@2x.png
-│   ├── sliders@2x.png
-│   ├── textfields@2x.png
-│   ├── disclosure-groups@2x.png
-│   ├── menus@2x.png
-│   └── background@2x.png
+│   ├── light/
+│   │   ├── buttons@2x.png
+│   │   └── ...
+│   └── dark/
+│       └── ...
 ├── daybreakPlaza/
 │   └── (same files)
 └── (7 theme directories total)
@@ -191,7 +190,8 @@ static var all: [SnapshotTestCase] {
 let customConfig = SnapshotConfig(
     size: CGSize(width: 800, height: 600),
     scale: 3.0,
-    theme: .ultravioletCargo
+    theme: .ultravioletCargo,
+    colorScheme: .dark
 )
 ```
 

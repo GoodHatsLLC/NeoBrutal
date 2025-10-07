@@ -313,6 +313,11 @@
         let window: NSWindow?
         let windowButtons: [WindowChromeButtonConfiguration]
         @State private var hover: Bool = false
+        @Environment(\.colorScheme) private var colorScheme
+
+        private var themeVariant: NeoBrutalistTheme.Variant {
+            theme.variant(for: colorScheme)
+        }
         var body: some View {
             HStack {
                 ForEach(windowButtons) { button in

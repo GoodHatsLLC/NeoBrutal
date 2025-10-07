@@ -70,7 +70,8 @@ Custom configurations:
 SnapshotConfig(
     size: CGSize(width: 500, height: 400),
     scale: 2.0,
-    theme: .bubblegum
+    theme: .bubblegum,
+    colorScheme: .light // or .dark
 )
 ```
 
@@ -78,6 +79,7 @@ SnapshotConfig(
 
 - `SNAPSHOT_OUTPUT`: Output directory path (default: `./Snapshots`)
 - `SNAPSHOT_THEMES`: Comma-separated theme names (default: all themes)
+- `SNAPSHOT_COLOR_SCHEMES`: Comma-separated list of color schemes (`light`, `dark`; default: both)
 
 Available theme names:
 - `bubblegum`
@@ -90,14 +92,16 @@ Available theme names:
 
 ## Output
 
-Snapshots are organized by theme:
+Snapshots are organized by theme and color scheme:
 
 ```
 Snapshots/
 ├── bubblegum/
-│   ├── buttons@2x.png
-│   ├── cards@2x.png
-│   └── ...
+│   ├── light/
+│   │   ├── buttons@2x.png
+│   │   └── ...
+│   └── dark/
+│       └── ...
 ├── daybreakPlaza/
 │   └── ...
 └── ...

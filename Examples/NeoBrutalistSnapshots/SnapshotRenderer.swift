@@ -6,24 +6,49 @@ struct SnapshotConfig: Sendable {
     let size: CGSize
     let scale: CGFloat
     let theme: NeoBrutalistTheme
+    let colorScheme: ColorScheme
+
+    init(
+        size: CGSize,
+        scale: CGFloat,
+        theme: NeoBrutalistTheme,
+        colorScheme: ColorScheme = .light
+    ) {
+        self.size = size
+        self.scale = scale
+        self.theme = theme
+        self.colorScheme = colorScheme
+    }
 
     static let standard = SnapshotConfig(
         size: CGSize(width: 400, height: 300),
         scale: 2.0,
-        theme: .bubblegum
+        theme: .bubblegum,
+        colorScheme: .light
     )
 
     static let compact = SnapshotConfig(
         size: CGSize(width: 300, height: 200),
         scale: 2.0,
-        theme: .bubblegum
+        theme: .bubblegum,
+        colorScheme: .light
     )
 
     static let wide = SnapshotConfig(
         size: CGSize(width: 600, height: 300),
         scale: 2.0,
-        theme: .bubblegum
+        theme: .bubblegum,
+        colorScheme: .light
     )
+
+    func with(theme: NeoBrutalistTheme, colorScheme: ColorScheme) -> SnapshotConfig {
+        SnapshotConfig(
+            size: size,
+            scale: scale,
+            theme: theme,
+            colorScheme: colorScheme
+        )
+    }
 }
 
 /// Renders SwiftUI views to images for snapshot testing
@@ -36,6 +61,7 @@ struct SnapshotRenderer {
     ) -> CGImage? {
         let renderer = ImageRenderer(content: content
             .frame(width: config.size.width, height: config.size.height)
+            .environment(\.colorScheme, config.colorScheme)
             .neoBrutalistTheme(config.theme)
         )
 
@@ -77,16 +103,17 @@ struct SnapshotRenderer {
             throw SnapshotError.failedToRender
         }
 
-        // Create theme-specific subdirectory
+        // Create theme/color scheme-specific subdirectory
         let themeDir = outputDirectory.appendingPathComponent(config.theme.name.isEmpty ? "default" : config.theme.name)
-        try FileManager.default.createDirectory(at: themeDir, withIntermediateDirectories: true)
+        let colorSchemeDir = themeDir.appendingPathComponent(config.colorScheme.snapshotDirectoryName)
+        try FileManager.default.createDirectory(at: colorSchemeDir, withIntermediateDirectories: true)
 
         let filename = "\(name)@\(Int(config.scale))x.png"
-        let fileURL = themeDir.appendingPathComponent(filename)
+        let fileURL = colorSchemeDir.appendingPathComponent(filename)
 
         try savePNG(image, to: fileURL)
 
-        print("✅ Saved snapshot: \(themeDir.lastPathComponent)/\(filename)")
+        print("✅ Saved snapshot: \(themeDir.lastPathComponent)/\(config.colorScheme.snapshotDirectoryName)/\(filename)")
     }
 }
 
@@ -103,6 +130,17 @@ enum SnapshotError: Error, LocalizedError {
             return "Failed to create PNG data"
         case .failedToCreateDirectory:
             return "Failed to create output directory"
+        }
+    }
+}
+
+private extension ColorScheme {
+    var snapshotDirectoryName: String {
+        switch self {
+        case .dark:
+            return "dark"
+        default:
+            return "light"
         }
     }
 }

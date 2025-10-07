@@ -31,22 +31,31 @@ SNAPSHOT_THEMES=bubblegum,nocturneVolt,crimsonFury swift run NeoBrutalistSnapsho
 SNAPSHOT_OUTPUT=/path/to/output swift run NeoBrutalistSnapshots
 ```
 
+### Limit to Light or Dark
+
+```bash
+# Only light mode
+SNAPSHOT_COLOR_SCHEMES=light swift run NeoBrutalistSnapshots
+
+# Both (explicit)
+SNAPSHOT_COLOR_SCHEMES=light,dark swift run NeoBrutalistSnapshots
+```
+
 ## Output Structure
 
-Snapshots are organized by theme:
+Snapshots are organized by theme and color scheme:
 
 ```
 Snapshots/
 ├── bubblegum/
-│   ├── buttons@2x.png
-│   ├── cards@2x.png
-│   ├── toggles@2x.png
-│   └── ...
+│   ├── light/
+│   │   ├── buttons@2x.png
+│   │   └── ...
+│   └── dark/
+│       └── ...
 ├── daybreakPlaza/
-│   ├── buttons@2x.png
 │   └── ...
 └── nocturneVolt/
-    ├── buttons@2x.png
     └── ...
 ```
 
@@ -144,7 +153,8 @@ You can create custom configurations:
 let config = SnapshotConfig(
     size: CGSize(width: 500, height: 400),
     scale: 2.0,
-    theme: .bubblegum
+    theme: .bubblegum,
+    colorScheme: .light // or .dark
 )
 ```
 
@@ -181,6 +191,6 @@ The snapshot system consists of:
 1. **SnapshotRenderer**: Uses SwiftUI's `ImageRenderer` to convert views to images
 2. **ComponentTestCases**: Defines what components and states to test
 3. **SnapshotApp**: Main executable that orchestrates the snapshot generation
-4. **SnapshotConfig**: Configuration for size, scale, and theme
+4. **SnapshotConfig**: Configuration for size, scale, theme, and color scheme
 
 All snapshot code lives in `Examples/NeoBrutalistSnapshots/`.
