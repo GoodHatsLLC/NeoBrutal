@@ -15,7 +15,7 @@ public struct NeoBrutalistTextField: View {
         TextField(title, text: $text)
             .textFieldStyle(.plain)
             .padding()
-            .background(theme.surface.primary.color)
+            .background(Color.nb.surface.primary)
             .border(Color.primary.opacity(theme.shadowOpacity), width: theme.borderWidth)
             .compositingGroup()
             .neoBrutalistShadow(

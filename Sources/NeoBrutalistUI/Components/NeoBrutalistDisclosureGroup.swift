@@ -59,7 +59,7 @@ public struct NeoBrutalistDisclosureGroup<Label: View, Content: View>: View {
             HStack(spacing: 14) {
                 label()
                     .font(theme.typography.titleFont)
-                    .foregroundColor(theme.textPrimary.color)
+                    .foregroundStyle(.nb.textPrimary)
 
                 Spacer(minLength: 0)
 
@@ -72,41 +72,50 @@ public struct NeoBrutalistDisclosureGroup<Label: View, Content: View>: View {
 
     private var divider: some View {
         Divider()
-            .overlay(theme.surface.highlight.color.opacity(0.5))
+            .overlay(.nb.surface.highlight.opacity(0.5))
             .padding(.bottom, contentSpacing)
     }
 
     private var expandedContent: some View {
         content()
             .font(theme.typography.bodyFont)
-            .foregroundColor(theme.textPrimary.color)
+            .foregroundStyle(.nb.textPrimary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .transition(.move(edge: .top).combined(with: .opacity))
     }
 
     private var indicator: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .fill(indicatorBackground)
-                .overlay(
+        Group {
+            if isExpanded {
+                ZStack {
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .stroke(indicatorBorder, lineWidth: theme.borderWidth * 0.9)
-                )
+                        .fill(.nb.accent.primary.opacity(0.24))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .stroke(.nb.accent.highlight, lineWidth: theme.borderWidth * 0.9)
+                        )
 
-            Text(isExpanded ? "-" : "+")
-                .font(theme.typography.monoFont)
-                .foregroundColor(theme.textPrimary.color)
-                .offset(y: isExpanded ? -0.6 : 0)
+                    Text("-")
+                        .font(theme.typography.monoFont)
+                        .foregroundStyle(.nb.textPrimary)
+                        .offset(y: -0.6)
+                }
+            } else {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(.nb.surface.secondary.opacity(0.65))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .stroke(.nb.accent.primary, lineWidth: theme.borderWidth * 0.9)
+                        )
+
+                    Text("+")
+                        .font(theme.typography.monoFont)
+                        .foregroundStyle(.nb.textPrimary)
+                }
+            }
         }
         .frame(width: 32, height: 32)
-    }
-
-    private var indicatorBackground: Color {
-        isExpanded ? theme.accent.primary.color.opacity(0.24) : theme.surface.secondary.color.opacity(0.65)
-    }
-
-    private var indicatorBorder: Color {
-        isExpanded ? theme.accent.highlight.color : theme.accent.primary.color
     }
 
     private var resolvedIsExpanded: Binding<Bool> {

@@ -15,7 +15,8 @@ public struct NeoBrutalistBackground: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack {
-                theme.background.primary.color
+                Rectangle()
+                    .fill(.nb.background.primary)
                     .ignoresSafeArea()
 
                 if theme.noiseOpacity > 0 {

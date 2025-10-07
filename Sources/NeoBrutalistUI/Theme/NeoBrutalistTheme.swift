@@ -3,7 +3,7 @@ import SwiftUI
 /// A palette-driven theme that captures the bold aesthetic of Neo Brutalism.
 import SwiftUI
 
-public struct NeoBrutalistTheme: Equatable {
+public struct NeoBrutalistTheme: Equatable, Sendable {
     public var name: String
     public var background: ColorPalette
     public var surface: ColorPalette
@@ -65,6 +65,7 @@ public struct NeoBrutalistTheme: Equatable {
 
     public static var bubblegum: NeoBrutalistTheme {
         NeoBrutalistTheme(
+            name: "bubblegum",
             background: .paper,
             surface: .paper,
             accent: .bubbleAccent,
@@ -81,6 +82,7 @@ public struct NeoBrutalistTheme: Equatable {
 
     public static var daybreakPlaza: NeoBrutalistTheme {
         NeoBrutalistTheme(
+            name: "daybreakPlaza",
             background: .morningMist,
             surface: .paper,
             accent: .sunburst,
@@ -97,6 +99,7 @@ public struct NeoBrutalistTheme: Equatable {
 
     public static var nocturneVolt: NeoBrutalistTheme {
         NeoBrutalistTheme(
+            name: "nocturneVolt",
             background: .abyss,
             surface: .graphite,
             accent: .plasmaBlue,
@@ -113,6 +116,7 @@ public struct NeoBrutalistTheme: Equatable {
 
     public static var ultravioletCargo: NeoBrutalistTheme {
         NeoBrutalistTheme(
+            name: "ultravioletCargo",
             background: .violetNight,
             surface: .midnight,
             accent: .infraSignal,
@@ -129,6 +133,7 @@ public struct NeoBrutalistTheme: Equatable {
 
     public static var desert: NeoBrutalistTheme {
         NeoBrutalistTheme(
+            name: "desert",
             background: .desert,
             surface: .desert,
             accent: .sunburst,
@@ -145,6 +150,7 @@ public struct NeoBrutalistTheme: Equatable {
 
     public static var jungle: NeoBrutalistTheme {
         NeoBrutalistTheme(
+            name: "jungle",
             background: .jungle,
             surface: .jungle,
             accent: .plasmaBlue,
@@ -161,6 +167,7 @@ public struct NeoBrutalistTheme: Equatable {
 
     public static var crimsonFury: NeoBrutalistTheme {
         NeoBrutalistTheme(
+            name: "crimsonFury",
             background: .paper,
             surface: .paper,
             accent: .crimsonFury,

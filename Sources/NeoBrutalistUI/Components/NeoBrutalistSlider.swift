@@ -64,7 +64,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
             if let label {
                 label()
                     .font(theme.typography.bodyFont)
-                    .foregroundColor(theme.textPrimary.color)
+                    .foregroundStyle(.nb.textPrimary)
             }
 
             sliderBody
@@ -72,7 +72,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
             if showsValueLabel {
                 Text(valueFormatter(value))
                     .font(theme.typography.monoFont)
-                    .foregroundColor(theme.textMuted.color)
+                    .foregroundStyle(.nb.textMuted)
                     .padding(.top, 2)
             }
         }
@@ -136,10 +136,10 @@ public struct NeoBrutalistSlider<Label: View>: View {
 
     private func baseTrack(height: CGFloat) -> some View {
         RoundedRectangle(cornerRadius: theme.cornerRadius == 0 ? 6 : theme.cornerRadius, style: .continuous)
-            .fill(theme.surface.secondary.color.opacity(0.65))
+            .fill(.nb.surface.secondary.opacity(0.65))
             .overlay(
                 RoundedRectangle(cornerRadius: theme.cornerRadius == 0 ? 6 : theme.cornerRadius, style: .continuous)
-                    .stroke(theme.surface.highlight.color.opacity(0.8), lineWidth: max(theme.borderWidth * 0.8, 1))
+                    .stroke(.nb.surface.highlight.opacity(0.8), lineWidth: max(theme.borderWidth * 0.8, 1))
             )
             .frame(height: height)
             .padding(.horizontal, theme.shadowOffset.width)
@@ -147,10 +147,10 @@ public struct NeoBrutalistSlider<Label: View>: View {
 
     private func progressTrack(width: CGFloat, height: CGFloat) -> some View {
         RoundedRectangle(cornerRadius: theme.cornerRadius == 0 ? 6 : theme.cornerRadius, style: .continuous)
-            .fill(theme.accent.primary.color.opacity(0.75))
+            .fill(.nb.accent.primary.opacity(0.75))
             .overlay(
                 RoundedRectangle(cornerRadius: theme.cornerRadius == 0 ? 6 : theme.cornerRadius, style: .continuous)
-                    .stroke(theme.accent.highlight.color.opacity(0.9), lineWidth: max(theme.borderWidth * 0.6, 1))
+                    .stroke(.nb.accent.highlight.opacity(0.9), lineWidth: max(theme.borderWidth * 0.6, 1))
             )
             .frame(width: width-theme.shadowOffset.width*2, height: height)
             .padding(.horizontal, theme.shadowOffset.width)
@@ -158,7 +158,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
 
     private func knob(size: CGFloat) -> some View {
         RoundedRectangle(cornerRadius: theme.shadowRadius, style: .continuous)
-            .fill(isDragging ? theme.accent.highlight.color : theme.accent.primary.color)
+            .fill(isDragging ? Color.nb.accent.highlight : Color.nb.accent.primary)
             .frame(width: size, height: size)
             .overlay(
                 RoundedRectangle(cornerRadius: theme.shadowRadius, style: .continuous)

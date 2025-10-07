@@ -28,7 +28,7 @@ public struct NeoBrutalistToggleStyle: ToggleStyle {
         HStack(spacing: 16) {
             configuration.label
                 .font(theme.typography.bodyFont)
-                .foregroundColor(theme.textPrimary.color)
+                .foregroundStyle(.nb.textPrimary)
             Spacer(minLength: 0)
             toggle(configuration: configuration)
         }
@@ -41,18 +41,22 @@ public struct NeoBrutalistToggleStyle: ToggleStyle {
 
         return ZStack(alignment: configuration.isOn ? .trailing : .leading) {
             RoundedRectangle(cornerRadius: trackCornerRadius, style: .continuous)
-                .fill(configuration.isOn ? theme.accent.primary.color.opacity(0.18) : theme.surface.secondary.color.opacity(0.6))
+                .fill(configuration.isOn ? Color.nb.accent.primary.opacity(0.18) : Color.nb.surface.secondary.opacity(0.6))
                 .overlay(
-                    RoundedRectangle(cornerRadius: trackCornerRadius, style: .continuous)
-                        .stroke(
-                            configuration.isOn ? theme.accent.primary.color : theme.surface.highlight.color.opacity(0.7),
-                            lineWidth: theme.borderWidth
-                        )
+                    Group {
+                        if configuration.isOn {
+                            RoundedRectangle(cornerRadius: trackCornerRadius, style: .continuous)
+                                .stroke(.nb.accent.primary, lineWidth: theme.borderWidth)
+                        } else {
+                            RoundedRectangle(cornerRadius: trackCornerRadius, style: .continuous)
+                                .stroke(.nb.surface.highlight.opacity(0.7), lineWidth: theme.borderWidth)
+                        }
+                    }
                 )
                 .frame(width: trackSize.width, height: trackSize.height)
 
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(configuration.isOn ? theme.accent.primary.color : theme.surface.primary.color)
+                .fill(configuration.isOn ? Color.nb.accent.primary : Color.nb.surface.primary)
                 .overlay(
                     RoundedRectangle(cornerRadius: 5, style: .continuous)
                         .stroke(Color.black.opacity(0.1), lineWidth: 1)

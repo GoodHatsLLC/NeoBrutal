@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct Typography: Equatable {
+public struct Typography: Equatable, Sendable {
     public var titleFont: Font
     public var bodyFont: Font
     public var monoFont: Font

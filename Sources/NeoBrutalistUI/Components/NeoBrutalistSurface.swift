@@ -37,7 +37,7 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
             content
                 .background(surface)
                 .padding(accentEdge.padding(size: accentThickness))
-                .background(isHighlighted ? theme.accent.highlight.color : theme.accent.primary.color)
+                .background(isHighlighted ? Color.nb.accent.highlight : Color.nb.accent.primary)
                 .compositingGroup()
                 .neoBrutalistShadow(
                     color: Color.primary.opacity(isHighlighted ? min(1, theme.shadowOpacity + 0.2) : theme.shadowOpacity),
@@ -48,7 +48,7 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
 
     private var surface: some View {
         baseShape
-            .fill(theme.surface.primary.color)
+            .fill(.nb.surface.primary)
             .overlay {
                 if theme.noiseOpacity > 0 {
                     baseShape
@@ -57,17 +57,21 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
                         .blendMode(.overlay)
                 }
             }
-            .overlay(baseShape.stroke(theme.surface.secondary.color.opacity(0.7), lineWidth: theme.borderWidth))
+            .overlay(baseShape.stroke(.nb.surface.secondary.opacity(0.7), lineWidth: theme.borderWidth))
             .overlay(highlightBorder)
     }
 
+    @ViewBuilder
     private var highlightBorder: some View {
-        baseShape
-            .stroke(
-                isHighlighted ? theme.accent.highlight.color : theme.surface.highlight.color.opacity(0.8),
-                lineWidth: isHighlighted ? theme.borderWidth * 1.4 : theme.borderWidth * 0.6
-            )
-            .opacity(isHighlighted ? 1 : 0.7)
+        if isHighlighted {
+            baseShape
+                .stroke(.nb.accent.highlight, lineWidth: theme.borderWidth * 1.4)
+                .opacity(1)
+        } else {
+            baseShape
+                .stroke(.nb.surface.highlight.opacity(0.8), lineWidth: theme.borderWidth * 0.6)
+                .opacity(0.7)
+        }
     }
 
     private var accentThickness: CGFloat {

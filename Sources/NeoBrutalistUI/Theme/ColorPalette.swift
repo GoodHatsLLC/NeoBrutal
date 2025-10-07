@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct ColorPalette: Equatable {
+public struct ColorPalette: Equatable, Sendable {
     public var primary: ColorDescriptor
     public var secondary: ColorDescriptor
     public var highlight: ColorDescriptor
@@ -212,7 +212,7 @@ public struct ColorPalette: Equatable {
     }
 }
 
-public struct ColorDescriptor: Equatable, Codable {
+public struct ColorDescriptor: Equatable, Codable, Sendable {
     public var red: Double
     public var green: Double
     public var blue: Double

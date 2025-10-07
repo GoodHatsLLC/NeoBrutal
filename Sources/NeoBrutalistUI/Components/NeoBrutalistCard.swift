@@ -32,12 +32,12 @@ public struct NeoBrutalistCard<Content: View>: View {
             if hasHeader {
                 header
                 Divider()
-                    .overlay(theme.surface.highlight.color.opacity(0.4))
+                    .overlay(.nb.surface.highlight.opacity(0.4))
             }
 
             content
                 .font(theme.typography.bodyFont)
-                .foregroundColor(theme.textPrimary.color)
+                .foregroundStyle(.nb.textPrimary)
         }
         .padding()
         .neoBrutalistSurface(accentEdge: accentEdge, highlighted: highlighted)
@@ -52,20 +52,20 @@ public struct NeoBrutalistCard<Content: View>: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 32, height: 32)
-                        .foregroundColor(theme.accent.highlight.color)
+                        .foregroundStyle(.nb.accent.highlight)
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
                     if let title {
                         Text(title)
                             .font(theme.typography.titleFont)
-                            .foregroundColor(theme.accent.highlight.color)
+                            .foregroundStyle(.nb.accent.highlight)
                     }
 
                     if let subtitle {
                         Text(subtitle.uppercased())
                             .font(theme.typography.monoFont)
-                            .foregroundColor(theme.textMuted.color)
+                            .foregroundStyle(.nb.textMuted)
                             .neoKerning(1.2)
                     }
                 }

@@ -21,16 +21,24 @@ public struct NeoBrutalistBadge: View {
     public var body: some View {
         HStack(spacing: 8) {
             if placement == .leading, let icon {
-                iconView(icon)
+                icon
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 14, height: 14)
+                    .foregroundStyle(isActive ? AnyShapeStyle(.white) : AnyShapeStyle(.nb.textPrimary))
             }
 
             Text(text.uppercased())
                 .font(theme.typography.monoFont)
-                .foregroundColor(textColor)
+                .foregroundStyle(isActive ? AnyShapeStyle(.white) : AnyShapeStyle(.nb.textPrimary))
                 .neoKerning(1.3)
 
             if placement == .trailing, let icon {
-                iconView(icon)
+                icon
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 14, height: 14)
+                    .foregroundStyle(isActive ? AnyShapeStyle(.white) : AnyShapeStyle(.nb.textPrimary))
             }
         }
         .padding(.horizontal, 18)
@@ -38,28 +46,20 @@ public struct NeoBrutalistBadge: View {
         .background(background)
     }
 
+    @ViewBuilder
     private var background: some View {
         RoundedRectangle(cornerRadius: theme.cornerRadius * 0.6, style: .continuous)
-            .fill(isActive ? theme.accent.primary.color : theme.surface.primary.color)
+            .fill(isActive ? Color.nb.accent.primary : Color.nb.surface.primary)
             .overlay(
-                RoundedRectangle(cornerRadius: theme.cornerRadius * 0.6, style: .continuous)
-                    .stroke(borderColor, lineWidth: theme.borderWidth * 0.6)
+                Group {
+                    if isActive {
+                        RoundedRectangle(cornerRadius: theme.cornerRadius * 0.6, style: .continuous)
+                            .stroke(.nb.accent.highlight, lineWidth: theme.borderWidth * 0.6)
+                    } else {
+                        RoundedRectangle(cornerRadius: theme.cornerRadius * 0.6, style: .continuous)
+                            .stroke(.nb.surface.highlight.opacity(0.7), lineWidth: theme.borderWidth * 0.6)
+                    }
+                }
             )
-    }
-
-    private func iconView(_ icon: Image) -> some View {
-        icon
-            .resizable()
-            .scaledToFit()
-            .frame(width: 14, height: 14)
-            .foregroundColor(textColor)
-    }
-
-    private var textColor: Color {
-        isActive ? Color.white : theme.textPrimary.color
-    }
-
-    private var borderColor: Color {
-        isActive ? theme.accent.highlight.color : theme.surface.highlight.color.opacity(0.7)
     }
 }

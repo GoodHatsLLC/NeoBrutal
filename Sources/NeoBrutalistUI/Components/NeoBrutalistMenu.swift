@@ -67,7 +67,7 @@ public struct NeoBrutalistMenuItem<Label: View>: View {
         Button(action: action) {
             label
                 .font(theme.typography.bodyFont)
-                .foregroundColor(destructive ? .red : theme.textPrimary.color)
+                .foregroundStyle(destructive ? AnyShapeStyle(.red) : AnyShapeStyle(.nb.textPrimary))
         }
     }
 }

@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(swift build)",
-      "Bash(swift test)"
+      "Bash(swift test)",
+      "Bash(swift run:*)",
+      "Bash(swift build:*)",
+      "Bash(SNAPSHOT_THEMES=bubblegum swift run NeoBrutalistSnapshots)",
+      "Bash(env SNAPSHOT_THEMES=bubblegum,crimsonFury swift run NeoBrutalistSnapshots)"
     ],
     "deny": [],
     "ask": []
