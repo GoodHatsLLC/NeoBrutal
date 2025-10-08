@@ -22,6 +22,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
         public var windowShadowOpacity: CGFloat
         public var windowRadius: CGFloat
         public var windowBorder: CGFloat
+        public var windowBorderColor: ColorDescriptor
+        public var windowShadowColor: ColorDescriptor
 
         public init(
             background: ColorPalette = .paper,
@@ -40,7 +42,9 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
             windowShadowOffset: CGSize = CGSize(width: 8, height: 8),
             windowShadowOpacity: CGFloat = 0.5,
             windowRadius: CGFloat = 16,
-            windowBorder: CGFloat = 2
+            windowBorder: CGFloat = 2,
+            windowBorderColor: ColorDescriptor = ColorDescriptor(red: 0, green: 0, blue: 0),
+            windowShadowColor: ColorDescriptor = ColorDescriptor(red: 0, green: 0, blue: 0),
         ) {
             self.background = background
             self.surface = surface
@@ -59,6 +63,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
             self.windowShadowOpacity = windowShadowOpacity
             self.windowRadius = windowRadius
             self.windowBorder = windowBorder
+            self.windowBorderColor = windowBorderColor
+            self.windowShadowColor = windowShadowColor
         }
     }
 
@@ -176,15 +182,9 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 textMuted: ColorDescriptor(red: 182, green: 186, blue: 203),
                 borderWidth: 2,
                 cornerRadius: 6,
-                shadowOffset: CGSize(width: 2, height: 2),
-                shadowRadius: 12,
-                shadowOpacity: 0.7,
-                noiseOpacity: 0.08,
-                windowButtonSize: CGSize(width: 14, height: 14),
-                windowShadowOffset: CGSize(width: 6, height: 6),
-                windowShadowOpacity: 0.7,
-                windowRadius: 18,
-                windowBorder: 2
+                shadowOffset: CGSize(width: 6, height: 6),
+                shadowRadius: 0,
+                noiseOpacity: 0.3
             )
         )
     }

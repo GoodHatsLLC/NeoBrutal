@@ -40,6 +40,7 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
             .foregroundStyle(.nb.textPrimary)
             .padding(size.padding)
             .background(background(isPressed: configuration.isPressed))
+            .compositingGroup()
             .offset(x: pressOffset.width, y: pressOffset.height)
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.spring(response: 0.28, dampingFraction: 0.7), value: configuration.isPressed)
@@ -50,19 +51,6 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
         let shadowColor = Color.primary.opacity(themeVariant.shadowOpacity)
 
         if isEnabled {
-            if isPressed {
-                baseShape
-                    .fill(.nb.accent.primary)
-                    .overlay(baseShape.stroke(.nb.accent.highlight, lineWidth: themeVariant.borderWidth))
-                    .overlay(baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: themeVariant.borderWidth))
-                    .compositingGroup()
-                    .neoBrutalistShadow(
-                        color: shadowColor,
-                        radius: themeVariant.shadowRadius,
-                        offset: themeVariant.shadowOffset,
-                        isEnabled: !isPressed && displayShadow
-                    )
-            } else {
                 baseShape
                     .fill(.nb.surface.primary)
                     .overlay(baseShape.stroke(.nb.accent.primary, lineWidth: themeVariant.borderWidth))
@@ -74,7 +62,6 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
                         offset: themeVariant.shadowOffset,
                         isEnabled: !isPressed && displayShadow
                     )
-            }
         } else {
             // For disabled state, we need to compute a mixed color
             let disabledFill = themeVariant.surface.secondary.color.mix(with: .gray, by: 0.1)

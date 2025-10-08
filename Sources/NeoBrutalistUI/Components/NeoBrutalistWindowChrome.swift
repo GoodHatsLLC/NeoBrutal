@@ -14,8 +14,10 @@
         public static func doubleTapZoom(
             action: @MainActor @escaping (_ window: NSWindow) -> Void = { w in
                 if w.isZoomed {
+                    w.performZoom(nil)
                     w.setIsZoomed(false)
                 } else {
+                    w.performZoom(nil)
                     w.setIsZoomed(true)
                 }
             }
@@ -30,9 +32,14 @@
     }
 
     public struct WindowChromeButtonConfiguration: Identifiable {
+        public enum ButtonState {
+            case inactive
+            case hovered
+            case active
+        }
         public let id: UUID = UUID()
         public let icon: Image
-        public let color: Color
+        public let color: (ButtonState, NSWindow?) -> Color
         public let accessibilityLabel: String
         public let action: (_ window: NSWindow) -> Void
 
@@ -45,7 +52,16 @@
         {
             WindowChromeButtonConfiguration(
                 icon: Image(systemName: "xmark"),
-                color: Color.red,
+                color: { state, window in
+                    switch state {
+                    case .inactive:
+                        Color.red
+                    case .hovered:
+                        Color.red.exposure(adjustment: 5)
+                    case .active:
+                        Color.red.mix(with: .black, by: 0.5).exposure(adjustment: 5)
+                    }
+                },
                 accessibilityLabel: "Close Window",
                 action: { w in Task { @MainActor in action(w) } }
             )
@@ -60,7 +76,16 @@
         {
             WindowChromeButtonConfiguration(
                 icon: Image(systemName: "minus"),
-                color: Color.yellow,
+                color: { state, window in
+                    switch state {
+                    case .inactive:
+                        Color.yellow
+                    case .hovered:
+                        Color.yellow.exposure(adjustment: 5)
+                    case .active:
+                        Color.yellow.mix(with: .black, by: 0.5).exposure(adjustment: 5)
+                    }
+                },
                 accessibilityLabel: "Minimize Window",
                 action:  { w in Task { @MainActor in action(w) } }
             )
@@ -78,7 +103,16 @@
         {
             WindowChromeButtonConfiguration(
                 icon: Image(systemName: "chevron.up.chevron.down"),
-                color: Color.green,
+                color: { state, window in
+                    switch state {
+                    case .inactive:
+                        window?.isZoomed == true ? Color.green.exposure(adjustment: 5) : Color.green
+                    case .hovered:
+                        Color.green.exposure(adjustment: 5)
+                    case .active:
+                        Color.green.mix(with: .black, by: 0.5).exposure(adjustment: 5)
+                    }
+                },
                 accessibilityLabel: "Zoom Window",
                 action:  { w in Task { @MainActor in action(w) } }
             )
@@ -92,7 +126,16 @@
         {
             WindowChromeButtonConfiguration(
                 icon: Image(systemName: "square.on.square"),
-                color: Color.blue,
+                color: { state, window in
+                    switch state {
+                    case .inactive:
+                        window?.level == .floating ? Color.blue.exposure(adjustment: 5) : Color.blue
+                    case .hovered:
+                        Color.blue.exposure(adjustment: 5)
+                    case .active:
+                        Color.blue.mix(with: .black, by: 0.5).exposure(adjustment: 5)
+                    }
+                },
                 accessibilityLabel: "Pin Window",
                 action:  { w in Task { @MainActor in action(w) } }
             )
@@ -100,7 +143,7 @@
 
         public init(
             icon: Image,
-            color: Color,
+            color: @escaping (ButtonState, NSWindow?) -> Color,
             accessibilityLabel: String,
             action: @escaping (_ window: NSWindow) -> Void
         ) {
@@ -199,7 +242,7 @@
                                 window: window,
                                 windowButtons: windowButtons
                             )
-                                .padding(.horizontal, themeVariant.borderWidth)
+                            .padding(.horizontal, themeVariant.borderWidth)
                             Color.clear
                                 .frame(width: 16)
                             VStack(
@@ -211,6 +254,7 @@
                                     .foregroundColor(themeVariant.textPrimary.color)
                                     .lineLimit(1)
                                     .padding()
+                                    .allowsHitTesting(false)
 
                                 if let subtitle, !subtitle.isEmpty {
                                     Text(subtitle.uppercased())
@@ -236,6 +280,8 @@
                                                         )
                                                 )
                                         )
+                                        .padding(.vertical)
+                                        .allowsHitTesting(false)
                                 }
                             }
                             .fixedSize()
@@ -340,64 +386,77 @@
             -> some View
         {
 
-            WithState(initialState: (down: false, active: false)) { $s in
-                Button {
-                    if let window {
-                        control.action(window)
+
+                WithState(initialState: (active: false, hovered: false)) { $s in
+                    let buttonState: WindowChromeButtonConfiguration.ButtonState = switch ( s.active, s.hovered) {
+                    case (true, _): .active
+                    case ( _, true): .hovered
+                    case ( _, _): .inactive
                     }
-                } label: {
-                    Circle()
-                        .fill(control.color.exposure(adjustment: s.active ? 5 : 0))
-                        .stroke(
-                            control.color.mix(with: .black, by: 0.7).opacity(0.5),
-                            lineWidth: max(themeVariant.borderWidth * 0.6, 1)
-                        )
-                        .frame(
-                            width: themeVariant.windowButtonSize.width,
-                            height: themeVariant.windowButtonSize.height
-                        )
-                        .overlay {
-                            Circle()
-                                .inset(
-                                    by: max(
-                                        1,
-                                        min(
-                                            themeVariant.windowButtonSize.width,
-                                            themeVariant.windowButtonSize.height)
-                                            * 0.1)
-                                )
-                                .fill(
-                                    LinearGradient(
-                                        colors: [
-                                            s.down ? .black: .white.opacity(0.3),
-                                            .clear,
-                                        ], startPoint: .top,
-                                        endPoint: .bottom)
-                                )
-                                .blendMode(.softLight)
+                    Button {
+                        if let window {
+                            control.action(window)
                         }
-                        .overlay(
-                            control.icon.resizable(resizingMode: .tile).aspectRatio(
-                                contentMode: .fit
+                    } label: {
+                        Circle()
+                            .fill(control.color(buttonState, window))
+                            .stroke(
+                                control.color(buttonState, window).mix(with: .black, by: 0.7).opacity(0.5),
+                                lineWidth: max(themeVariant.borderWidth * 0.6, 1)
                             )
-                            .fontWeight(.black)
-                            .opacity(
-                                hover ? 0.7 : 0
-                            ).padding(
-                                max(
-                                    2,
-                                    min(themeVariant.windowButtonSize.width, themeVariant.windowButtonSize.height)
-                                        * 0.22)
+                            .frame(
+                                width: themeVariant.windowButtonSize.width,
+                                height: themeVariant.windowButtonSize.height
                             )
-                        )
-                        .contentShape(Circle())
-                        .compositingGroup()
+                            .overlay {
+                                Circle()
+                                    .inset(
+                                        by: max(
+                                            1,
+                                            min(
+                                                themeVariant.windowButtonSize.width,
+                                                themeVariant.windowButtonSize.height)
+                                            * 0.1)
+                                    )
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                s.active ? .black: .white.opacity(0.3),
+                                                .clear,
+                                            ], startPoint: .top,
+                                            endPoint: .bottom)
+                                    )
+                                    .blendMode(.softLight)
+                            }
+                            .overlay(
+                                control.icon
+                                    .resizable(resizingMode: .tile)
+                                    .aspectRatio(contentMode: .fit)
+                                    .foregroundStyle(.black)
+                                    .fontWeight(.black)
+                                    .opacity(
+                                        hover ? 0.7 : 0
+                                    ).padding(
+                                        max(
+                                            2,
+                                            min(themeVariant.windowButtonSize.width, themeVariant.windowButtonSize.height)
+                                            * 0.22)
+                                    )
+                            )
+                            .contentShape(Circle())
+                            .compositingGroup()
+                    }
+                    .buttonStyle(NoStyle())
+                    .accessibilityLabel(control.accessibilityLabel)
+                    .onTouchUpInside(downInside: $s.active)
+                    .onContinuousHover(perform: { phase in
+                        switch phase {
+                        case .active: s.hovered = true
+                        case .ended: s.hovered = false
+                        }
+                    })
+                    .disabled(window == nil)
                 }
-                .buttonStyle(NoStyle())
-                .accessibilityLabel(control.accessibilityLabel)
-                .onTouchUpInside(downInside: $s.active)
-                .disabled(window == nil)
-            }
         }
     }
 

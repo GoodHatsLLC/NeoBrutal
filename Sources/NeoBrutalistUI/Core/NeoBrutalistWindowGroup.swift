@@ -62,17 +62,16 @@ public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: V
             }
             .clipShape(RoundedRectangle(cornerRadius: themeVariant.windowRadius, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: themeVariant.windowRadius, style: .continuous).strokeBorder(.primary, lineWidth: themeVariant.windowBorder)
+                RoundedRectangle(cornerRadius: themeVariant.windowRadius, style: .continuous).strokeBorder(themeVariant.windowBorderColor.color, lineWidth: themeVariant.windowBorder)
             }
             .offset(-themeVariant.windowShadowOffset / 2.0)
             .background {
                 RoundedRectangle(cornerRadius: themeVariant.windowRadius)
-                    .fill(.primary.opacity(themeVariant.shadowOpacity))
+                    .fill(themeVariant.windowShadowColor.color.opacity(themeVariant.shadowOpacity))
                     .offset(themeVariant.windowShadowOffset / 2.0)
             }
             .padding(.horizontal, themeVariant.windowShadowOffset.width / 2.0)
             .padding(.vertical, themeVariant.windowShadowOffset.height / 2.0)
-            .preferredColorScheme(.light) // FIXME: hack
         }
         .windowStyle(.plain)
         .windowResizability(.contentSize)
