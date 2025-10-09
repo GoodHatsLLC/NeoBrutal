@@ -6,8 +6,8 @@ extension NeoBrutalist {
   struct WindowChrome<Accessory: View>: View {
     @Environment(\.nb) private var nbTheme
 
-    private let title: String
-    private let subtitle: String?
+    private let title: Text
+    private let subtitle: Text?
     private let accessory: Accessory
     private let windowButtons: [NeoBrutalist.WindowButtonConfiguration]
     private let windowGestures: [NeoBrutalist.WindowGestureConfiguration]
@@ -18,8 +18,8 @@ extension NeoBrutalist {
       window: NSWindow?,
       buttons: [NeoBrutalist.WindowButtonConfiguration],
       gestures: [NeoBrutalist.WindowGestureConfiguration],
-      title: String,
-      subtitle: String? = nil,
+      title: Text,
+      subtitle: Text? = nil,
       @ViewBuilder accessory: () -> Accessory
     ) {
       self.window = window
@@ -33,8 +33,8 @@ extension NeoBrutalist {
       window: NSWindow?,
       buttons: [NeoBrutalist.WindowButtonConfiguration],
       gestures: [NeoBrutalist.WindowGestureConfiguration],
-      title: String,
-      subtitle: String? = nil
+      title: Text,
+      subtitle: Text? = nil
     ) where Accessory == EmptyView {
       self.window = window
       self.title = title
@@ -59,16 +59,16 @@ extension NeoBrutalist {
             alignment: .leading,
             spacing: 4
           ) {
-            Text(title)
-              .font(nbTheme.typography.titleFont)
+            title
+//              .font(nbTheme.typography.titleFont)
               .foregroundColor(nbTheme.textPrimary.color)
               .lineLimit(1)
               .padding()
               .allowsHitTesting(false)
 
-            if let subtitle, !subtitle.isEmpty {
-              Text(subtitle.uppercased())
-                .font(nbTheme.typography.monoFont)
+            if let subtitle {
+              subtitle
+//                .font(nbTheme.typography.monoFont)
                 .foregroundColor(nbTheme.textMuted.color)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)

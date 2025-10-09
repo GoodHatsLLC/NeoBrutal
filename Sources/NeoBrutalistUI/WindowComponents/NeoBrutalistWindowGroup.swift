@@ -3,8 +3,8 @@ import SwiftUI
 public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: View>: Scene {
   public init(
     id: String,
-    title: String,
-    subTitle: String = "",
+    title: Text,
+    subTitle: Text? = nil,
     buttons: [NeoBrutalist.WindowButtonConfiguration] = .defaultButtons,
     gestures: [NeoBrutalist.WindowGestureConfiguration] = .defaultGestures,
     @ViewBuilder content: @escaping () -> Content,
@@ -24,8 +24,8 @@ public struct NeoBrutalistWindowGroup<Content: View, Overlay: View, Accessory: V
   var id: String
   var buttons: [NeoBrutalist.WindowButtonConfiguration]
   var gestures: [NeoBrutalist.WindowGestureConfiguration]
-  var title: String
-  var subTitle: String
+  var title: Text
+  var subTitle: Text?
   @ViewBuilder var content: () -> Content
   @ViewBuilder var overlay: () -> Overlay
   @ViewBuilder var accessory: () -> Accessory

@@ -11,6 +11,11 @@ private struct NeoBrutalistFontResource {
 enum NeoBrutalistFontRegistrar {
   private static let resources: [String: NeoBrutalistFontResource] = [
     NeoBrutalistFontResource(
+      postScriptName: "Inter-Medium",
+      fileName: "Inter-Medium",
+      fileExtension: "otf"
+    ),
+    NeoBrutalistFontResource(
       postScriptName: "Aspekta-300",
       fileName: "Aspekta-300",
       fileExtension: "otf"
