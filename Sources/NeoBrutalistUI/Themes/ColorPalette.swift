@@ -12,12 +12,14 @@ public struct Palette: Equatable, Codable, Sendable {
     self.highlight = highlight
   }
 
-    public static func hierarchy(_ highlight: PaletteColor, _ primary: PaletteColor, _ secondary: PaletteColor) -> Palette {
-        .init(highlight: highlight, primary: primary, secondary: secondary)
-    }
-    public static func uniform(_ color: PaletteColor) -> Palette {
-        .init(highlight: color, primary: color, secondary: color)
-    }
+  public static func hierarchy(
+    _ highlight: PaletteColor, _ primary: PaletteColor, _ secondary: PaletteColor
+  ) -> Palette {
+    .init(highlight: highlight, primary: primary, secondary: secondary)
+  }
+  public static func uniform(_ color: PaletteColor) -> Palette {
+    .init(highlight: color, primary: color, secondary: color)
+  }
 }
 
 /// A codable representation of a single color

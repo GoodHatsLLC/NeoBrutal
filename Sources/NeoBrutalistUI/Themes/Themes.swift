@@ -1,4 +1,5 @@
-// swift-format-ignore-file: LineLength
+// swift-format-ignore-file
+
 import SwiftUI
 
 extension PaletteColor {

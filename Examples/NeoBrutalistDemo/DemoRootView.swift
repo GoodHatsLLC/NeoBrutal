@@ -13,7 +13,7 @@ struct DemoRootView: View {
 
   @State private var stepperValue = 0
 
-    private let themeOptions: [NeoBrutalistTheme] = NeoBrutalist.standardThemes
+  private let themeOptions: [NeoBrutalistTheme] = NeoBrutalist.standardThemes
 
   private var selectedVariant: NeoBrutalistTheme.Variant {
     selectedTheme.variant(for: colorScheme)
@@ -243,7 +243,7 @@ private struct ThemeSwatch: View {
           .font(themeVariant.typography.bodyFont)
           .foregroundColor(themeVariant.textPrimary.color)
 
-          Text(option.name)
+        Text(option.name)
           .font(themeVariant.typography.monoFont)
           .foregroundColor(themeVariant.textMuted.color)
       }
@@ -303,40 +303,40 @@ private struct DemoLogItem: Identifiable {
 }
 
 extension DemoLogItem {
-    fileprivate enum Status: CaseIterable, Hashable {
-        case live
-        case pending
-        case offline
+  fileprivate enum Status: CaseIterable, Hashable {
+    case live
+    case pending
+    case offline
 
-        var label: String {
-            switch self {
-            case .live: return "Live"
-            case .pending: return "Pending"
-            case .offline: return "Offline"
-            }
-        }
-
-        var iconName: String {
-            switch self {
-            case .live: return "dot.scope"
-            case .pending: return "hourglass"
-            case .offline: return "moon.zzz"
-            }
-        }
+    var label: String {
+      switch self {
+      case .live: return "Live"
+      case .pending: return "Pending"
+      case .offline: return "Offline"
+      }
     }
 
-    fileprivate static let seed: [DemoLogItem] = [
-        DemoLogItem(
-            title: "Launch Sequence", message: "Stage separation confirmed. Vector locked.",
-            status: .live),
-        DemoLogItem(
-            title: "Diagnostics", message: "Thermal envelope stable at 81%", status: .pending),
-        DemoLogItem(
-            title: "Payload", message: "Neo Brutalist components compiled for all platforms.",
-            status: .live),
-        DemoLogItem(
-            title: "Telemetry", message: "Signal drop detected in sector 7.", status: .offline),
-        DemoLogItem(
-            title: "Crew", message: "All operators synced to midnight mode.", status: .live),
-    ]
+    var iconName: String {
+      switch self {
+      case .live: return "dot.scope"
+      case .pending: return "hourglass"
+      case .offline: return "moon.zzz"
+      }
+    }
+  }
+
+  fileprivate static let seed: [DemoLogItem] = [
+    DemoLogItem(
+      title: "Launch Sequence", message: "Stage separation confirmed. Vector locked.",
+      status: .live),
+    DemoLogItem(
+      title: "Diagnostics", message: "Thermal envelope stable at 81%", status: .pending),
+    DemoLogItem(
+      title: "Payload", message: "Neo Brutalist components compiled for all platforms.",
+      status: .live),
+    DemoLogItem(
+      title: "Telemetry", message: "Signal drop detected in sector 7.", status: .offline),
+    DemoLogItem(
+      title: "Crew", message: "All operators synced to midnight mode.", status: .live),
+  ]
 }

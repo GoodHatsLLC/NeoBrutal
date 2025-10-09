@@ -3,7 +3,7 @@ import SwiftUI
 /// A palette-driven theme that captures the bold aesthetic of Neo Brutalism and adapts to SwiftUI
 /// light and dark color schemes.
 public struct NeoBrutalistTheme: Equatable, Sendable, Identifiable {
-    public var id: String { name }
+  public var id: String { name }
   /// A concrete representation of the visual system for a single `ColorScheme`.
   public struct Variant: Equatable, Sendable {
     public var background: Palette
