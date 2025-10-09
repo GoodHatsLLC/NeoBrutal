@@ -60,7 +60,7 @@ extension NeoBrutalist {
             spacing: 4
           ) {
             title
-//              .font(nbTheme.typography.titleFont)
+              //              .font(nbTheme.typography.titleFont)
               .foregroundColor(nbTheme.textPrimary.color)
               .lineLimit(1)
               .padding()
@@ -68,7 +68,7 @@ extension NeoBrutalist {
 
             if let subtitle {
               subtitle
-//                .font(nbTheme.typography.monoFont)
+                //                .font(nbTheme.typography.monoFont)
                 .foregroundColor(nbTheme.textMuted.color)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)

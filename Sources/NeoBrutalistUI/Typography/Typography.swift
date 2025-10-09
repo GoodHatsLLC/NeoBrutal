@@ -4,13 +4,13 @@ public struct Typography: Equatable, Sendable {
   public var titleFont: Font
   public var bodyFont: Font
   public var monoFont: Font
-    public var iconFont: Font
+  public var iconFont: Font
 
-    public init(titleFont: Font, bodyFont: Font, monoFont: Font, iconFont: Font) {
+  public init(titleFont: Font, bodyFont: Font, monoFont: Font, iconFont: Font) {
     self.titleFont = titleFont
     self.bodyFont = bodyFont
     self.monoFont = monoFont
-        self.iconFont = iconFont
+    self.iconFont = iconFont
   }
 
   public static var `default`: Typography {
