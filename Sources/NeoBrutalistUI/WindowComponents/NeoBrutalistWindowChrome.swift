@@ -3,7 +3,7 @@ import SwiftUI
 
 extension NeoBrutalist {
   @available(macOS 15.0, *)
-  struct WindowChrome<Accessory: View>: View {
+  public struct WindowChrome<Accessory: View>: View {
     @Environment(\.nb) private var nbTheme
 
     private let title: Text
@@ -14,7 +14,7 @@ extension NeoBrutalist {
 
     private let window: NSWindow?
 
-    init(
+      public init(
       window: NSWindow?,
       buttons: [NeoBrutalist.WindowButtonConfiguration],
       gestures: [NeoBrutalist.WindowGestureConfiguration],
@@ -44,7 +44,7 @@ extension NeoBrutalist {
       self.windowGestures = gestures
     }
 
-    var body: some View {
+      public var body: some View {
       VStack(spacing: 0) {
         HStack(spacing: 0) {
           Color.clear.frame(width: 16)

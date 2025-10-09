@@ -97,15 +97,7 @@ struct SnapshotApp {
     }
 
     // Default: test all themes
-    return [
-      NeoBrutalistTheme.bubblegum,
-      NeoBrutalistTheme.daybreakPlaza,
-      NeoBrutalistTheme.nocturneVolt,
-      NeoBrutalistTheme.ultravioletCargo,
-      NeoBrutalistTheme.desert,
-      NeoBrutalistTheme.jungle,
-      NeoBrutalistTheme.crimsonFury,
-    ]
+      return NeoBrutalist.standardThemes
   }
 
   /// Determines which color schemes to test based on environment variables
@@ -127,16 +119,7 @@ struct SnapshotApp {
 
   /// Gets a theme by name
   static func themeByName(_ name: String) -> NeoBrutalistTheme? {
-    switch name.lowercased() {
-    case "bubblegum": return .bubblegum
-    case "daybreakplaza", "daybreak": return .daybreakPlaza
-    case "nocturnevelt", "nocturne": return .nocturneVolt
-    case "ultravioletcargo", "ultraviolet": return .ultravioletCargo
-    case "desert": return .desert
-    case "jungle": return .jungle
-    case "crimsonfury", "crimson": return .crimsonFury
-    default: return nil
-    }
+      NeoBrutalist.standardThemes.first(where: { $0.name.lowercased() == name.lowercased() })
   }
 
   private static func colorSchemeByName(_ name: String) -> ColorScheme? {

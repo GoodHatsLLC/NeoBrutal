@@ -80,7 +80,7 @@ public struct NeoBrutalistTheme: Equatable, Sendable, Identifiable {
   ) {
     self.name = name
     self.light = light
-    self.dark = dark ?? light
+    self.dark = dark
   }
 
   /// Returns the variant that matches the provided color scheme.
