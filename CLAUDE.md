@@ -37,7 +37,7 @@ open Package.swift
 
 The library uses a centralized theme system built around `NeoBrutalistTheme` (Theme/NeoBrutalistTheme.swift:6). Themes are injected via SwiftUI environment and control all visual styling:
 
-- **ColorPalette**: Defines primary/secondary/highlight colors for background, surface, and accent layers
+- **Palette**: Defines primary/secondary/highlight colors for background, surface, and accent layers
 - **Typography**: Provides bodyFont and monoFont configurations
 - **Visual Properties**: borderWidth, cornerRadius, shadowOffset, shadowRadius, shadowOpacity, noiseOpacity
 - **Window Properties**: Special properties for macOS window styling (windowButtonSize, windowShadowOffset, etc.)
@@ -104,7 +104,7 @@ For cases requiring explicit `Color` types or complex operations:
 let color: Color = theme.textPrimary.color
 ```
 
-`ColorDescriptor` (Theme/ColorPalette.swift:215) stores RGB values (0-255 or 0-1) and alpha. `ColorPalette` groups three related colors (primary, secondary, highlight) and provides a gradient generator.
+`PaletteColor` (Theme/Palette.swift:215) stores RGB values (0-255 or 0-1) and alpha. `Palette` groups three related colors (primary, secondary, highlight) and provides a gradient generator.
 
 ### Noise Texture
 
@@ -150,8 +150,6 @@ Components use conditional compilation for platform-specific features:
 // iOS-specific code
 #endif
 ```
-
-The `neoKerning()` helper (Core/NeoBrutalistHelpers.swift:7) handles macOS version differences for typography.
 
 ### Spacing Convention
 

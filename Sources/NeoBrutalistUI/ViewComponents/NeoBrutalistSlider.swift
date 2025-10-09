@@ -2,12 +2,7 @@ import SwiftUI
 
 /// A custom slider tailored to the Neo Brutalist theme with thick geometry and an animated thumb.
 public struct NeoBrutalistSlider<Label: View>: View {
-    @Environment(\.neoBrutalistTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var themeVariant: NeoBrutalistTheme.Variant {
-        theme.variant(for: colorScheme)
-    }
+    @Environment(\.nb) private var nbTheme
 
     @Binding private var value: Double
     private let range: ClosedRange<Double>
@@ -68,7 +63,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
         VStack(alignment: .leading, spacing: NeoBrutalist.Spacing.small.rawValue) {
             if let label {
                 label()
-                    .font(themeVariant.typography.bodyFont)
+                    .font(nbTheme.typography.bodyFont)
                     .foregroundStyle(.nb.textPrimary)
             }
 
@@ -76,7 +71,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
 
             if showsValueLabel {
                 Text(valueFormatter(value))
-                    .font(themeVariant.typography.monoFont)
+                    .font(nbTheme.typography.monoFont)
                     .foregroundStyle(.nb.textMuted)
                     .padding(.top, 2)
             }
@@ -103,7 +98,7 @@ public struct NeoBrutalistSlider<Label: View>: View {
             let trackHeight: CGFloat = 12
             let progress = progressValue()
             let knobCenter = CGFloat(progress) * trackWidth
-            let knobOffset = max(0, min(knobCenter - knobSize / 2, trackWidth - knobSize - themeVariant.shadowOffset.width))
+            let knobOffset = max(0, min(knobCenter - knobSize / 2, trackWidth - knobSize - nbTheme.shadowOffset.width))
             let fillWidth = min(max(knobCenter, knobSize * 0.4), trackWidth)
 
             ZStack(alignment: .leading) {
@@ -136,49 +131,49 @@ public struct NeoBrutalistSlider<Label: View>: View {
             )
         }
         .frame(height: 56)
-        .padding(.horizontal, themeVariant.borderWidth)
+        .padding(.horizontal, nbTheme.borderWidth)
     }
 
     private func baseTrack(height: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: themeVariant.cornerRadius == 0 ? 6 : themeVariant.cornerRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: nbTheme.cornerRadius == 0 ? 6 : nbTheme.cornerRadius, style: .continuous)
             .fill(.nb.surface.secondary.opacity(0.65))
             .overlay(
-                RoundedRectangle(cornerRadius: themeVariant.cornerRadius == 0 ? 6 : themeVariant.cornerRadius, style: .continuous)
-                    .stroke(.nb.surface.highlight.opacity(0.8), lineWidth: max(themeVariant.borderWidth * 0.8, 1))
+                RoundedRectangle(cornerRadius: nbTheme.cornerRadius == 0 ? 6 : nbTheme.cornerRadius, style: .continuous)
+                    .stroke(.nb.surface.highlight.opacity(0.8), lineWidth: max(nbTheme.borderWidth * 0.8, 1))
             )
             .frame(height: height)
-            .padding(.horizontal, themeVariant.shadowOffset.width)
+            .padding(.horizontal, nbTheme.shadowOffset.width)
     }
 
     private func progressTrack(width: CGFloat, height: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: themeVariant.cornerRadius == 0 ? 6 : themeVariant.cornerRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: nbTheme.cornerRadius == 0 ? 6 : nbTheme.cornerRadius, style: .continuous)
             .fill(.nb.accent.primary.opacity(0.75))
             .overlay(
-                RoundedRectangle(cornerRadius: themeVariant.cornerRadius == 0 ? 6 : themeVariant.cornerRadius, style: .continuous)
-                    .stroke(.nb.accent.highlight.opacity(0.9), lineWidth: max(themeVariant.borderWidth * 0.6, 1))
+                RoundedRectangle(cornerRadius: nbTheme.cornerRadius == 0 ? 6 : nbTheme.cornerRadius, style: .continuous)
+                    .stroke(.nb.accent.highlight.opacity(0.9), lineWidth: max(nbTheme.borderWidth * 0.6, 1))
             )
-            .frame(width: width - themeVariant.shadowOffset.width * 2, height: height)
-            .padding(.horizontal, themeVariant.shadowOffset.width)
+            .frame(width: width - nbTheme.shadowOffset.width * 2, height: height)
+            .padding(.horizontal, nbTheme.shadowOffset.width)
     }
 
     private func knob(size: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: themeVariant.shadowRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: nbTheme.shadowRadius, style: .continuous)
             .fill(isDragging ? Color.nb.accent.highlight : Color.nb.accent.primary)
             .frame(width: size, height: size)
             .overlay(
-                RoundedRectangle(cornerRadius: themeVariant.shadowRadius, style: .continuous)
+                RoundedRectangle(cornerRadius: nbTheme.shadowRadius, style: .continuous)
                     .stroke(Color.black.opacity(0.12), lineWidth: 1)
             )
             .neoBrutalistShadow(
-                color: Color.black.opacity(isDragging ? min(1, themeVariant.shadowOpacity + 0.2) : themeVariant.shadowOpacity),
-                radius: themeVariant.shadowRadius,
-                offset: themeVariant.shadowOffset,
+                color: Color.black.opacity(isDragging ? min(1, nbTheme.shadowOpacity + 0.2) : nbTheme.shadowOpacity),
+                radius: nbTheme.shadowRadius,
+                offset: nbTheme.shadowOffset,
                 isEnabled: true
             )
-            .offset(x: -themeVariant.borderWidth - themeVariant.shadowOffset.width, y: -themeVariant.borderWidth / 2)
+            .offset(x: -nbTheme.borderWidth - nbTheme.shadowOffset.width, y: -nbTheme.borderWidth / 2)
             .scaleEffect(isDragging ? 1.05 : 1)
             .animation(.easeOut(duration: 0.15), value: isDragging)
-            .padding(.horizontal, themeVariant.shadowOffset.width)
+            .padding(.horizontal, nbTheme.shadowOffset.width)
     }
 
     private func progressValue() -> Double {

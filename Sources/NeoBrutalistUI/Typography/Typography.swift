@@ -21,7 +21,7 @@ public struct Typography: Equatable, Sendable {
 
     public static var blocky: Typography {
         Typography(
-            titleFont: .neoBrutalistCustom("Aspekta-700", size: 30),
+            titleFont: .neoBrutalistCustom("CabinetGrotesk-Bold", size: 30),
             bodyFont: .neoBrutalistCustom("Aspekta-500", size: 18),
             monoFont: .neoBrutalistCustom("IBMPlexMono-Bold", size: 14)
         )

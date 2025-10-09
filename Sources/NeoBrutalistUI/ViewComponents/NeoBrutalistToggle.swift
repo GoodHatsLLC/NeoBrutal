@@ -14,14 +14,19 @@ public struct NeoBrutalistToggleStyle: ToggleStyle {
             case .large: return CGSize(width: 86, height: 42)
             }
         }
+        var spacing: CGFloat {
+            switch self {
+            case .compact:
+                8
+            case .regular:
+                16
+            case .large:
+                16
+            }
+        }
     }
 
-    @Environment(\.neoBrutalistTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var themeVariant: NeoBrutalistTheme.Variant {
-        theme.variant(for: colorScheme)
-    }
+    @Environment(\.nb) private var nbTheme
 
     private let size: Size
 
@@ -30,9 +35,9 @@ public struct NeoBrutalistToggleStyle: ToggleStyle {
     }
 
     public func makeBody(configuration: Configuration) -> some View {
-        HStack(spacing: 16) {
+        HStack(spacing: size.spacing) {
             configuration.label
-                .font(themeVariant.typography.bodyFont)
+                .font(nbTheme.typography.bodyFont)
                 .foregroundStyle(.nb.textPrimary)
             Spacer(minLength: 0)
             toggle(configuration: configuration)
@@ -51,10 +56,10 @@ public struct NeoBrutalistToggleStyle: ToggleStyle {
                     Group {
                         if configuration.isOn {
                             RoundedRectangle(cornerRadius: trackCornerRadius, style: .continuous)
-                                .stroke(.nb.accent.primary, lineWidth: themeVariant.borderWidth)
+                                .stroke(.nb.accent.primary, lineWidth: nbTheme.borderWidth)
                         } else {
                             RoundedRectangle(cornerRadius: trackCornerRadius, style: .continuous)
-                                .stroke(.nb.surface.highlight.opacity(0.7), lineWidth: themeVariant.borderWidth)
+                                .stroke(.nb.surface.highlight.opacity(0.7), lineWidth: nbTheme.borderWidth)
                         }
                     }
                 )
@@ -80,12 +85,12 @@ public struct NeoBrutalistToggleStyle: ToggleStyle {
                 configuration.isOn.toggle()
             }
         }
-        .padding(.horizontal, themeVariant.borderWidth)
+        .padding(.horizontal, nbTheme.borderWidth)
     }
 }
 
 public extension ToggleStyle where Self == NeoBrutalistToggleStyle {
-    static func neoBrutalist(size: NeoBrutalistToggleStyle.Size = .regular) -> NeoBrutalistToggleStyle {
+    public static func neoBrutalist(size: NeoBrutalistToggleStyle.Size = .regular) -> NeoBrutalistToggleStyle {
         NeoBrutalistToggleStyle(size: size)
     }
 }

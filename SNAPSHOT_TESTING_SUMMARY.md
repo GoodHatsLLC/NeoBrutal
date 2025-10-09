@@ -89,7 +89,7 @@ Snapshots/
 ### Concurrency
 
 - Properly uses `@MainActor` for SwiftUI view creation
-- `Sendable` conformance for `SnapshotConfig`, `NeoBrutalistTheme`, `ColorPalette`, `ColorDescriptor`, and `Typography`
+- `Sendable` conformance for `SnapshotConfig`, `NeoBrutalistTheme`, `Palette`, `PaletteColor`, and `Typography`
 - Async/await patterns for clean execution flow
 
 ### Theme Integration
@@ -208,7 +208,7 @@ let customConfig = SnapshotConfig(
 ### Modified Files
 - `Package.swift` - Added NeoBrutalistSnapshots executable target
 - `Sources/NeoBrutalistUI/Theme/NeoBrutalistTheme.swift` - Added names and Sendable
-- `Sources/NeoBrutalistUI/Theme/ColorPalette.swift` - Added Sendable
+- `Sources/NeoBrutalistUI/Theme/Palette.swift` - Added Sendable
 - `Sources/NeoBrutalistUI/Typography/Typography.swift` - Added Sendable
 - `.gitignore` - Added Snapshots/
 - `CLAUDE.md` - Documented snapshot testing

@@ -2,12 +2,7 @@ import SwiftUI
 
 /// A collapsible content container that applies the Neo Brutalist treatment.
 public struct NeoBrutalistDisclosureGroup<Label: View, Content: View>: View {
-    @Environment(\.neoBrutalistTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var themeVariant: NeoBrutalistTheme.Variant {
-        theme.variant(for: colorScheme)
-    }
+    @Environment(\.nb) private var nbTheme
 
     private let label: () -> Label
     private let content: () -> Content
@@ -64,7 +59,7 @@ public struct NeoBrutalistDisclosureGroup<Label: View, Content: View>: View {
         Button(action: toggleExpanded) {
             HStack(spacing: 14) {
                 label()
-                    .font(themeVariant.typography.titleFont)
+                    .font(nbTheme.typography.titleFont)
                     .foregroundStyle(.nb.textPrimary)
 
                 Spacer(minLength: 0)
@@ -84,7 +79,7 @@ public struct NeoBrutalistDisclosureGroup<Label: View, Content: View>: View {
 
     private var expandedContent: some View {
         content()
-            .font(themeVariant.typography.bodyFont)
+            .font(nbTheme.typography.bodyFont)
             .foregroundStyle(.nb.textPrimary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .transition(.move(edge: .top).combined(with: .opacity))
@@ -98,11 +93,11 @@ public struct NeoBrutalistDisclosureGroup<Label: View, Content: View>: View {
                         .fill(.nb.accent.primary.opacity(0.24))
                         .overlay(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .stroke(.nb.accent.highlight, lineWidth: themeVariant.borderWidth * 0.9)
+                                .stroke(.nb.accent.highlight, lineWidth: nbTheme.borderWidth * 0.9)
                         )
 
                     Text("-")
-                        .font(themeVariant.typography.monoFont)
+                        .font(nbTheme.typography.monoFont)
                         .foregroundStyle(.nb.textPrimary)
                         .offset(y: -0.6)
                 }
@@ -112,11 +107,11 @@ public struct NeoBrutalistDisclosureGroup<Label: View, Content: View>: View {
                         .fill(.nb.surface.secondary.opacity(0.65))
                         .overlay(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .stroke(.nb.accent.primary, lineWidth: themeVariant.borderWidth * 0.9)
+                                .stroke(.nb.accent.primary, lineWidth: nbTheme.borderWidth * 0.9)
                         )
 
                     Text("+")
-                        .font(themeVariant.typography.monoFont)
+                        .font(nbTheme.typography.monoFont)
                         .foregroundStyle(.nb.textPrimary)
                 }
             }

@@ -43,12 +43,7 @@ public struct NeoBrutalistMenuStyle: MenuStyle {
 
 /// A menu item with Neo Brutalist styling for use inside menus.
 public struct NeoBrutalistMenuItem<Label: View>: View {
-    @Environment(\.neoBrutalistTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var themeVariant: NeoBrutalistTheme.Variant {
-        theme.variant(for: colorScheme)
-    }
+    @Environment(\.nb) private var nbTheme
 
     private let action: () -> Void
     private let label: Label
@@ -67,7 +62,7 @@ public struct NeoBrutalistMenuItem<Label: View>: View {
     public var body: some View {
         Button(action: action) {
             label
-                .font(themeVariant.typography.bodyFont)
+                .font(nbTheme.typography.bodyFont)
                 .foregroundStyle(destructive ? AnyShapeStyle(.red) : AnyShapeStyle(.nb.textPrimary))
         }
     }

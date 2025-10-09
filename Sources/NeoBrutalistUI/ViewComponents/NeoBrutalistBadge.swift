@@ -9,12 +9,7 @@ public struct NeoBrutalistBadge: View {
     private let placement: IconPlacement
     private let isActive: Bool
 
-    @Environment(\.neoBrutalistTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var themeVariant: NeoBrutalistTheme.Variant {
-        theme.variant(for: colorScheme)
-    }
+    @Environment(\.nb) private var nbTheme
 
     public init(_ text: String, icon: Image? = nil, placement: IconPlacement = .leading, isActive: Bool = false) {
         self.text = text
@@ -34,9 +29,9 @@ public struct NeoBrutalistBadge: View {
             }
 
             Text(text.uppercased())
-                .font(themeVariant.typography.monoFont)
+                .font(nbTheme.typography.monoFont)
                 .foregroundStyle(isActive ? AnyShapeStyle(.white) : AnyShapeStyle(.nb.textPrimary))
-                .neoKerning(1.3)
+                .kerning(1.3)
 
             if placement == .trailing, let icon {
                 icon
@@ -53,16 +48,16 @@ public struct NeoBrutalistBadge: View {
 
     @ViewBuilder
     private var background: some View {
-        RoundedRectangle(cornerRadius: themeVariant.cornerRadius * 0.6, style: .continuous)
+        RoundedRectangle(cornerRadius: nbTheme.cornerRadius * 0.6, style: .continuous)
             .fill(isActive ? Color.nb.accent.primary : Color.nb.surface.primary)
             .overlay(
                 Group {
                     if isActive {
-                        RoundedRectangle(cornerRadius: themeVariant.cornerRadius * 0.6, style: .continuous)
-                            .stroke(.nb.accent.highlight, lineWidth: themeVariant.borderWidth * 0.6)
+                        RoundedRectangle(cornerRadius: nbTheme.cornerRadius * 0.6, style: .continuous)
+                            .stroke(.nb.accent.highlight, lineWidth: nbTheme.borderWidth * 0.6)
                     } else {
-                        RoundedRectangle(cornerRadius: themeVariant.cornerRadius * 0.6, style: .continuous)
-                            .stroke(.nb.surface.highlight.opacity(0.7), lineWidth: themeVariant.borderWidth * 0.6)
+                        RoundedRectangle(cornerRadius: nbTheme.cornerRadius * 0.6, style: .continuous)
+                            .stroke(.nb.surface.highlight.opacity(0.7), lineWidth: nbTheme.borderWidth * 0.6)
                     }
                 }
             )

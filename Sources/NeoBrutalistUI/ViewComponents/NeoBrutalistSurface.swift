@@ -23,12 +23,7 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
         }
     }
 
-    @Environment(\.neoBrutalistTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var themeVariant: NeoBrutalistTheme.Variant {
-        theme.variant(for: colorScheme)
-    }
+    @Environment(\.nb) private var nbTheme
 
     private let accentEdge: AccentEdge?
     private let isHighlighted: Bool
@@ -45,9 +40,9 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
                 .background(isHighlighted ? Color.nb.accent.highlight : Color.nb.accent.primary)
                 .compositingGroup()
                 .neoBrutalistShadow(
-                    color: Color.primary.opacity(isHighlighted ? min(1, themeVariant.shadowOpacity + 0.2) : themeVariant.shadowOpacity),
-                    radius: themeVariant.shadowRadius,
-                    offset: themeVariant.shadowOffset
+                    color: Color.primary.opacity(isHighlighted ? min(1, nbTheme.shadowOpacity + 0.2) : nbTheme.shadowOpacity),
+                    radius: nbTheme.shadowRadius,
+                    offset: nbTheme.shadowOffset
                 )
     }
 
@@ -55,14 +50,14 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
         baseShape
             .fill(.nb.surface.primary)
             .overlay {
-                if themeVariant.noiseOpacity > 0 {
+                if nbTheme.noiseOpacity > 0 {
                     baseShape
-                        .fill(NeoBrutalistNoise.paint())
-                        .opacity(themeVariant.noiseOpacity)
+                        .fill(NeoBrutalist.noise())
+                        .opacity(nbTheme.noiseOpacity)
                         .blendMode(.overlay)
                 }
             }
-            .overlay(baseShape.stroke(.nb.surface.secondary.opacity(0.7), lineWidth: themeVariant.borderWidth))
+            .overlay(baseShape.stroke(.nb.surface.secondary.opacity(0.7), lineWidth: nbTheme.borderWidth))
             .overlay(highlightBorder)
     }
 
@@ -70,21 +65,21 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
     private var highlightBorder: some View {
         if isHighlighted {
             baseShape
-                .stroke(.nb.accent.highlight, lineWidth: themeVariant.borderWidth * 1.4)
+                .stroke(.nb.accent.highlight, lineWidth: nbTheme.borderWidth * 1.4)
                 .opacity(1)
         } else {
             baseShape
-                .stroke(.nb.surface.highlight.opacity(0.8), lineWidth: themeVariant.borderWidth * 0.6)
+                .stroke(.nb.surface.highlight.opacity(0.8), lineWidth: nbTheme.borderWidth * 0.6)
                 .opacity(0.7)
         }
     }
 
     private var accentThickness: CGFloat {
-        max(themeVariant.borderWidth * 3, 8)
+        max(nbTheme.borderWidth * 3, 8)
     }
 
     private var baseShape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: themeVariant.cornerRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: nbTheme.cornerRadius, style: .continuous)
     }
 }
 

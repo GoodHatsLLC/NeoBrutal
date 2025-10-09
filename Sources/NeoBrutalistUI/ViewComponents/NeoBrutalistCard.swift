@@ -9,12 +9,7 @@ public struct NeoBrutalistCard<Content: View>: View {
     private let highlighted: Bool
     private let content: Content
 
-    @Environment(\.neoBrutalistTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var themeVariant: NeoBrutalistTheme.Variant {
-        theme.variant(for: colorScheme)
-    }
+    @Environment(\.nb) private var nbTheme
 
     public init(
         title: String? = nil,
@@ -41,7 +36,7 @@ public struct NeoBrutalistCard<Content: View>: View {
             }
 
             content
-                .font(themeVariant.typography.bodyFont)
+                .font(nbTheme.typography.bodyFont)
                 .foregroundStyle(.nb.textPrimary)
         }
         .padding()
@@ -63,15 +58,15 @@ public struct NeoBrutalistCard<Content: View>: View {
                 VStack(alignment: .leading, spacing: 4) {
                     if let title {
                         Text(title)
-                            .font(themeVariant.typography.titleFont)
+                            .font(nbTheme.typography.titleFont)
                             .foregroundStyle(.nb.accent.highlight)
                     }
 
                     if let subtitle {
                         Text(subtitle.uppercased())
-                            .font(themeVariant.typography.monoFont)
+                            .font(nbTheme.typography.monoFont)
                             .foregroundStyle(.nb.textMuted)
-                            .neoKerning(1.2)
+                            .kerning(1.2)
                     }
                 }
 

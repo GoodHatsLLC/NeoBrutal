@@ -41,11 +41,6 @@ enum NeoBrutalistFontRegistrar {
             fileExtension: "otf"
         ),
         NeoBrutalistFontResource(
-            postScriptName: "CabinetGrotesk-Regular",
-            fileName: "CabinetGrotesk-Regular",
-            fileExtension: "otf"
-        ),
-        NeoBrutalistFontResource(
             postScriptName: "Zodiak-Light",
             fileName: "Zodiak-Light",
             fileExtension: "otf"

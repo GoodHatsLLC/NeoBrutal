@@ -1,13 +1,8 @@
 import SwiftUI
 
 public struct NeoBrutalistStepper: View {
-    @Environment(\.neoBrutalistTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.nb) private var nbTheme
 
-    private var themeVariant: NeoBrutalistTheme.Variant {
-        theme.variant(for: colorScheme)
-    }
-    
     @Binding var value: Int
     let range: ClosedRange<Int>
     
@@ -34,12 +29,12 @@ public struct NeoBrutalistStepper: View {
 
             if #available(macOS 26.0, *) {
                 Text("\(value)")
-                    .font(themeVariant.typography.monoFont.pointSize(h2))
+                    .font(nbTheme.typography.monoFont.pointSize(h2))
                     .contentTransition(.numericText(value: Double(value)))
                     .padding()
             } else {
                 Text("\(value)")
-                    .font(themeVariant.typography.monoFont)
+                    .font(nbTheme.typography.monoFont)
                     .contentTransition(.numericText(value: Double(value)))
                     .padding()
             }

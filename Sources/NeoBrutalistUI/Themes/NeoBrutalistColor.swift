@@ -3,7 +3,7 @@ import SwiftUI
 /// A dynamic color that reads from the current NeoBrutalistTheme in the environment.
 /// This allows for ergonomic color access like `.nb.background.primary` without needing @Environment.
 public struct NeoBrutalistColor: ShapeStyle, @unchecked Sendable {
-    let keyPath: KeyPath<NeoBrutalistTheme.Variant, ColorDescriptor>
+    let keyPath: KeyPath<NeoBrutalistTheme.Variant, PaletteColor>
 
     public func resolve(in environment: EnvironmentValues) -> some ShapeStyle {
         let theme = environment.neoBrutalistTheme
@@ -21,7 +21,7 @@ public struct NeoBrutalistColor: ShapeStyle, @unchecked Sendable {
 
 /// A palette-level accessor that provides primary, secondary, and highlight variants.
 public struct NeoBrutalistPaletteAccessor: @unchecked Sendable {
-    let paletteKeyPath: KeyPath<NeoBrutalistTheme.Variant, ColorPalette>
+    let paletteKeyPath: KeyPath<NeoBrutalistTheme.Variant, Palette>
 
     public var primary: NeoBrutalistColor {
         NeoBrutalistColor(keyPath: paletteKeyPath.appending(path: \.primary))

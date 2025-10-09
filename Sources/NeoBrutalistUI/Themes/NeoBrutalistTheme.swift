@@ -5,12 +5,12 @@ import SwiftUI
 public struct NeoBrutalistTheme: Equatable, Sendable {
     /// A concrete representation of the visual system for a single `ColorScheme`.
     public struct Variant: Equatable, Sendable {
-        public var background: ColorPalette
-        public var surface: ColorPalette
-        public var accent: ColorPalette
+        public var background: Palette
+        public var surface: Palette
+        public var accent: Palette
         public var typography: Typography
-        public var textPrimary: ColorDescriptor
-        public var textMuted: ColorDescriptor
+        public var textPrimary: PaletteColor
+        public var textMuted: PaletteColor
         public var borderWidth: CGFloat
         public var cornerRadius: CGFloat
         public var shadowOffset: CGSize
@@ -22,16 +22,16 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
         public var windowShadowOpacity: CGFloat
         public var windowRadius: CGFloat
         public var windowBorder: CGFloat
-        public var windowBorderColor: ColorDescriptor
-        public var windowShadowColor: ColorDescriptor
+        public var windowBorderColor: PaletteColor
+        public var windowShadowColor: PaletteColor
 
         public init(
-            background: ColorPalette = .paper,
-            surface: ColorPalette = .paper,
-            accent: ColorPalette = .bubbleAccent,
+            background: Palette = .paper,
+            surface: Palette = .paper,
+            accent: Palette = .bubbleAccent,
             typography: Typography = .blocky,
-            textPrimary: ColorDescriptor = ColorDescriptor(red: 20, green: 20, blue: 20),
-            textMuted: ColorDescriptor = ColorDescriptor(red: 128, green: 128, blue: 128),
+            textPrimary: PaletteColor = PaletteColor(red: 20, green: 20, blue: 20),
+            textMuted: PaletteColor = PaletteColor(red: 128, green: 128, blue: 128),
             borderWidth: CGFloat = 2,
             cornerRadius: CGFloat = 0,
             shadowOffset: CGSize = CGSize(width: 6, height: 6),
@@ -43,8 +43,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
             windowShadowOpacity: CGFloat = 0.5,
             windowRadius: CGFloat = 16,
             windowBorder: CGFloat = 2,
-            windowBorderColor: ColorDescriptor = ColorDescriptor(red: 0, green: 0, blue: 0),
-            windowShadowColor: ColorDescriptor = ColorDescriptor(red: 0, green: 0, blue: 0),
+            windowBorderColor: PaletteColor = PaletteColor(red: 0, green: 0, blue: 0),
+            windowShadowColor: PaletteColor = PaletteColor(red: 0, green: 0, blue: 0),
         ) {
             self.background = background
             self.surface = surface
@@ -87,12 +87,12 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
     /// dark mode.
     public init(
         name: String = "",
-        background: ColorPalette = .paper,
-        surface: ColorPalette = .paper,
-        accent: ColorPalette = .bubbleAccent,
+        background: Palette = .paper,
+        surface: Palette = .paper,
+        accent: Palette = .bubbleAccent,
         typography: Typography = .blocky,
-        textPrimary: ColorDescriptor = ColorDescriptor(red: 20, green: 20, blue: 20),
-        textMuted: ColorDescriptor = ColorDescriptor(red: 128, green: 128, blue: 128),
+        textPrimary: PaletteColor = PaletteColor(red: 20, green: 20, blue: 20),
+        textMuted: PaletteColor = PaletteColor(red: 128, green: 128, blue: 128),
         borderWidth: CGFloat = 2,
         cornerRadius: CGFloat = 0,
         shadowOffset: CGSize = CGSize(width: 6, height: 6),
@@ -153,8 +153,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 surface: .paper,
                 accent: .bubbleAccent,
                 typography: .blocky,
-                textPrimary: ColorDescriptor(red: 18, green: 18, blue: 18),
-                textMuted: ColorDescriptor(red: 120, green: 120, blue: 120),
+                textPrimary: PaletteColor(red: 18, green: 18, blue: 18),
+                textMuted: PaletteColor(red: 120, green: 120, blue: 120),
                 borderWidth: 2,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 6, height: 6),
@@ -162,24 +162,24 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 noiseOpacity: 0
             ),
             dark: Variant(
-                background: ColorPalette(
-                    primary: ColorDescriptor(red: 20, green: 22, blue: 30),
-                    secondary: ColorDescriptor(red: 29, green: 33, blue: 44),
-                    highlight: ColorDescriptor(red: 40, green: 45, blue: 61)
+                background: Palette(
+                    primary: PaletteColor(red: 20, green: 22, blue: 30),
+                    secondary: PaletteColor(red: 29, green: 33, blue: 44),
+                    highlight: PaletteColor(red: 40, green: 45, blue: 61)
                 ),
-                surface: ColorPalette(
-                    primary: ColorDescriptor(red: 26, green: 30, blue: 42),
-                    secondary: ColorDescriptor(red: 39, green: 44, blue: 59),
-                    highlight: ColorDescriptor(red: 61, green: 68, blue: 90)
+                surface: Palette(
+                    primary: PaletteColor(red: 26, green: 30, blue: 42),
+                    secondary: PaletteColor(red: 39, green: 44, blue: 59),
+                    highlight: PaletteColor(red: 61, green: 68, blue: 90)
                 ),
-                accent: ColorPalette(
-                    primary: ColorDescriptor(red: 255, green: 119, blue: 168),
-                    secondary: ColorDescriptor(red: 255, green: 170, blue: 200),
-                    highlight: ColorDescriptor(red: 139, green: 170, blue: 255)
+                accent: Palette(
+                    primary: PaletteColor(red: 255, green: 119, blue: 168),
+                    secondary: PaletteColor(red: 255, green: 170, blue: 200),
+                    highlight: PaletteColor(red: 139, green: 170, blue: 255)
                 ),
                 typography: .blocky,
-                textPrimary: ColorDescriptor(red: 242, green: 242, blue: 248),
-                textMuted: ColorDescriptor(red: 182, green: 186, blue: 203),
+                textPrimary: PaletteColor(red: 242, green: 242, blue: 248),
+                textMuted: PaletteColor(red: 182, green: 186, blue: 203),
                 borderWidth: 2,
                 cornerRadius: 6,
                 shadowOffset: CGSize(width: 6, height: 6),
@@ -197,8 +197,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 surface: .paper,
                 accent: .sunburst,
                 typography: .blocky,
-                textPrimary: ColorDescriptor(red: 42, green: 37, blue: 32),
-                textMuted: ColorDescriptor(red: 144, green: 125, blue: 112),
+                textPrimary: PaletteColor(red: 42, green: 37, blue: 32),
+                textMuted: PaletteColor(red: 144, green: 125, blue: 112),
                 borderWidth: 2,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 6, height: 6),
@@ -206,24 +206,24 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 noiseOpacity: 0.05
             ),
             dark: Variant(
-                background: ColorPalette(
-                    primary: ColorDescriptor(red: 22, green: 24, blue: 34),
-                    secondary: ColorDescriptor(red: 33, green: 36, blue: 50),
-                    highlight: ColorDescriptor(red: 63, green: 69, blue: 88)
+                background: Palette(
+                    primary: PaletteColor(red: 22, green: 24, blue: 34),
+                    secondary: PaletteColor(red: 33, green: 36, blue: 50),
+                    highlight: PaletteColor(red: 63, green: 69, blue: 88)
                 ),
-                surface: ColorPalette(
-                    primary: ColorDescriptor(red: 28, green: 31, blue: 44),
-                    secondary: ColorDescriptor(red: 39, green: 42, blue: 58),
-                    highlight: ColorDescriptor(red: 77, green: 83, blue: 106)
+                surface: Palette(
+                    primary: PaletteColor(red: 28, green: 31, blue: 44),
+                    secondary: PaletteColor(red: 39, green: 42, blue: 58),
+                    highlight: PaletteColor(red: 77, green: 83, blue: 106)
                 ),
-                accent: ColorPalette(
-                    primary: ColorDescriptor(red: 255, green: 157, blue: 45),
-                    secondary: ColorDescriptor(red: 255, green: 102, blue: 128),
-                    highlight: ColorDescriptor(red: 255, green: 182, blue: 95)
+                accent: Palette(
+                    primary: PaletteColor(red: 255, green: 157, blue: 45),
+                    secondary: PaletteColor(red: 255, green: 102, blue: 128),
+                    highlight: PaletteColor(red: 255, green: 182, blue: 95)
                 ),
                 typography: .blocky,
-                textPrimary: ColorDescriptor(red: 239, green: 234, blue: 224),
-                textMuted: ColorDescriptor(red: 170, green: 157, blue: 137),
+                textPrimary: PaletteColor(red: 239, green: 234, blue: 224),
+                textMuted: PaletteColor(red: 170, green: 157, blue: 137),
                 borderWidth: 2,
                 cornerRadius: 6,
                 shadowOffset: CGSize(width: 4, height: 4),
@@ -243,20 +243,20 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
         NeoBrutalistTheme(
             name: "nocturneVolt",
             light: Variant(
-                background: ColorPalette(
-                    primary: ColorDescriptor(red: 238, green: 244, blue: 255),
-                    secondary: ColorDescriptor(red: 214, green: 226, blue: 255),
-                    highlight: ColorDescriptor(red: 175, green: 214, blue: 255)
+                background: Palette(
+                    primary: PaletteColor(red: 238, green: 244, blue: 255),
+                    secondary: PaletteColor(red: 214, green: 226, blue: 255),
+                    highlight: PaletteColor(red: 175, green: 214, blue: 255)
                 ),
-                surface: ColorPalette(
-                    primary: ColorDescriptor(red: 223, green: 231, blue: 249),
-                    secondary: ColorDescriptor(red: 199, green: 212, blue: 243),
-                    highlight: ColorDescriptor(red: 148, green: 187, blue: 255)
+                surface: Palette(
+                    primary: PaletteColor(red: 223, green: 231, blue: 249),
+                    secondary: PaletteColor(red: 199, green: 212, blue: 243),
+                    highlight: PaletteColor(red: 148, green: 187, blue: 255)
                 ),
                 accent: .plasmaBlue,
                 typography: .highContrast,
-                textPrimary: ColorDescriptor(red: 16, green: 30, blue: 53),
-                textMuted: ColorDescriptor(red: 82, green: 101, blue: 140),
+                textPrimary: PaletteColor(red: 16, green: 30, blue: 53),
+                textMuted: PaletteColor(red: 82, green: 101, blue: 140),
                 borderWidth: 3,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 4, height: 4),
@@ -274,8 +274,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 surface: .graphite,
                 accent: .plasmaBlue,
                 typography: .highContrast,
-                textPrimary: ColorDescriptor(red: 225, green: 235, blue: 255),
-                textMuted: ColorDescriptor(red: 129, green: 147, blue: 197),
+                textPrimary: PaletteColor(red: 225, green: 235, blue: 255),
+                textMuted: PaletteColor(red: 129, green: 147, blue: 197),
                 borderWidth: 3,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 6, height: 6),
@@ -295,24 +295,24 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
         NeoBrutalistTheme(
             name: "ultravioletCargo",
             light: Variant(
-                background: ColorPalette(
-                    primary: ColorDescriptor(red: 245, green: 236, blue: 252),
-                    secondary: ColorDescriptor(red: 233, green: 215, blue: 250),
-                    highlight: ColorDescriptor(red: 197, green: 171, blue: 244)
+                background: Palette(
+                    primary: PaletteColor(red: 245, green: 236, blue: 252),
+                    secondary: PaletteColor(red: 233, green: 215, blue: 250),
+                    highlight: PaletteColor(red: 197, green: 171, blue: 244)
                 ),
-                surface: ColorPalette(
-                    primary: ColorDescriptor(red: 232, green: 215, blue: 244),
-                    secondary: ColorDescriptor(red: 214, green: 193, blue: 234),
-                    highlight: ColorDescriptor(red: 182, green: 150, blue: 224)
+                surface: Palette(
+                    primary: PaletteColor(red: 232, green: 215, blue: 244),
+                    secondary: PaletteColor(red: 214, green: 193, blue: 234),
+                    highlight: PaletteColor(red: 182, green: 150, blue: 224)
                 ),
-                accent: ColorPalette(
-                    primary: ColorDescriptor(red: 210, green: 64, blue: 255),
-                    secondary: ColorDescriptor(red: 255, green: 94, blue: 188),
-                    highlight: ColorDescriptor(red: 140, green: 82, blue: 255)
+                accent: Palette(
+                    primary: PaletteColor(red: 210, green: 64, blue: 255),
+                    secondary: PaletteColor(red: 255, green: 94, blue: 188),
+                    highlight: PaletteColor(red: 140, green: 82, blue: 255)
                 ),
                 typography: .default,
-                textPrimary: ColorDescriptor(red: 55, green: 32, blue: 76),
-                textMuted: ColorDescriptor(red: 120, green: 96, blue: 142),
+                textPrimary: PaletteColor(red: 55, green: 32, blue: 76),
+                textMuted: PaletteColor(red: 120, green: 96, blue: 142),
                 borderWidth: 3,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 3, height: 3),
@@ -330,8 +330,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 surface: .midnight,
                 accent: .infraSignal,
                 typography: .default,
-                textPrimary: ColorDescriptor(red: 240, green: 228, blue: 255),
-                textMuted: ColorDescriptor(red: 165, green: 150, blue: 191),
+                textPrimary: PaletteColor(red: 240, green: 228, blue: 255),
+                textMuted: PaletteColor(red: 165, green: 150, blue: 191),
                 borderWidth: 3,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 6, height: 6),
@@ -355,8 +355,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 surface: .desert,
                 accent: .sunburst,
                 typography: .default,
-                textPrimary: ColorDescriptor(red: 42, green: 37, blue: 32),
-                textMuted: ColorDescriptor(red: 144, green: 125, blue: 112),
+                textPrimary: PaletteColor(red: 42, green: 37, blue: 32),
+                textMuted: PaletteColor(red: 144, green: 125, blue: 112),
                 borderWidth: 2,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 6, height: 6),
@@ -365,24 +365,24 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 noiseOpacity: 0.05
             ),
             dark: Variant(
-                background: ColorPalette(
-                    primary: ColorDescriptor(red: 32, green: 25, blue: 23),
-                    secondary: ColorDescriptor(red: 51, green: 40, blue: 36),
-                    highlight: ColorDescriptor(red: 74, green: 52, blue: 44)
+                background: Palette(
+                    primary: PaletteColor(red: 32, green: 25, blue: 23),
+                    secondary: PaletteColor(red: 51, green: 40, blue: 36),
+                    highlight: PaletteColor(red: 74, green: 52, blue: 44)
                 ),
-                surface: ColorPalette(
-                    primary: ColorDescriptor(red: 40, green: 33, blue: 29),
-                    secondary: ColorDescriptor(red: 59, green: 48, blue: 41),
-                    highlight: ColorDescriptor(red: 93, green: 72, blue: 57)
+                surface: Palette(
+                    primary: PaletteColor(red: 40, green: 33, blue: 29),
+                    secondary: PaletteColor(red: 59, green: 48, blue: 41),
+                    highlight: PaletteColor(red: 93, green: 72, blue: 57)
                 ),
-                accent: ColorPalette(
-                    primary: ColorDescriptor(red: 233, green: 176, blue: 73),
-                    secondary: ColorDescriptor(red: 220, green: 132, blue: 64),
-                    highlight: ColorDescriptor(red: 255, green: 203, blue: 115)
+                accent: Palette(
+                    primary: PaletteColor(red: 233, green: 176, blue: 73),
+                    secondary: PaletteColor(red: 220, green: 132, blue: 64),
+                    highlight: PaletteColor(red: 255, green: 203, blue: 115)
                 ),
                 typography: .default,
-                textPrimary: ColorDescriptor(red: 243, green: 233, blue: 214),
-                textMuted: ColorDescriptor(red: 182, green: 165, blue: 140),
+                textPrimary: PaletteColor(red: 243, green: 233, blue: 214),
+                textMuted: PaletteColor(red: 182, green: 165, blue: 140),
                 borderWidth: 2,
                 cornerRadius: 4,
                 shadowOffset: CGSize(width: 5, height: 5),
@@ -402,24 +402,24 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
         NeoBrutalistTheme(
             name: "jungle",
             light: Variant(
-                background: ColorPalette(
-                    primary: ColorDescriptor(red: 222, green: 242, blue: 234),
-                    secondary: ColorDescriptor(red: 198, green: 227, blue: 212),
-                    highlight: ColorDescriptor(red: 170, green: 210, blue: 190)
+                background: Palette(
+                    primary: PaletteColor(red: 222, green: 242, blue: 234),
+                    secondary: PaletteColor(red: 198, green: 227, blue: 212),
+                    highlight: PaletteColor(red: 170, green: 210, blue: 190)
                 ),
-                surface: ColorPalette(
-                    primary: ColorDescriptor(red: 203, green: 231, blue: 217),
-                    secondary: ColorDescriptor(red: 175, green: 213, blue: 195),
-                    highlight: ColorDescriptor(red: 148, green: 193, blue: 175)
+                surface: Palette(
+                    primary: PaletteColor(red: 203, green: 231, blue: 217),
+                    secondary: PaletteColor(red: 175, green: 213, blue: 195),
+                    highlight: PaletteColor(red: 148, green: 193, blue: 175)
                 ),
-                accent: ColorPalette(
-                    primary: ColorDescriptor(red: 83, green: 182, blue: 173),
-                    secondary: ColorDescriptor(red: 55, green: 152, blue: 146),
-                    highlight: ColorDescriptor(red: 117, green: 222, blue: 214)
+                accent: Palette(
+                    primary: PaletteColor(red: 83, green: 182, blue: 173),
+                    secondary: PaletteColor(red: 55, green: 152, blue: 146),
+                    highlight: PaletteColor(red: 117, green: 222, blue: 214)
                 ),
                 typography: .highContrast,
-                textPrimary: ColorDescriptor(red: 24, green: 56, blue: 48),
-                textMuted: ColorDescriptor(red: 78, green: 120, blue: 112),
+                textPrimary: PaletteColor(red: 24, green: 56, blue: 48),
+                textMuted: PaletteColor(red: 78, green: 120, blue: 112),
                 borderWidth: 3,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 4, height: 4),
@@ -437,8 +437,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 surface: .jungle,
                 accent: .plasmaBlue,
                 typography: .highContrast,
-                textPrimary: ColorDescriptor(red: 225, green: 235, blue: 255),
-                textMuted: ColorDescriptor(red: 129, green: 147, blue: 197),
+                textPrimary: PaletteColor(red: 225, green: 235, blue: 255),
+                textMuted: PaletteColor(red: 129, green: 147, blue: 197),
                 borderWidth: 3,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 6, height: 6),
@@ -462,8 +462,8 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 surface: .paper,
                 accent: .crimsonFury,
                 typography: .blocky,
-                textPrimary: ColorDescriptor(red: 20, green: 20, blue: 20),
-                textMuted: ColorDescriptor(red: 120, green: 120, blue: 120),
+                textPrimary: PaletteColor(red: 20, green: 20, blue: 20),
+                textMuted: PaletteColor(red: 120, green: 120, blue: 120),
                 borderWidth: 3,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 8, height: 8),
@@ -472,20 +472,20 @@ public struct NeoBrutalistTheme: Equatable, Sendable {
                 noiseOpacity: 0.18
             ),
             dark: Variant(
-                background: ColorPalette(
-                    primary: ColorDescriptor(red: 28, green: 14, blue: 18),
-                    secondary: ColorDescriptor(red: 44, green: 18, blue: 26),
-                    highlight: ColorDescriptor(red: 62, green: 24, blue: 38)
+                background: Palette(
+                    primary: PaletteColor(red: 28, green: 14, blue: 18),
+                    secondary: PaletteColor(red: 44, green: 18, blue: 26),
+                    highlight: PaletteColor(red: 62, green: 24, blue: 38)
                 ),
-                surface: ColorPalette(
-                    primary: ColorDescriptor(red: 36, green: 16, blue: 20),
-                    secondary: ColorDescriptor(red: 52, green: 20, blue: 30),
-                    highlight: ColorDescriptor(red: 79, green: 30, blue: 42)
+                surface: Palette(
+                    primary: PaletteColor(red: 36, green: 16, blue: 20),
+                    secondary: PaletteColor(red: 52, green: 20, blue: 30),
+                    highlight: PaletteColor(red: 79, green: 30, blue: 42)
                 ),
                 accent: .crimsonFury,
                 typography: .blocky,
-                textPrimary: ColorDescriptor(red: 243, green: 231, blue: 229),
-                textMuted: ColorDescriptor(red: 194, green: 150, blue: 148),
+                textPrimary: PaletteColor(red: 243, green: 231, blue: 229),
+                textMuted: PaletteColor(red: 194, green: 150, blue: 148),
                 borderWidth: 3,
                 cornerRadius: 0,
                 shadowOffset: CGSize(width: 6, height: 6),
@@ -507,6 +507,13 @@ private struct NeoBrutalistThemeKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
+
+    public var nb: NeoBrutalistTheme.Variant {
+        get {
+            self.neoBrutalistTheme.variant(for: self.colorScheme)
+        }
+    }
+
     public var neoBrutalistTheme: NeoBrutalistTheme {
         get { self[NeoBrutalistThemeKey.self] }
         set { self[NeoBrutalistThemeKey.self] = newValue }
