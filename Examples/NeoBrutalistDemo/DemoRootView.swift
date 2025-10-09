@@ -363,20 +363,6 @@ private struct DemoThemeOption: Identifiable {
     [
       DemoThemeOption(
         name: "Bubblegum Pop", tagline: "Playful with punch", theme: .bubblegum),
-      DemoThemeOption(
-        name: "Daybreak Plaza", tagline: "Sunlit plaza energy", theme: .daybreakPlaza),
-      DemoThemeOption(
-        name: "Nocturne Volt", tagline: "Moody neon grids", theme: .nocturneVolt),
-      DemoThemeOption(
-        name: "Ultraviolet Cargo", tagline: "Cosmic freight vibes", theme: .ultravioletCargo),
-      DemoThemeOption(
-        name: "Desert", tagline: "Warm desert tones", theme: .desert),
-      DemoThemeOption(
-        name: "Jungle", tagline: "Lush jungle vibes", theme: .jungle),
-      DemoThemeOption(
-        name: "Crimson Fury", tagline: "Bold red, zero shadows", theme: .crimsonFury),
-      DemoThemeOption(
-        name: "Break Ideas", tagline: "Fresh and bold", theme: .breakIdeas),
     ]
   }
 }

@@ -60,7 +60,7 @@ extension NeoBrutalist {
             spacing: 4
           ) {
             title
-              //              .font(nbTheme.typography.titleFont)
+              .font(nbTheme.typography.titleFont)
               .foregroundColor(nbTheme.textPrimary.color)
               .lineLimit(1)
               .padding()
@@ -68,7 +68,7 @@ extension NeoBrutalist {
 
             if let subtitle {
               subtitle
-                //                .font(nbTheme.typography.monoFont)
+                .font(nbTheme.typography.monoFont)
                 .foregroundColor(nbTheme.textMuted.color)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
@@ -106,15 +106,19 @@ extension NeoBrutalist {
               .fill(NeoBrutalist.noise())
               .opacity(nbTheme.noiseOpacity)
               .blendMode(.overlay)
+              .allowsHitTesting(false)
           }
         }
         Rectangle()
           .fill(nbTheme.accent.primary.color)
           .frame(height: accentHeight)
+          .allowsHitTesting(false)
         Rectangle()
           .fill(.primary.opacity(nbTheme.shadowOpacity))
           .frame(height: accentHeight)
+          .allowsHitTesting(false)
       }
+      .frame(maxWidth: .infinity)
       .background {
         Rectangle()
           .fill(nbTheme.surface.primary.color)
