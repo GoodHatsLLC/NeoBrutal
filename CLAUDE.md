@@ -59,10 +59,10 @@ Built-in themes: bubblegum, daybreakPlaza, nocturneVolt, ultravioletCargo, deser
 All components follow a consistent pattern:
 1. Use `.nb` syntax for colors (e.g., `.foregroundStyle(.nb.textPrimary)`)
 2. Use `@Environment(\.neoBrutalistTheme)` only when accessing non-color theme properties (typography, borderWidth, spacing, etc.)
-3. Apply `neoBrutalistShadow()` helper for hard-edged or soft shadows (Core/NeoBrutalistHelpers.swift:20)
+3. Apply `neoBrutalistShadow()` helper for hard-edged or soft shadows (ViewComponents/NeoBrutalistShadow.swift:8)
 4. Components automatically adapt to theme changes
 
-Components are located in `Sources/NeoBrutalistUI/Components/`.
+Components are located in `Sources/NeoBrutalistUI/ViewComponents/`.
 
 **When to use `@Environment`**: You still need `@Environment(\.neoBrutalistTheme) private var theme` when accessing:
 - Typography: `theme.typography.bodyFont`, `theme.typography.titleFont`
@@ -71,9 +71,11 @@ Components are located in `Sources/NeoBrutalistUI/Components/`.
 
 ### Shadow System
 
-The library implements a custom shadow system (Core/NeoBrutalistHelpers.swift:20-68) that supports both:
-- **Hard-edged shadows**: When `shadowRadius` is 0, creates a solid offset background layer
+The library implements a custom shadow system (ViewComponents/NeoBrutalistShadow.swift) that supports both:
+- **Hard-edged shadows**: When `shadowRadius` is 0, creates a solid offset background layer with rounded corners matching the component's `cornerRadius`
 - **Soft shadows**: When `shadowRadius` > 0, uses standard SwiftUI shadows
+
+The `neoBrutalistShadow()` modifier accepts an optional `cornerRadius` parameter to ensure hard-edged shadows match the shape of rounded components.
 
 ### Color System
 
@@ -108,7 +110,7 @@ let color: Color = theme.textPrimary.color
 
 ### Noise Texture
 
-`NeoBrutalistNoise` (Core/NeoBrutalistHelpers.swift:70) generates a procedural grayscale noise texture at runtime for brutalist texture effects. Controlled via theme's `noiseOpacity` property.
+`NeoBrutalist.noise()` (Namespace.swift:61) generates a procedural grayscale noise texture at runtime for brutalist texture effects. Controlled via theme's `noiseOpacity` property.
 
 ### Package Structure
 

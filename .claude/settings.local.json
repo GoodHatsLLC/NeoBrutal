@@ -15,7 +15,8 @@
       "mcp__peekaboo__list",
       "Bash(pgrep:*)",
       "Bash(mktemp:*)",
-      "mcp__peekaboo__image"
+      "mcp__peekaboo__image",
+      "Bash(SNAPSHOT_THEMES=bubblegum,midnightCitrus,cherryBlossom,cyberPunk,desertStorm,arcticFrost swift run NeoBrutalistSnapshots)"
     ],
     "deny": [],
     "ask": []

@@ -14,7 +14,12 @@ public enum NeoBrutalist {
   /// ready-to-use themes.
   public static var standardThemes: [NeoBrutalistTheme] {
     [
-      .bubblegum
+      .bubblegum,
+      .midnightCitrus,
+      .cherryBlossom,
+      .cyberPunk,
+      .desertStorm,
+      .arcticFrost
     ]
   }
 

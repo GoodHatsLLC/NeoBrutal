@@ -57,7 +57,8 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
           color: shadowColor,
           radius: nbTheme.shadowRadius,
           offset: nbTheme.shadowOffset,
-          isEnabled: !isPressed && displayShadow
+          isEnabled: !isPressed && displayShadow,
+          cornerRadius: nbTheme.cornerRadius
         )
     } else {
       // For disabled state, we need to compute a mixed color
@@ -73,7 +74,8 @@ public struct NeoBrutalistButtonStyle: ButtonStyle {
           color: shadowColor,
           radius: nbTheme.shadowRadius,
           offset: nbTheme.shadowOffset,
-          isEnabled: !isPressed && displayShadow
+          isEnabled: !isPressed && displayShadow,
+          cornerRadius: nbTheme.cornerRadius
         )
     }
   }

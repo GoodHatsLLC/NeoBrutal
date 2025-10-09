@@ -37,13 +37,17 @@ public struct NeoBrutalistSurfaceModifier: ViewModifier {
     content
       .background(surface)
       .padding(accentEdge.padding(size: accentThickness))
-      .background(isHighlighted ? Color.nb.accent.highlight : Color.nb.accent.primary)
+      .background(
+        baseShape
+          .fill(isHighlighted ? Color.nb.accent.highlight : Color.nb.accent.primary)
+      )
       .compositingGroup()
       .neoBrutalistShadow(
         color: Color.primary.opacity(
           isHighlighted ? min(1, nbTheme.shadowOpacity + 0.2) : nbTheme.shadowOpacity),
         radius: nbTheme.shadowRadius,
-        offset: nbTheme.shadowOffset
+        offset: nbTheme.shadowOffset,
+        cornerRadius: nbTheme.cornerRadius
       )
   }
 

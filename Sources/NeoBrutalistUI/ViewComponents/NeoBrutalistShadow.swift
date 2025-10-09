@@ -6,7 +6,8 @@ extension View {
 
   /// Applies a hard-edged shadow when the theme requests a zero-radius drop shadow.
   public func neoBrutalistShadow(
-    color: Color, radius: CGFloat, offset: CGSize, clip: Axis? = nil, isEnabled: Bool = true
+    color: Color, radius: CGFloat, offset: CGSize, clip: Axis? = nil, isEnabled: Bool = true,
+    cornerRadius: CGFloat = 0
   ) -> some View {
     modifier(
       NeoBrutalistShadowModifier(
@@ -14,7 +15,8 @@ extension View {
         radius: radius,
         offset: offset,
         clip: clip,
-        isEnabled: isEnabled
+        isEnabled: isEnabled,
+        cornerRadius: cornerRadius
       )
     )
   }
@@ -26,6 +28,7 @@ private struct NeoBrutalistShadowModifier: ViewModifier {
   let offset: CGSize
   let clip: Axis?
   let isEnabled: Bool
+  let cornerRadius: CGFloat
   var modOffset: CGSize { isEnabled ? offset : .zero }
 
   @ViewBuilder
@@ -33,7 +36,8 @@ private struct NeoBrutalistShadowModifier: ViewModifier {
     if radius <= 0 {
       content
         .background {
-          color
+          RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .fill(color)
             .offset(x: modOffset.width, y: modOffset.height)
         }
     } else {
