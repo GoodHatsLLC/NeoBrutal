@@ -7,13 +7,15 @@ The NeoBrutalistUI library includes an automated snapshot testing system to veri
 ### Generate All Snapshots
 
 ```bash
-swift run NeoBrutalistSnapshots
+./scripts/snapshots.sh
 ```
 
 This will:
-- Generate snapshots for all components
-- Test all 7 built-in themes
-- Save PNG files to `./Snapshots/`
+- run `swift run NeoBrutalistSnapshots` to:
+  - Generate snapshots for all components
+  - Test all 7 built-in themes
+  - Save PNG files to `./Snapshots/`
+- run the demo app and run `./scripts/node_modules/@steipete/peekaboo-mcp/peekaboo image --app NeoBrutalistSnapshots` to take a window snapshot.
 
 ### Generate Snapshots for Specific Themes
 
