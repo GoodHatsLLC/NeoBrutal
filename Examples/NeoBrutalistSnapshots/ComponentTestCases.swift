@@ -11,6 +11,7 @@ struct ComponentTestCases {
       cardsTestCase,
       togglesTestCase,
       badgesTestCase,
+      progressBarsTestCase,
       surfacesTestCase,
       slidersTestCase,
       textFieldsTestCase,
@@ -135,6 +136,27 @@ struct ComponentTestCases {
             NeoBrutalistBadge(
               "Active", icon: Image(systemName: "checkmark"), placement: .trailing, isActive: true)
           }
+        }
+        .padding()
+      )
+    )
+  }
+
+  // MARK: - Progress Bar Tests
+
+  static var progressBarsTestCase: SnapshotTestCase {
+    SnapshotTestCase(
+      name: "progress-bars",
+      config: .standard,
+      view: AnyView(
+        VStack(spacing: 20) {
+          NeoBrutalistProgressBar(value: .constant(0.0), showsLabel: false)
+          
+          NeoBrutalistProgressBar(value: .constant(0.3), showsLabel: true)
+          
+          NeoBrutalistProgressBar(value: .constant(0.65), showsLabel: false)
+          
+          NeoBrutalistProgressBar(value: .constant(1.0), showsLabel: true)
         }
         .padding()
       )

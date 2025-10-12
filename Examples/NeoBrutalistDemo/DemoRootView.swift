@@ -118,6 +118,8 @@ struct DemoRootView: View {
             accessibilityLabel: "Noise intensity"
           )
 
+          NeoBrutalistProgressBar(value: $intensity, showsLabel: true)
+
           NeoBrutalistTextField("Text Field", text: $textFieldValue)
 
           NeoBrutalistStepper(value: $stepperValue, in: 0...10)
