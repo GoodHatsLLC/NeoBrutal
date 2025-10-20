@@ -6,14 +6,20 @@ public struct NeoBrutalButtonStyle: ButtonStyle {
   @Environment(\.nb) private var nbTheme
   @Environment(\.controlSize) private var size
   private let displayShadow: Bool
+  @Environment(\.controlSize) private var controlSize
   @Environment(\.isEnabled) var isEnabled
+  @Environment(\.self) var env
 
   public init(displayShadow: Bool = true) {
     self.displayShadow = displayShadow
   }
 
   public func makeBody(configuration: Configuration) -> some View {
-    let pressOffset = configuration.isPressed ? nbTheme.shadowOffset : .zero
+    let pressOffset =
+      configuration.isPressed
+      ? nbTheme.shadowOffset.applying(
+        .init(scaleX: controlSize.shadowMultiple, y: controlSize.shadowMultiple)
+      ) : .zero
 
     configuration.label
       .font(nbTheme.typography.controlFont(at: size))
@@ -30,43 +36,31 @@ public struct NeoBrutalButtonStyle: ButtonStyle {
   private func background(isPressed: Bool) -> some View {
     let shadowColor = Color.primary.opacity(nbTheme.shadowOpacity)
 
-    if isEnabled {
-      baseShape
-        .fill(.nb.surface.primary)
-        .overlay(baseShape.stroke(.nb.accent.primary, lineWidth: nbTheme.borderWidth))
-        .overlay(
-          baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: nbTheme.borderWidth)
-        )
-        .compositingGroup()
-        .neoBrutalShadow(
-          color: shadowColor,
-          radius: nbTheme.shadowRadius,
-          offset: nbTheme.shadowOffset,
-          isEnabled: !isPressed && displayShadow,
-          cornerRadius: nbTheme.cornerRadius
-        )
-    } else {
-      // For disabled state, we need to compute a mixed color
-      let disabledFill = nbTheme.surface.secondary.color.mix(with: .gray, by: 0.1)
-      baseShape
-        .fill(disabledFill)
-        .overlay(baseShape.stroke(.primary, lineWidth: nbTheme.borderWidth))
-        .overlay(
-          baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: nbTheme.borderWidth)
-        )
-        .compositingGroup()
-        .neoBrutalShadow(
-          color: shadowColor,
-          radius: nbTheme.shadowRadius,
-          offset: nbTheme.shadowOffset,
-          isEnabled: !isPressed && displayShadow,
-          cornerRadius: nbTheme.cornerRadius
-        )
-    }
+    baseShape
+      .fill(
+        isEnabled
+          ? .nb.surface.primary
+            .color(in: env)
+          : nbTheme.surface.secondary.color
+            .mix(with: .gray, by: 0.1)
+      )
+      .overlay(baseShape.stroke(.nb.accent.primary, lineWidth: nbTheme.borderWidth))
+      .overlay(
+        baseShape.stroke(.nb.surface.highlight.opacity(0.6), lineWidth: nbTheme.borderWidth)
+      )
+      .compositingGroup()
+      .neoBrutalShadow(
+        color: shadowColor,
+        radius: nbTheme.shadowRadius,
+        offset: nbTheme.shadowOffset.applying(
+          .init(scaleX: controlSize.shadowMultiple, y: controlSize.shadowMultiple)),
+        isEnabled: !isPressed && displayShadow,
+        cornerRadius: nbTheme.controlCornerRadius
+      )
   }
 
   private var baseShape: RoundedRectangle {
-    RoundedRectangle(cornerRadius: nbTheme.cornerRadius, style: .continuous)
+    RoundedRectangle(cornerRadius: nbTheme.controlCornerRadius, style: .continuous)
   }
 }
 
@@ -85,7 +79,6 @@ public struct NeoBrutalButton<LabelView: View>: View {
   private let displayShadow: Bool
   @Environment(\.isEnabled) var isEnabled
   @Environment(\.self) var environment
-  @Environment(\.controlSize) private var size
   @Environment(\.nb) private var nbTheme
   @ScaledMetric(relativeTo: .body) var fontSize = 18
 
@@ -121,12 +114,29 @@ public struct NeoBrutalButton<LabelView: View>: View {
 extension ControlSize {
   var padding: EdgeInsets {
     switch self {
+    case .mini: return EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
     case .small: return EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-    case .mini: return EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
-    case .regular: return EdgeInsets(top: 14, leading: 14, bottom: 14, trailing: 14)
-    case .large: return EdgeInsets(top: 18, leading: 18, bottom: 18, trailing: 18)
+    case .regular: return EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+    case .large: return EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
     case .extraLarge: return EdgeInsets(top: 22, leading: 22, bottom: 22, trailing: 22)
-    @unknown default: return EdgeInsets(top: 14, leading: 14, bottom: 14, trailing: 14)
+    @unknown default: return EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+    }
+  }
+
+  var shadowMultiple: CGFloat {
+    switch self {
+    case .mini:
+      0.5
+    case .small:
+      0.6
+    case .regular:
+      1.0
+    case .large:
+      1.0
+    case .extraLarge:
+      1.0
+    @unknown default:
+      1.0
     }
   }
 }

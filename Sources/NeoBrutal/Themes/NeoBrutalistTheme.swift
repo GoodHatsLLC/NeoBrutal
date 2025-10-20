@@ -13,7 +13,7 @@ public struct NeoBrutalTheme: Equatable, Sendable, Identifiable {
     public var textPrimary: PaletteColor
     public var textMuted: PaletteColor
     public var borderWidth: CGFloat
-    public var cornerRadius: CGFloat
+    public var controlCornerRadius: CGFloat
     public var shadowOffset: CGSize
     public var shadowRadius: CGFloat
     public var shadowOpacity: CGFloat
@@ -34,7 +34,7 @@ public struct NeoBrutalTheme: Equatable, Sendable, Identifiable {
       textPrimary: PaletteColor = .standardPrimaryText,
       textMuted: PaletteColor = .standardMutedText,
       borderWidth: CGFloat = 2,
-      cornerRadius: CGFloat = 0,
+      controlCornerRadius: CGFloat = 8,
       shadowOffset: CGSize = CGSize(width: 6, height: 6),
       shadowRadius: CGFloat = 0,
       shadowOpacity: CGFloat = 0.4,
@@ -54,7 +54,7 @@ public struct NeoBrutalTheme: Equatable, Sendable, Identifiable {
       self.textPrimary = textPrimary
       self.textMuted = textMuted
       self.borderWidth = borderWidth
-      self.cornerRadius = cornerRadius
+      self.controlCornerRadius = controlCornerRadius
       self.shadowOffset = shadowOffset
       self.shadowRadius = shadowRadius
       self.shadowOpacity = shadowOpacity

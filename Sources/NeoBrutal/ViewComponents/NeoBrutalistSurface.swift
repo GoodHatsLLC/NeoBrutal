@@ -47,7 +47,7 @@ public struct NeoBrutalSurfaceModifier: ViewModifier {
           isHighlighted ? min(1, nbTheme.shadowOpacity + 0.2) : nbTheme.shadowOpacity),
         radius: nbTheme.shadowRadius,
         offset: nbTheme.shadowOffset,
-        cornerRadius: nbTheme.cornerRadius
+        cornerRadius: nbTheme.controlCornerRadius
       )
   }
 
@@ -84,7 +84,7 @@ public struct NeoBrutalSurfaceModifier: ViewModifier {
   }
 
   private var baseShape: RoundedRectangle {
-    RoundedRectangle(cornerRadius: nbTheme.cornerRadius, style: .continuous)
+    RoundedRectangle(cornerRadius: nbTheme.controlCornerRadius, style: .continuous)
   }
 }
 

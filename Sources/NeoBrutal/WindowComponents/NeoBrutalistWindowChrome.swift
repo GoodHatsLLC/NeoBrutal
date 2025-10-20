@@ -3,11 +3,12 @@ import SwiftUI
 
 extension NeoBrutal {
   @available(macOS 15.0, *)
-  public struct WindowChrome<Accessory: View>: View {
+  public struct WindowChrome<Icon: View, Accessory: View>: View {
     @Environment(\.nb) private var nbTheme
 
     private let title: Text
     private let subtitle: Text?
+    private let icon: Icon?
     private let accessory: Accessory
     private let windowButtons: [NeoBrutal.WindowButtonConfiguration]
     private let windowGestures: [NeoBrutal.WindowGestureConfiguration]
@@ -20,12 +21,14 @@ extension NeoBrutal {
       gestures: [NeoBrutal.WindowGestureConfiguration],
       title: Text,
       subtitle: Text? = nil,
+      icon: Icon,
       @ViewBuilder accessory: () -> Accessory
     ) {
       self.window = window
       self.title = title
       self.subtitle = subtitle
       self.accessory = accessory()
+      self.icon = icon
       self.windowButtons = buttons
       self.windowGestures = gestures
     }
@@ -35,26 +38,19 @@ extension NeoBrutal {
       gestures: [NeoBrutal.WindowGestureConfiguration],
       title: Text,
       subtitle: Text? = nil
-    ) where Accessory == EmptyView {
+    ) where Accessory == EmptyView, Icon == EmptyView {
       self.window = window
       self.title = title
       self.subtitle = subtitle
       self.accessory = EmptyView()
+      self.icon = EmptyView()
       self.windowButtons = buttons
       self.windowGestures = gestures
     }
 
     public var body: some View {
-      VStack(spacing: 0) {
-        HStack(spacing: 0) {
-          Color.clear.frame(width: 16)
-          WindowControls(
-            window: window,
-            windowButtons: windowButtons
-          )
-          .padding(.horizontal, nbTheme.borderWidth)
-          Color.clear
-            .frame(width: 16)
+      VStack(alignment: .leading) {
+        HStack(alignment: .center, spacing: 0) {
           VStack(
             alignment: .leading,
             spacing: 4
@@ -63,64 +59,44 @@ extension NeoBrutal {
               .font(nbTheme.typography.titleFont)
               .foregroundColor(nbTheme.textPrimary.color)
               .lineLimit(1)
-              .padding()
               .allowsHitTesting(false)
-
-            if let subtitle {
-              subtitle
-                .font(nbTheme.typography.monoFont)
-                .foregroundColor(nbTheme.textMuted.color)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(
-                  Capsule(style: .continuous)
-                    .fill(nbTheme.surface.secondary.color.opacity(0.7))
-                    .overlay(
-                      Capsule(
-                        style: .continuous
-                      )
-                      .stroke(
-                        nbTheme.surface.highlight.color.opacity(
-                          0.65
-                        ),
-                        lineWidth: max(
-                          nbTheme.borderWidth * 0.8,
-                          1
-                        )
-                      )
-                    )
-                )
-                .padding(.vertical)
-                .allowsHitTesting(false)
-            }
+              .fixedSize()
           }
-          .fixedSize()
-          accessory.lineLimit(1)
-          Spacer(minLength: 0)
-          Color.clear.frame(width: 16)
-        }
-        .background {
-          if nbTheme.noiseOpacity > 0 {
-            Rectangle()
-              .fill(NeoBrutal.noise())
-              .opacity(nbTheme.noiseOpacity)
-              .blendMode(.overlay)
-              .allowsHitTesting(false)
+          if let icon {
+            Rectangle().fill(.clear).frame(width: 8)
+            icon
           }
+          Spacer()
         }
-        Rectangle()
-          .fill(nbTheme.accent.primary.color)
-          .frame(height: accentHeight)
-          .allowsHitTesting(false)
-        Rectangle()
-          .fill(.primary.opacity(nbTheme.shadowOpacity))
-          .frame(height: accentHeight)
-          .allowsHitTesting(false)
+        .frame(maxWidth: .infinity)
+        .safeAreaInset(edge: .leading, alignment: .center) {
+          WindowControls(
+            window: window,
+            windowButtons: windowButtons
+          )
+          .padding(.horizontal)
+        }
+        .safeAreaInset(edge: .trailing, alignment: .center) {
+          accessory
+            .padding(.horizontal)
+        }
+        .padding(.vertical)
       }
-      .frame(maxWidth: .infinity)
+      .fixedSize(horizontal: false, vertical: true)
+      .background {
+        if nbTheme.noiseOpacity > 0 {
+          Rectangle()
+            .fill(NeoBrutal.noise())
+            .ignoresSafeArea()
+            .opacity(nbTheme.noiseOpacity)
+            .blendMode(.overlay)
+            .allowsHitTesting(false)
+        }
+      }
       .background {
         Rectangle()
           .fill(nbTheme.surface.primary.color)
+          .ignoresSafeArea()
           .onTapGesture(count: 2) {
             if let window {
               for gesture in windowGestures {
@@ -131,9 +107,8 @@ extension NeoBrutal {
               }
             }
           }
-          .simultaneousGesture(WindowDragGesture())
       }
-      .ignoresSafeArea()
+
     }
 
     private var accentHeight: CGFloat {

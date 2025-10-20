@@ -1,15 +1,18 @@
 import SwiftUI
 
-public struct NeoBrutalWindowGroup<Content: View, Overlay: View, Accessory: View>: Scene {
+public struct NeoBrutalWindowGroup<Content: View, Overlay: View, Accessory: View, Icon: View>: Scene
+{
   public init(
     id: String,
     title: Text,
     subTitle: Text? = nil,
+    image: Image? = nil,
+    icon: @autoclosure () -> Icon = EmptyView(),
     buttons: [NeoBrutal.WindowButtonConfiguration] = .defaultButtons,
     gestures: [NeoBrutal.WindowGestureConfiguration] = .defaultGestures,
     @ViewBuilder content: @escaping () -> Content,
     @ViewBuilder overlay: @escaping () -> Overlay,
-    @ViewBuilder accessory: @escaping () -> Accessory = { EmptyView() }
+    @ViewBuilder accessory: @escaping () -> Accessory = { EmptyView() },
   ) {
     self.id = id
     self.buttons = buttons
@@ -19,6 +22,7 @@ public struct NeoBrutalWindowGroup<Content: View, Overlay: View, Accessory: View
     self.content = content
     self.overlay = overlay
     self.accessory = accessory
+    self.icon = icon()
   }
 
   var id: String
@@ -26,6 +30,7 @@ public struct NeoBrutalWindowGroup<Content: View, Overlay: View, Accessory: View
   var gestures: [NeoBrutal.WindowGestureConfiguration]
   var title: Text
   var subTitle: Text?
+  var icon: Icon
   @ViewBuilder var content: () -> Content
   @ViewBuilder var overlay: () -> Overlay
   @ViewBuilder var accessory: () -> Accessory
@@ -33,6 +38,7 @@ public struct NeoBrutalWindowGroup<Content: View, Overlay: View, Accessory: View
   @State var safeArea: EdgeInsets = .init()
   @State var size: CGSize = .zero
   @State var window: NSWindow?
+  @State var focusDisabled: Bool = true
 
   public var body: some Scene {
     WindowGroup(id: id) {
@@ -43,13 +49,21 @@ public struct NeoBrutalWindowGroup<Content: View, Overlay: View, Accessory: View
           gestures: gestures,
           title: title,
           subtitle: subTitle,
+          icon: icon,
           accessory: accessory
         )
-        .frame(maxWidth: .infinity)
-        .fixedSize(horizontal: false, vertical: true)
-        .readingSize(into: $size, safeArea: $safeArea)
+        .gesture(WindowDragGesture())
+        .allowsWindowActivationEvents()
         content()
+          .clipped()
       }
+      .ignoresSafeArea()
+      .frame(maxWidth: .infinity)
+      .overlay {
+        overlay()
+      }
+      .ignoresSafeArea()
+      .background(.ultraThinMaterial)
       .background {
         WindowReader { window in
           self.window = window
@@ -58,49 +72,42 @@ public struct NeoBrutalWindowGroup<Content: View, Overlay: View, Accessory: View
             .closable,
             .miniaturizable,
             .resizable,
+            .fullSizeContentView,
           ]
-
           if !window.styleMask.contains(requiredMask) {
             window.styleMask.formUnion(requiredMask)
           }
-          window.titleVisibility = .hidden
-          window.isMovableByWindowBackground = false
-          window.backgroundColor = .clear
-
           window.standardWindowButton(.closeButton)?.isHidden = true
           window.standardWindowButton(.miniaturizeButton)?.isHidden = true
           window.standardWindowButton(.zoomButton)?.isHidden = true
-
-          if window.canBecomeKey {
-            window.makeKeyAndOrderFront(nil)
-          }
+          window.titleVisibility = .hidden
+          window.titlebarAppearsTransparent = true
+          window.isMovableByWindowBackground = false
+          window.isOpaque = false
+          window.backgroundColor = .clear
+          window.hasShadow = true
         }
       }
-      .background(.ultraThinMaterial)
-      .ignoresSafeArea()
-      .overlay {
-        overlay()
-          .safeAreaPadding(.top, size.height)
-          .ignoresSafeArea()
-      }
-      .clipShape(RoundedRectangle(cornerRadius: nbTheme.windowRadius, style: .continuous))
-      .overlay {
-        RoundedRectangle(cornerRadius: nbTheme.windowRadius, style: .continuous).strokeBorder(
-          nbTheme.windowBorderColor.color, lineWidth: nbTheme.windowBorder)
-      }
-      .offset(-nbTheme.windowShadowOffset / 2.0)
-      .background {
-        RoundedRectangle(cornerRadius: nbTheme.windowRadius)
-          .fill(nbTheme.windowShadowColor.color.opacity(nbTheme.shadowOpacity))
-          .offset(nbTheme.windowShadowOffset / 2.0)
-      }
-      .padding(.horizontal, nbTheme.windowShadowOffset.width / 2.0)
-      .padding(.vertical, nbTheme.windowShadowOffset.height / 2.0)
+      .focusEffectDisabled(focusDisabled)
+      .onKeyPress(
+        keys: [.tab],
+        action: { _ in
+          focusDisabled = false
+          return .ignored
+        }
+      )
+      .onKeyPress(
+        .escape,
+        action: {
+          focusDisabled = true
+          return .handled
+        }
+      )
       .windowFullScreenBehavior(.enabled)
     }
-    .windowStyle(.plain)
-    .windowResizability(.contentSize)
-    .windowBackgroundDragBehavior(.disabled)
+    .windowStyle(.hiddenTitleBar)
+    .windowToolbarStyle(.unifiedCompact)
+    .windowBackgroundDragBehavior(.enabled)
     .windowIdealPlacement { content, context in
       let displayBounds = context.defaultDisplay.visibleRect
       let proposal = ProposedViewSize(

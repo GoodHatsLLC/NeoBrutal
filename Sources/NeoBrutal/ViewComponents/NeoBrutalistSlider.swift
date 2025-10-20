@@ -10,7 +10,6 @@ public struct NeoBrutalSlider<Label: View>: View {
   private let showsValueLabel: Bool
   private let valueFormatter: (Double) -> String
   private let label: (() -> Label)?
-  private let accessibilityLabelText: String
 
   @State private var isDragging = false
 
@@ -28,7 +27,6 @@ public struct NeoBrutalSlider<Label: View>: View {
     in range: ClosedRange<Double> = 0...1,
     step: Double? = nil,
     showsValueLabel: Bool = true,
-    accessibilityLabel: String? = nil,
     valueFormatter: ((Double) -> String)? = nil,
     @ViewBuilder label: @escaping () -> Label
   ) {
@@ -38,7 +36,6 @@ public struct NeoBrutalSlider<Label: View>: View {
     self.showsValueLabel = showsValueLabel
     self.valueFormatter = valueFormatter ?? Self.defaultFormatter(step: step, range: range)
     self.label = label
-    self.accessibilityLabelText = accessibilityLabel ?? "Slider"
   }
 
   /// Creates a Neo Brutalist slider without a label.
@@ -47,7 +44,6 @@ public struct NeoBrutalSlider<Label: View>: View {
     in range: ClosedRange<Double> = 0...1,
     step: Double? = nil,
     showsValueLabel: Bool = true,
-    accessibilityLabel: String? = nil,
     valueFormatter: ((Double) -> String)? = nil
   ) where Label == EmptyView {
     self._value = value
@@ -56,7 +52,6 @@ public struct NeoBrutalSlider<Label: View>: View {
     self.showsValueLabel = showsValueLabel
     self.valueFormatter = valueFormatter ?? Self.defaultFormatter(step: step, range: range)
     self.label = nil
-    self.accessibilityLabelText = accessibilityLabel ?? "Slider"
   }
 
   public var body: some View {
@@ -76,19 +71,6 @@ public struct NeoBrutalSlider<Label: View>: View {
           .padding(.top, 2)
       }
     }
-    .accessibilityLabel(Text(accessibilityLabelText))
-    .accessibilityValue(Text(valueFormatter(value)))
-    .accessibilityAdjustableAction { direction in
-      let delta = step ?? (range.upperBound - range.lowerBound) * 0.05
-      switch direction {
-      case .increment:
-        adjustValue(by: delta)
-      case .decrement:
-        adjustValue(by: -delta)
-      @unknown default:
-        break
-      }
-    }
   }
 
   private var sliderBody: some View {
@@ -103,24 +85,18 @@ public struct NeoBrutalSlider<Label: View>: View {
       let fillWidth = min(max(knobCenter, knobSize * 0.4), trackWidth)
 
       ZStack(alignment: .leading) {
-
         baseTrack(height: trackHeight)
         progressTrack(width: fillWidth, height: trackHeight)
         knob(size: knobSize)
           .offset(x: knobOffset)
       }
       .frame(height: max(knobSize, 48))
-      .contentShape(Rectangle())
-      .highPriorityGesture(
-        DragGesture(minimumDistance: 0)
+      .gesture(
+        DragGesture(minimumDistance: 2)
           .onChanged { drag in
+            isDragging = true
             let clampedX = min(max(drag.location.x, 0), trackWidth)
             updateValue(for: clampedX, width: trackWidth)
-            if !isDragging {
-              withAnimation(.easeOut(duration: 0.15)) {
-                isDragging = true
-              }
-            }
           }
           .onEnded { drag in
             let clampedX = min(max(drag.location.x, 0), trackWidth)
@@ -137,14 +113,14 @@ public struct NeoBrutalSlider<Label: View>: View {
 
   private func baseTrack(height: CGFloat) -> some View {
     RoundedRectangle(
-      cornerRadius: nbTheme.cornerRadius == 0 ? 6 : nbTheme.cornerRadius, style: .continuous
+      cornerRadius: nbTheme.controlCornerRadius, style: .continuous
     )
     .fill(.nb.surface.secondary.opacity(0.65))
     .overlay(
       RoundedRectangle(
-        cornerRadius: nbTheme.cornerRadius == 0 ? 6 : nbTheme.cornerRadius, style: .continuous
+        cornerRadius: nbTheme.controlCornerRadius, style: .continuous
       )
-      .stroke(.nb.surface.highlight.opacity(0.8), lineWidth: max(nbTheme.borderWidth * 0.8, 1))
+      .stroke(.nb.accent.primary.opacity(1), lineWidth: max(nbTheme.borderWidth * 0.8, 1))
     )
     .frame(height: height)
     .padding(.horizontal, nbTheme.shadowOffset.width)
@@ -152,25 +128,25 @@ public struct NeoBrutalSlider<Label: View>: View {
 
   private func progressTrack(width: CGFloat, height: CGFloat) -> some View {
     RoundedRectangle(
-      cornerRadius: nbTheme.cornerRadius == 0 ? 6 : nbTheme.cornerRadius, style: .continuous
+      cornerRadius: nbTheme.controlCornerRadius, style: .continuous
     )
-    .fill(.nb.accent.primary.opacity(0.75))
+    .fill(.nb.accent.primary.opacity(0.55))
     .overlay(
       RoundedRectangle(
-        cornerRadius: nbTheme.cornerRadius == 0 ? 6 : nbTheme.cornerRadius, style: .continuous
+        cornerRadius: nbTheme.controlCornerRadius, style: .continuous
       )
-      .stroke(.nb.accent.highlight.opacity(0.9), lineWidth: max(nbTheme.borderWidth * 0.6, 1))
+      .stroke(.nb.accent.primary.opacity(0.4), lineWidth: max(nbTheme.borderWidth * 0.6, 1))
     )
     .frame(width: width - nbTheme.shadowOffset.width * 2, height: height)
     .padding(.horizontal, nbTheme.shadowOffset.width)
   }
 
   private func knob(size: CGFloat) -> some View {
-    RoundedRectangle(cornerRadius: nbTheme.shadowRadius, style: .continuous)
+    RoundedRectangle(cornerRadius: nbTheme.controlCornerRadius, style: .continuous)
       .fill(isDragging ? Color.nb.accent.highlight : Color.nb.accent.primary)
       .frame(width: size, height: size)
       .overlay(
-        RoundedRectangle(cornerRadius: nbTheme.shadowRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: nbTheme.controlCornerRadius, style: .continuous)
           .stroke(Color.black.opacity(0.12), lineWidth: 1)
       )
       .neoBrutalShadow(
@@ -179,7 +155,7 @@ public struct NeoBrutalSlider<Label: View>: View {
         radius: nbTheme.shadowRadius,
         offset: nbTheme.shadowOffset,
         isEnabled: true,
-        cornerRadius: nbTheme.shadowRadius
+        cornerRadius: nbTheme.controlCornerRadius
       )
       .offset(x: -nbTheme.borderWidth - nbTheme.shadowOffset.width, y: -nbTheme.borderWidth / 2)
       .scaleEffect(isDragging ? 1.05 : 1)
@@ -242,7 +218,6 @@ extension NeoBrutalSlider where Label == Text {
     in range: ClosedRange<Double> = 0...1,
     step: Double? = nil,
     showsValueLabel: Bool = true,
-    accessibilityLabel: String? = nil,
     valueFormatter: ((Double) -> String)? = nil
   ) {
     self.init(
@@ -250,7 +225,6 @@ extension NeoBrutalSlider where Label == Text {
       in: range,
       step: step,
       showsValueLabel: showsValueLabel,
-      accessibilityLabel: accessibilityLabel ?? title,
       valueFormatter: valueFormatter
     ) {
       Text(title)

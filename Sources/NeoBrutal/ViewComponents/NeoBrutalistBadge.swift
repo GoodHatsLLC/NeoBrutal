@@ -50,18 +50,12 @@ public struct NeoBrutalBadge: View {
 
   @ViewBuilder
   private var background: some View {
-    RoundedRectangle(cornerRadius: nbTheme.cornerRadius * 0.6, style: .continuous)
+    RoundedRectangle(cornerRadius: (nbTheme.controlCornerRadius * 0.6), style: .continuous)
       .fill(isActive ? Color.nb.accent.primary : Color.nb.surface.primary)
       .overlay(
-        Group {
-          if isActive {
-            RoundedRectangle(cornerRadius: nbTheme.cornerRadius * 0.6, style: .continuous)
-              .stroke(.nb.accent.highlight, lineWidth: nbTheme.borderWidth * 0.6)
-          } else {
-            RoundedRectangle(cornerRadius: nbTheme.cornerRadius * 0.6, style: .continuous)
-              .stroke(.nb.surface.highlight.opacity(0.7), lineWidth: nbTheme.borderWidth * 0.6)
-          }
-        }
+        RoundedRectangle(cornerRadius: nbTheme.controlCornerRadius * 0.6, style: .continuous)
+          .stroke(
+            .nb.accent.highlight.opacity(isActive ? 1 : 0.7), lineWidth: nbTheme.borderWidth * 0.6)
       )
   }
 }

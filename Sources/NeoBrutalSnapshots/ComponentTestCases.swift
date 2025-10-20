@@ -45,13 +45,13 @@ struct ComponentTestCases {
           } label: {
             Label("Regular Action", systemImage: "star.fill")
           }.controlSize(.regular)
-          
+
           NeoBrutalButton {
             print("Large")
           } label: {
             Label("Large Action", systemImage: "star.fill")
           }.controlSize(.large)
-          
+
           NeoBrutalButton {
             print("Extra Large")
           } label: {
