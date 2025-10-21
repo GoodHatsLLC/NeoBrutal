@@ -97,8 +97,8 @@ public struct NeoBrutalWindowGroup<Content: View, Overlay: View, Accessory: View
         }
       )
       .onKeyPress(
-        .escape,
-        action: {
+        keys: [.escape],
+        action: { _ in
           focusDisabled = true
           return .handled
         }

@@ -49,7 +49,7 @@ extension NeoBrutal {
     }
 
     public var body: some View {
-      VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
         HStack(alignment: .center, spacing: 0) {
           VStack(
             alignment: .leading,
@@ -81,6 +81,8 @@ extension NeoBrutal {
             .padding(.horizontal)
         }
         .padding(.vertical)
+          Rectangle().fill(nbTheme.accent.primary.color).frame(height: 8)
+            Rectangle().fill(.primary.opacity(nbTheme.shadowOpacity)).frame(height: 8)
       }
       .fixedSize(horizontal: false, vertical: true)
       .background {
