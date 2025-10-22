@@ -83,11 +83,11 @@ struct DemoRootView: View {
   }
 
   private var group: some View {
-    NeoBrutalDisclosureGroup {
-      Text("Group")
-    } content: {
+    DisclosureGroup {
       Text("Content")
-    }
+    } label: {
+      Text("Group")
+    }.disclosureGroupStyle(.neoBrutal)
   }
 
   private var controlPanel: some View {
@@ -130,18 +130,20 @@ struct DemoRootView: View {
           Toggle(isOn: $notificationsEnabled) {
             Text(notificationsEnabled ? "Alerts Enabled" : "Alerts Disabled")
           }
-          .toggleStyle(.neoBrutal(size: .regular))
+          .toggleStyle(.neoBrutal)
+          .controlSize(.regular)
 
           NeoBrutalSlider(
             "Noise Intensity",
             value: $intensity,
-            in: 0...1,
-            accessibilityLabel: "Noise intensity"
+            in: 0...1
           )
 
-          NeoBrutalTextField("Text Field", text: $textFieldValue)
+          TextField("Text Field", text: $textFieldValue)
+            .textFieldStyle(.neoBrutal)
 
           NeoBrutalStepper(value: $stepperValue, in: 0...10)
+
 
           NeoBrutalMenu("Actions", systemImage: "ellipsis.circle") {
             NeoBrutalMenuItem("Export Data", systemImage: "square.and.arrow.up") {

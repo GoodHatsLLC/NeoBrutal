@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A segmented content container with Neo Brutalist styling.
+/// A segmented content container
 public struct NeoBrutalCard<Content: View>: View {
   private let title: String?
   private let subtitle: String?

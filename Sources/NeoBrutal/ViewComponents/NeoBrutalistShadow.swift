@@ -22,7 +22,7 @@ extension View {
   }
 }
 
-private struct NeoBrutalShadowModifier: ViewModifier {
+private struct NeoBrutalShadowModifier: ViewModifier, Sendable {
   let color: Color
   let radius: CGFloat
   let offset: CGSize

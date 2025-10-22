@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct NeoBrutalDemoApp: App {
+  @State var isDarkMode: Bool = false
   @State private var selectedTheme: NeoBrutalTheme = .bubblegum
   var body: some Scene {
     NeoBrutalWindowGroup(
@@ -15,8 +16,10 @@ struct NeoBrutalDemoApp: App {
     } overlay: {
 
     } accessory: {
-
+      Toggle("DARK", isOn: $isDarkMode)
+        .toggleStyle(.neoBrutal)
     }
+    .environment(\.colorScheme, isDarkMode ? .dark : .light)
     .environment(\.neoBrutalTheme, selectedTheme)
   }
 }

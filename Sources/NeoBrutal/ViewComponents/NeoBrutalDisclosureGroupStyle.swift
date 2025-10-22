@@ -45,7 +45,6 @@ struct NeoBrutalDisclosureGroup<Label: View, Content: View>: View {
         }
         .buttonStyle(NeoBrutalButtonStyle(displayShadow: true))
         .compositingGroup()
-        //        .transition(.scale(scale: 2, anchor: .bottomLeading).combined(with: .opacity))
       } else {
         VStack(alignment: .leading, spacing: controlSize.spacing) {
           Button {

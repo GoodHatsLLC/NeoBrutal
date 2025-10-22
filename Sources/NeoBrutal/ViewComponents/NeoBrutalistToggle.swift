@@ -15,7 +15,9 @@ public struct NeoBrutalToggleStyle: ToggleStyle {
       configuration.label
         .font(nbTheme.typography.bodyFont)
         .foregroundStyle(.nb.textPrimary)
-      Spacer(minLength: controlSize.spacing)
+      Rectangle()
+        .fill(.clear)
+        .frame(width: controlSize.spacing, height: 1)
       toggle(configuration: configuration)
     }
     .focusScope(focusScope)
