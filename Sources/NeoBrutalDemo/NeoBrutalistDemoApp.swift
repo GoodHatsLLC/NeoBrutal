@@ -16,7 +16,7 @@ struct NeoBrutalDemoApp: App {
     } overlay: {
 
     } accessory: {
-      Toggle("DARK", isOn: $isDarkMode)
+      Toggle(isDarkMode ? "🌘" : "☀️", isOn: $isDarkMode)
         .toggleStyle(.neoBrutal)
     }
     .environment(\.colorScheme, isDarkMode ? .dark : .light)
