@@ -13,6 +13,8 @@ struct DemoRootView: View {
 
   @State private var stepperValue = 0
 
+  @State private var dropdownSelection: DropdownOption = .option1
+
   private let themeOptions: [NeoBrutalTheme] = NeoBrutal.standardThemes
 
   private var selectedVariant: NeoBrutalTheme.Variant {
@@ -144,6 +146,20 @@ struct DemoRootView: View {
 
           NeoBrutalStepper(value: $stepperValue, in: 0...10)
 
+          NeoBrutalDropdown(
+            selection: $dropdownSelection,
+            options: DropdownOption.allCases,
+            displayShadow: true
+          ) { option in
+            HStack {
+              Image(systemName: option.iconName)
+              Text(option.description)
+            }
+          }
+          .controlSize(.regular)
+          .onChange(of: dropdownSelection) { _, newValue in
+            log("Dropdown changed to: \(newValue.description)")
+          }
 
           NeoBrutalMenu("Actions", systemImage: "ellipsis.circle") {
             NeoBrutalMenuItem("Export Data", systemImage: "square.and.arrow.up") {
@@ -322,6 +338,28 @@ private struct DemoLogItem: Identifiable {
     self.title = title
     self.message = message
     self.status = status
+  }
+}
+
+private enum DropdownOption: String, CaseIterable, Hashable, CustomStringConvertible, Identifiable {
+  case option1 = "Turbo Mode"
+  case option2 = "Standard Mode"
+  case option3 = "Eco Mode"
+  case option4 = "Sleep Mode"
+
+  var id: String { rawValue }
+
+  var description: String {
+    rawValue
+  }
+
+  var iconName: String {
+    switch self {
+    case .option1: return "bolt.fill"
+    case .option2: return "gauge.with.dots.needle.50percent"
+    case .option3: return "leaf.fill"
+    case .option4: return "moon.zzz.fill"
+    }
   }
 }
 
